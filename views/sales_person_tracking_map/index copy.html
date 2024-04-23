@@ -1,0 +1,230 @@
+
+{{extend 'layout.html'}}
+  
+ <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+ input[type=text], input[type=password]{
+    margin: 2px 0px 2px 0px;
+	width: 200px;
+}
+div.error {
+    width: 200px;
+}
+select {
+    margin: 2px 0px 2px 0px;
+	width: 210px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;	
+	}
+	
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='MARKET'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_area_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============
+	   
+}); 
+
+</script>
+  <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr2="";
+		//alert (base_url+'default/get_all_ff_list');
+		$.ajax({
+			  url: base_url+'default/get_all_ff_list',
+			  success: function(resStr) {
+				  valueListStr2=resStr
+			  }
+			
+		});
+			 
+		$('#rep_id').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr2.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList2_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList2_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#rep_id" ).autocomplete({
+				source: valueList2_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">DCR Map</span></td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		<table width="900" border="0" cellpadding="0" cellspacing="0" >
+			<tr>
+				<td>&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>
+		</table>
+		
+		
+		</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+
+         <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >		   
+		   <form id="form1" name="form1" method="post" action="{{=URL(c='showMap_doctor',f='outletMap')}}" target="_blank">
+            <tr style="background-color:#CCC" align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td colspan="4" >Market Wise Outlet:</td>
+              </tr>
+            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+              <td width="100" >
+                <select name="search_type" id="search_type" style="width:150px" >
+                  <option value="">Select a type</option>
+                  	{{if session.search_typeOutlet=='MARKET':}}<option value="MARKET" selected="selected">Market</option>{{else:}}<option value="MARKET" >Market</option>{{pass}}
+                </select>
+              </td>
+              <td width="200" >
+              {{if session.search_valueOutlet=='' or session.search_valueOutlet==None:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:200px"/>
+              {{else:}}
+              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_valueOutlet}}" placeholder="Select a value" autocomplete="off" style="width:200px"/>
+              {{pass}}
+              
+              
+              </td>
+              <td width="100" ><input type="submit" name="btn_outlet_map" id="btn_outlet_map" value="Show"   class="button_update"/>
+			  		
+		  		</td>
+				
+              <td align="right" >
+			  
+             
+			  </td>
+            </tr>
+            </form>
+            <form id="form1" name="form1" method="post" action="{{=URL(c='showMap_doctor',f='arrow_new')}}" target="_blank">
+            <tr style="background-color:#CCC" align="left" class="blackCatHead"  height="20px";"vertical-align:middle">
+              <td colspan="4" >Visit Path:</td>
+              </tr>
+            <tr align="left" class="blackCatHead"  height="20px";"vertical-align:middle">
+              <td >SPO/Sup:</td>
+              <td ><input  name="rep_id" type="text" id="rep_id" size="25" value="" placeholder="SPO/Sup"  style="width:200px"/></td>
+              <td >&nbsp;</td>
+              <td align="right" ></td>
+            </tr>
+            <tr align="left" class="blackCatHead"  height="20px";"vertical-align:middle">
+              <td >Date:</td>
+              <td >
+              {{=search_form.custom.widget.to_dt}}
+              </td>
+              <td ><input type="submit" name="btn_path_map" id="btn_path_map" value="Show Path"   class="button_update"/></td>
+              <td align="right" ></td>
+            </tr>
+		      </form>
+          </table>
+         <p>&nbsp;</p>
+        </td></tr>
+    </table>
+    
+
+	</td>
+  </tr>
+</table>
+  
+  <br />
+  <br />

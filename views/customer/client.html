@@ -1,0 +1,412 @@
+{{extend 'layout.html'}}
+
+<script>
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+  $(function () {
+  
+  $('#client_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'customer/get_client_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#client_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#client_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#client_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+
+  //=========
+  $('#dist_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'customer/get_dist_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#dist_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#dist_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#dist_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });
+  
+  //=========
+  $('#district_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'customer/get_district_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#district_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#district_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#district_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });
+  
+  //=========
+  $('#tagPerson_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'customer/get_tagPerson_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#tagPerson_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#tagPerson_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#tagPerson_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+  
+  })
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+    <tr height="30px" >
+      <td width="500"><span class="blackCatTitle">Retailer</span></td>
+      <!-- <td width="500" align="right"><span class="blackCatTitle">
+     {{ #if session.rm_client_cat_manage=="True" or session.rm_client_cat_view=="True":}}
+      
+       <a href="{{#=URL(c='customer',f='catagory')}}" ><input type="button" value="Category"/></a>&nbsp;
+       <a href="{{#=URL(c='customer',f='sub_catagory')}}" ><input type="button" value="Sub Category"/></a>
+       
+       {{# pass }}
+      </span></td> -->
+      <td align="right">&nbsp;</td>
+    </tr>
+    <tr  height="1px" style="background-color:#CCCCCC;">
+          <td width="300" ></td><td ></td><td ></td>
+    </tr>
+    </table>
+    
+    
+    <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+      <td>
+      <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+        <tr>
+          <td width="5">&nbsp;</td>
+          <td>
+          
+          <table width="1200" border="0" cellpadding="0" cellspacing="0" >
+              <tr>
+                  <td width="100">&nbsp;</td>
+                  <td width="1200" align="right">
+                      <a href="{{=URL(c='customer',f='client_add')}}"><input type="button" name="" id="" value="New" style="background-color: rgb(147, 125, 248); color: white; border-radius: 4px; padding-bottom: 2px;" class="button_update"/></a>
+                  </td>
+                  <td align="right">&nbsp;</td>
+              </tr>
+          </table>
+          
+          </td>
+        </tr>
+        <tr>
+          <td width="5">&nbsp;</td>
+          <td>			
+              <br />
+              <table width="1200" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+                <form id="form1" name="form1" method="post" action="{{=URL(c='customer',f='client')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                  <!-- <td width="166" >
+                    {{if session.client_id_filter_1 != '' or session.client_id_filter_1 != 'None' or session.client_id_filter_1 != None :}}
+                       <input  name="client_id_filter_1" type="text" id="client_id_filter_1" size="25" value="{{=session.client_id_filter_1}}" placeholder="Client ID/Name" autocomplete="off" style="width:300px"/>
+                      {{else:}}
+                      <input  name="client_id_filter_1" type="text" id="client_id_filter_1" size="25" value="" placeholder="Client ID/Name" autocomplete="off" style="width:300px"/>
+
+                   {{pass}}
+                   
+                   </td> -->
+                   <td width="50" >
+                    {{if session.client_id_filter == '' or session.client_id_filter == 'None' or session.client_id_filter == None :}}
+                      <input  name="client_id_filter" type="text" id="client_id_filter" size="25" value="" placeholder="Retailer ID/Name" autocomplete="off" style="width:100px"/>
+                    {{else:}}
+                       <input  name="client_id_filter" type="text" id="client_id_filter" size="25" value="{{=session.client_id_filter}}" placeholder="Retailer ID/Name" autocomplete="off" style="width:100px"/>
+                   {{pass}}
+                   </td>
+                   
+                   <td width="50" >
+                    {{if session.dist_id_filter == '' or session.dist_id_filter == 'None' or session.dist_id_filter == None :}}
+                      <input  name="dist_id_filter" type="text" id="dist_id_filter" size="25" value="" placeholder="Distributor ID/Name" autocomplete="off" style="width:100px"/>
+                    {{else:}}
+                      <input  name="dist_id_filter" type="text" id="dist_id_filter" size="25" value="{{=session.dist_id_filter}}" placeholder="Distributor ID/Name" autocomplete="off" style="width:100px"/>
+                   {{pass}}
+                   </td>
+
+                   <td width="50" >
+                    {{if session.district_id_filter == '' or session.district_id_filter == 'None' or session.district_id_filter == None :}}
+                      <input  name="district_id_filter" type="text" id="district_id_filter" size="25" value="" placeholder="District ID/Name" autocomplete="off" style="width:100px"/>
+                    {{else:}}
+                      <input  name="district_id_filter" type="text" id="district_id_filter" size="25" value="{{=session.district_id_filter}}" placeholder="District ID/Name" autocomplete="off" style="width:100px"/>
+                    {{pass}}
+                   </td>
+
+                   <td width="50" >
+                    {{if session.tagPerson_filter == '' or session.tagPerson_filter == 'None' or session.tagPerson_filter == None :}}
+                      <input  name="tagPerson_filter" type="text" id="tagPerson_filter" size="25" value="" placeholder="Tagperson ID/Name" autocomplete="off" style="width:100px"/>
+                    {{else:}}
+                      <input  name="tagPerson_filter" type="text" id="tagPerson_filter" size="25" value="{{=session.tagPerson_filter}}" placeholder="Tagperson ID/Name" autocomplete="off" style="width:100px"/>
+                    {{pass}}
+                   </td>
+
+                   <td width="50" >
+                    {{if session.approved_filter == '' or session.approved_filter == 'None' or session.approved_filter == None :}}
+                        <select name="approved_filter" id="approved_filter" style="width: 100px; margin-top: 2px;">
+                            <option value="">Approved</option>
+                            <option value="YES">Yes</option>
+                            <option value="NO">No</option>
+                        </select>
+                        {{pass}}
+                        {{if session.approved_filter == 'YES':}}
+                        <select name="approved_filter" id="approved_filter" style="width: 100px; margin-top: 2px;">
+                          <option value="">Approved</option>
+                          <option value="YES" selected>Yes</option>
+                          <option value="NO">No</option>
+                        </select>
+                        {{pass}}
+                        {{if session.approved_filter == 'NO':}}
+                        <select name="approved_filter" id="approved_filter" style="width: 100px; margin-top: 2px;">
+                          <option value="">Approved</option>
+                          <option value="YES">Yes</option>
+                          <option value="NO" selected>No</option>
+                        </select>
+                    {{pass}}
+                  </td>
+                
+                   <td width="100" style="padding-top: 1px;">
+                    
+                    <input type="submit" name="btn_filter_client" id="btn_filter_client" value="Filter" style="background-color: rgb(147, 125, 248); color: white; border-radius: 4px; height: 30px;" class="button_update"/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All" style="background-color:  rgb(147, 125, 248); color: white; border-radius: 4px; height: 30px;"  class="button_update"/>
+                      </td>
+                     
+                   <td align="right" style="padding-top: 1px;">
+                   <a href="{{=URL(c='customer',f='client_Download')}}">
+                          <input type="button" name="btn_download" id="btn_download" value="Download" style="background-color: rgb(147, 125, 248); color: white; border-radius: 4px; height: 30px;" class="button_update"/>
+                         </a> 
+                   <a href="{{=URL(c='customer',f='client_batch_upload')}}">
+                   <input type="button" name="" id="" value="Batch Upload" style="background-color: rgb(147, 125, 248); color: white; border-radius: 4px; height: 30px;" class="button_update"/>
+                   </a>
+                   <a href="{{=URL(c='customer',f='client_batch_edit')}}">
+                    <input type="button" name="" id="" value="Batch Edit" style="background-color: rgb(147, 125, 248); color: white; border-radius: 4px; height: 30px;" class="button_update"/>
+                    </a>
+                   </td>
+                 </tr>
+                </form>
+            </table>
+               <strong>Total:</strong> {{=total_rec}}<br />
+               <br />
+               <table width="1200" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+                   <td width="80" >Retailer ID</td>
+                   <td width="150" >Retailer Name</td>
+                   <td width="120" >Distributor</td>
+                   <td width="60" >Contact No1</td>
+                   <td width="60">District</td>
+                   <td width="60">Tag Person</td>
+                   <td width="60">Type</td>
+                   <td width="50">Location</td>
+                   <td width="30">Approved</td>
+                   <td width="30" align="right" ></td>
+                   <td width="30" align="right" ></td>
+                 </tr>
+
+                 {{
+                    for j in range(len(clientRows)):
+                          records_ov_dict=clientRows[j]
+                          cid=str(records_ov_dict["cid"])
+                          client_id=str(records_ov_dict["client_id"])
+                          name=str(records_ov_dict["name"])
+                          distributor_id=str(records_ov_dict["area_id"])
+                          distributor_name=str(records_ov_dict["depot_name"])
+                          contact_no1=str(records_ov_dict["contact_no1"])
+                          district_id=str(records_ov_dict["district_id"])
+                          district=str(records_ov_dict["district"])
+                          latitude=str(records_ov_dict["latitude"])
+                          longitude=str(records_ov_dict["longitude"])
+                          approved=str(records_ov_dict["approved_by_sup"])
+                          customer_type=str(records_ov_dict["customer_type"])
+                  }}
+                        <tr  align="left" class="blackCat"  style="font-size:13px"> 
+                        <td width="80" >{{=client_id}}</td>
+                        <td width="150" >{{=name}}</td>
+                        <td width="120" >{{=distributor_id}}|{{=distributor_name}}</td>
+                        <td width="60" >{{=contact_no1}}</td>
+                        <td width="130" >{{=district_id}}|{{=district}}</td>
+                        {{
+                          rep_id=''
+                          rep_name=''
+                          repRecords_sql = 'select rep_id,name from rep_client where cid="' + cid + '" and client_id="' + client_id + '"  order by id;'
+                          repRows = db.executesql(repRecords_sql, as_dict=True)
+                          for i in range(len(repRows)):
+                              records_dict=repRows[i]
+                              rep_id=str(records_dict["rep_id"])
+                              rep_name=str(records_dict["name"])
+
+                              pass
+                        }}
+                        <td width="120" >{{=rep_id}}|{{=rep_name}}</td>
+                        <td width="120" >{{=customer_type}}</td>
+                        <td align="left" ><a href="https://maps.google.com/?q={{=latitude}},{{=longitude}}" target="_blank">Map</a>
+                        </td>
+                        <td width="60" align="center">{{=approved}}</td>
+                        
+                        <form id="form1" name="form1" method="post" action="{{=URL(c='customer',f='client_edit')}}" target="_blank">
+                        <td width="30" align="right"  >
+                          <a href="{{=URL(c='customer',f='client_edit',args=[client_id])}}"><input type="button" name="" id="" value="Edit" style="background-color: #922310; color:#FAF8F9; border-radius: 4px; height: 26px;" class="button_update"/></a>  
+                        </td>
+                        </form>
+                        <form  name="form1" action="{{=URL(c='customer',f='client')}}" method="post">
+                          <td align="right" width="20px" style="padding-top: 3px; ">
+                            <input type="hidden" name="client_id" id="client_id" value="{{=client_id}}">
+                              <button type="submit" name="update_btn" id="update_btn" value="Reset" style="padding-top:1px; background:#922310; color:#FAF8F9; " onclick="if (!confirm('Do you really want to RESET!!?')) { return false }">Reset
+                              </button> 
+                          </td>
+                        </form> 
+                        <!-- <form id="form1" name="form1" method="post" action="{{#=URL(c='customer',f='client_profile')}}" target="_blank">
+                          <td width="30" align="right"  >
+                            <a href="{{#=URL(c='customer',f='client_profile')}}"><input type="button" name="" id="" value="Profile"   class="button_update"/></a>  
+                          </td>
+                          </form> -->
+                      </tr>
+    
+                 {{pass}}
+                 
+            </table>
+  
+                        {{if page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+                        {{pass}}
+                        
+                        {{if len(clientRows)>clients_per_page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+                        {{pass}}
+  
+            </td>
+          </tr>
+      </table>
+      </td>
+    </tr>
+  </table>

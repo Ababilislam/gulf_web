@@ -1,0 +1,197 @@
+{{extend 'layout.html'}}
+ 
+   <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:250px;
+}
+
+#uni_middle_str4{
+width:100px;
+}
+
+
+ </style>
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	$('#userTypeagency').hide();
+	
+	var userRole=$('#sm_user_user_role').val();
+	if (userRole=='AGENCY'){
+		$('#userTypeagency').show();
+	}else{
+		$('#userTypeagency').hide();
+	}
+	
+	$('#sm_user_user_role').change(function(){
+	var userType=$('#sm_user_user_role').val();
+	
+	if (userType=='AGENCY'){
+		$('#userTypeagency').show();
+		//alert(userType);
+	}else{
+		$('#userTypeagency').hide();
+	}
+})
+	
+   //==============
+    var refListStr="";
+	$.ajax({
+		  url: base_url+'user/agencyList',
+		  success: function(resStr) {
+			  refListStr=resStr
+		  }
+	});
+	
+	$('#uAgency').keyup(function(){
+			//-------------------------
+			var ref_list = refListStr.split(',');				
+			var ref_name=$("#uAgency").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#uAgency" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  	   
+}); 
+
+
+</script>
+
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="300"><span class="blackCatTitle">User   - Edit</span></td>
+	<form action="{{=URL(c='user',f='user_add',args=[page])}}" method="post">
+    <td width="200" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10px">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td align="left" valign="top">
+			<table width="700" class="blackCat">
+		  {{=form.custom.begin}}            
+            <tr>
+              <td width="100">ID </td>
+              <td width="500">{{=userID}}</td>
+              <td width="100" rowspan="6">
+              
+              	Town<select id="town_code" name="town_code" class="test-build-select-all-select" multiple="multiple" style="width:250px; height:300px;">
+                <option value="ALL">ALL</option>
+                {{for row in rectown:}}                
+                {{if row.town_code in(townList):}}
+                <option value="{{=row.town_code}}" selected="selected" >{{=row.town_name}}-{{=row.town_code}}</option>
+                {{else:}}
+                <option value="{{=row.town_code}}" >{{=row.town_name}}-{{=row.town_code}}</option>
+                {{pass}}
+                {{pass}}
+                {{pass}}
+            </select>
+              </td>
+              </tr>
+            <tr>
+              <td width="100" align="left">Name</td>
+              <td width="500">{{=form.custom.widget.user_name}}</td>
+              </tr>           
+            <tr>
+              <td width="100">Password</td>
+              <td width="500" >{{=form.custom.widget.password}}</td>
+              </tr>           
+            <tr>
+              <td width="100">Mobile No </td>
+              <td width="500" >{{=form.custom.widget.mobile}}</td>
+              </tr>  
+            <tr>
+              <td width="100">Email</td>
+              <td width="500" >{{=form.custom.widget.email}}</td>
+              </tr>   
+             <tr>
+              <td width="100">Email Notification</td>
+              <td width="500" >{{=form.custom.widget.email_notification}}</td>
+              </tr>            		
+			<tr>
+			  <td width="100">Status</td>
+			  <td width="500">{{=form.custom.widget.status}}</td>
+			  </tr>
+			<tr>
+			  <td width="100">Access  Role </td>
+			  <td width="500">{{=form.custom.widget.user_role}}</td>
+			  </tr>
+             <tr id="userTypeagency">
+				  <td width="100" align="left"> Agency</td>
+				  <td colspan="3"><input type="text" name="uAgency" id="uAgency" value="{{=agencyCode}}|{{=agencyName}}"  placeholder="Select Agency"/></td>
+			</tr>	
+            		 
+			 <tr>		
+              <td width="100"><input type="hidden" name="rowID" id="rowID" value="{{=rowID}}"/></td>
+              <td width="500">{{=form.custom.submit}}</td>
+              <td width="100">&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100">&nbsp;</td>
+              <td width="500">&nbsp;</td>
+              <td width="100">&nbsp;</td>
+            </tr>
+		{{=form.custom.end}}
+		</table>
+          </td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+</table>
+

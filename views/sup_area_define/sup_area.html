@@ -1,0 +1,309 @@
+{{extend 'layout.html'}}
+
+<script>
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+  $(function () {
+  
+  // alert(base_url+'sup_area_define/get_sup_id_list')
+  
+  $.ajax({
+      url: base_url + 'sup_area_define/get_sup_id_list',
+      success: function (retStr) {
+          zmStr = retStr
+          //alert (zmStr)
+      }
+  });
+  
+  
+  $('#rep_id_filter').keyup(function () {
+  
+      // alert("YES")
+      //-------------------------
+      var ref_list = zmStr.split(',');
+      var ref_name = $("#rep_id_filter").val();
+  
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+          refStr = ref_list[i];
+          i = i + 1;
+          var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res != null) {
+              ref_list_new[lc] = refStr;
+              lc = lc + 1;
+              if (lc == 30) {
+                  break;
+              };
+          } else {
+              continue;
+          }
+      };
+      //alert (ref_list_new);
+  
+      //-------------- auto complete source
+      $("input#rep_id_filter").autocomplete({
+          source: ref_list_new
+      });
+
+  
+  });
+
+  // ------filter
+$.ajax({
+      url: base_url + 'sup_area_define/get_sup_id_list',
+      success: function (retStr) {
+          zmStr = retStr
+          //alert (zmStr)
+      }
+  });
+  
+  
+  $('#rep_id_filter_1').keyup(function () {
+  
+      // alert("YES")
+      //-------------------------
+      var ref_list = zmStr.split(',');
+      var ref_name = $("#rep_id_filter_1").val();
+  
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+          refStr = ref_list[i];
+          i = i + 1;
+          var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res != null) {
+              ref_list_new[lc] = refStr;
+              lc = lc + 1;
+              if (lc == 30) {
+                  break;
+              };
+          } else {
+              continue;
+          }
+      };
+      //alert (ref_list_new);
+  
+      //-------------- auto complete source
+      $("input#rep_id_filter_1").autocomplete({
+          source: ref_list_new
+      });
+
+  
+  });
+
+  // ...................area
+
+
+  // alert(base_url+'rep_area_define/get_area_id_list')
+  
+  $.ajax({
+      url: base_url + 'sup_area_define/get_sup_area_id_list',
+      success: function (retStr) {
+          arStr = retStr
+          //alert (zmStr)
+      }
+  });
+  
+  
+  $('#area_id_filter').keyup(function () {
+  
+      // alert("YES")
+      //-------------------------
+      var ref_list = arStr.split(',');
+      var ref_name = $("#area_id_filter").val();
+  
+      //---------------- auto complete combo list
+      var ref_list_ar = new Array();
+      lc = 0;
+      i = 0;
+      var retStr = "";
+      while (i < ref_list.length) {
+          retStr = ref_list[i];
+          i = i + 1;
+          var res = retStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res != null) {
+              ref_list_ar[lc] = retStr;
+              lc = lc + 1;
+              if (lc == 30) {
+                  break;
+              };
+          } else {
+              continue;
+          }
+      };
+      //alert (ref_list_ar);
+  
+      //-------------- auto complete source
+      $("input#area_id_filter").autocomplete({
+          source: ref_list_ar
+      });
+
+      
+  
+  });
+  
+  });
+
+  </script>
+  
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Supervisor level
+      
+    </span></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+      <td ></td><td ></td>
+      <td width="100" ></td>
+      <td ></td>
+  </tr>
+</table>
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+          <!--=====INPUT VALUES===========-->
+                        <form action="{{=URL(c='sup_area_define',f='sup_area')}}" method="post">
+                          <table width="700">
+                            <tr>
+                              <td width="400">
+                                <table width="320" class="blackCat">
+                                    <tr>
+                                        <td width="180">Supervisor ID&nbsp;</td>
+                                           <td>&nbsp;&nbsp;</td>
+                                        <td width="180">Area Id</td>
+                                        <td>&nbsp;&nbsp;</td>
+                                        <td width="180">Depth</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        
+                                        <td><input style= "width: 180px;"type="text" name="rep_id_filter" id= "rep_id_filter" autocomplete="off"></td>
+                                        <td></td>
+                                        <td><input style= "width: 180px;"type="text" name="area_id_filter" id= "area_id_filter" autocomplete="off"></td>
+                                        <td></td>
+                                        <td><input style= "width: 180px;"type="text" name="depth" id= "depth" autocomplete="off"></td>
+                                        <td width="12"></td>
+                                          <td>&nbsp;&nbsp;</td>
+                                        <td align="left" style="margin-left: 5px;" >
+                                            <div align="left">
+                                              <input align="left" type="submit" name="submit" id="submit" value='Save' style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    </tr>
+                          
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        <!--========END=========-->
+                        
+
+                        <!--=======FILTER/ALL/DOWNLOAD/BATCHUP==========-->
+                        <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+       
+                            <form id="form1" name="form1" method="post" action="{{=URL(c='sup_area_define',f='sup_area')}}">
+                             <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                               
+                               <td width="166" >
+                                {{if session.rep_id_filter_1 == '' or session.rep_id_filter_1 == 'None' or session.rep_id_filter_1 == None :}}
+                                   <input  name="rep_id_filter_1" type="text" id="rep_id_filter_1" size="25" value="" placeholder="sup ID/Name" autocomplete="off" style="width:300px"/>
+                                {{else:}}
+                                    <input  name="rep_id_filter_1" type="text" id="rep_id_filter_1" size="25" value="{{=session.rep_id_filter_1}}" placeholder="sup ID/Name" autocomplete="off" style="width:300px"/>
+                               {{pass}}
+                               
+                               </td>
+                               <td width="100" >
+                                <input type="submit" name="btn_filter_rep" id="btn_filter_rep" value="Filter" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               <input type="submit" name="btn_all" id="btn_all" value="All" style="border-radius: 4px; height: 30px;" class="button_update"/>   
+                                  </td>
+                                 
+                               <td align="right" >
+                               <a href="{{=URL(c='sup_area_define',f='area_list_Download')}}">
+                                      <input type="button" name="" id="" value="Download" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                                     </a>
+                               <a href="{{=URL(c='sup_area_define',f='sup_area_batch')}}">
+                               <input type="button" name="" id="" value="Batch Upload" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               </a>
+                               </td>
+                             </tr>
+                            </form>
+                        </table>
+                        <strong>Total:</strong> {{=len(repArea)}}<br />
+                        <br/>
+                        <!--======END=========-->
+
+
+                        <!--=========SHOW TABLE========-->
+                        <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+                              <td width="950px" >Supervisor ID|Name</td>
+                             
+                              <td width="950px">Area Id|Area Name</td>
+                              <td width="950px">Depth</td>
+                              
+                            </tr>
+
+                            {{for j in range(len(repArea)):
+                              records_ov_dict=repArea[j]
+                              #row_id=str(records_ov_dict["id"])
+                              rep_id=str(records_ov_dict["sup_id"])
+                              name=str(records_ov_dict["sup_name"])
+                              area_id=str(records_ov_dict["level_id"])
+                              area_name=str(records_ov_dict["level_name"])
+                              level_depth_no=str(records_ov_dict["level_depth_no"])
+
+
+
+                                                               
+                            }}
+
+                            
+                              
+                              <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+                                <td width="50" >{{=rep_id}}|{{=name}}</td>
+                                <td width="250">{{=area_id}}|{{=area_name}}</td>
+                                <td width="250">{{=level_depth_no}}</td>
+
+                                <form name="form1" action="{{=URL(c='sup_area_define',f='sup_area',args=[rep_id,area_id])}}" method="post">
+                    <td></td>
+                    <td align="right">
+                      <input type="submit" name="delete_btn" value="X"  onclick="if (!confirm('Do you really want to delete?')) { return false }">
+                    </td>
+                      <!-- <button type="submit" name="btn_delete" id="btn_delete" value="" style="background-color: transparent;border: none;" onclick="if (!confirm('Do you really want to delete?')) { return false }">X</button>  -->
+                </form> 
+
+                               
+                              </tr>
+                            
+                            {{pass}}
+                        </table>
+                        <table>
+                          
+                      </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+                            

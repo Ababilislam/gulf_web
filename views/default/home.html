@@ -1,0 +1,66 @@
+{{extend 'layout.html'}}
+
+<script type="text/javascript">
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	$(document).ready(function(){
+		
+		syncCodeCreate=$("#syncCodeForLogin").val();
+		localStorage.syncCodeDB=$("#syncCodeForLoginDB").val();
+		
+		if(syncCodeCreate!="None"){
+			localStorage.syncCodeCreate=syncCodeCreate
+			
+			}
+		
+	});
+</script>
+<style type="text/css">
+	.page_color{background-color:#FFF;}
+</style>
+
+<input type="hidden" value="{{=session.sync_code}}" id="syncCodeForLoginDB"/>
+<input type="hidden" value="{{=session.sync_codeNew}}" id="syncCodeForLogin"/>
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"></td>
+	  <td width="500" align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr height="1px" style="background-color:#CCCCCC;">
+	  <td colspan="3" ></td>
+  </tr>
+</table>
+
+<table width="100%" border="1" cellspacing="1" cellpadding="1" style="background-color:#E8EEE6; border:1px solid #F3F3F3; ">
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+		
+      <div style=" margin:20px; box-shadow:#E1E1E1 0 0 10px; border-radius:5px; height:275px; border:1px solid #DADADA; background-color:#FFF;">
+        <table width="100%" height="100%" border="1" cellspacing="0" cellpadding="0" >
+            <tr height="15">
+              <td width="1%"  ></td>
+              <td width="49%"  ></td>
+            </tr>
+            <tr height="10">
+              <td align="left"   >&nbsp;</td>
+              <td align="left"   ></td>
+              <td width="50%" align="right" style="margin-right:10px;"   >&nbsp;</td>
+            </tr>
+            <tr>
+              <td height="30" colspan="3" align="center"   ><br><br>
+                <font style="font-size:18px; font-family:Arial, Helvetica, sans-serif; color:#3C3C3C;"><b>Welcome to GULF-OIL-BANGLADESH</b></font><br>
+                <font style="font-size:13px; font-family:Arial, Helvetica, sans-serif; color:#3C3C3C"><b>Please select your desired option from left hand menu</b></font><br><br><br>
+              </td>
+            </tr>
+        </table>
+      </div>
+	
+    </td>
+  </tr>
+</table>
+
+
+

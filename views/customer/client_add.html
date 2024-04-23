@@ -1,0 +1,197 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width:200px;
+		}
+	select {
+		margin: 2px 0px 2px 0px;
+		width:215px;
+		}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: 220px; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Retailer Add</span></td>
+    <form action="{{=URL(c='customer',f='client')}}" method="post">
+    <td width="380" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  <form action="{{=URL(c='customer',f='client_add')}}">
+	<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+		<tr height="100%"  style="vertical-align:top;">
+		  <td>
+		  <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+			
+			<tr>
+			  <td width="5">&nbsp;</td>
+			  <td width="900" valign="top">
+	  
+			  <br />
+ 
+			  <table width="900">
+				  <tr>
+					  <td width="450" valign="top">
+				<table width="450" class="blackCat">
+					<tr>
+					  <td width="200">ID</td>
+					  <td><input style= "width: 200px;"type="text" name="client_id" autocomplete="off"></td>
+					  </tr>
+					<tr>
+					  <td width="200">Name</td>
+					  <td><input style= "width: 200px;"type="text" name="name" autocomplete="off"></td>
+					  </tr>
+					<tr>
+					  <td width="200">Distributor ID</td>
+					  <td><input style= "width: 200px;"type="text" name="distributor_id" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="200">Distributor Name</td>
+					  <td><input style= "width: 200px;"type="text" name="distributor_name" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td>Status</td>
+					  <td>
+						<select type="text" class="text" name="status" id="status" style= "width: 212px;" >
+		  
+							
+							<option value="ACTIVE">ACTIVE</option>
+							<option value="INACTIVE">INACTIVE</option>
+						</select>
+					</td>
+					</tr>
+					<tr>
+					  <td width="200">Balance</td>
+					  <td><input style= "width: 200px;"type="text" name="balance" autocomplete="off"></td>
+					</tr>
+					<!-- <tr>
+					  <td width="200">Address</td>
+					  <td><input style= "width: 200px;"type="text" name="address" ></td>
+					</tr> -->
+					<tr>
+						<td width="200">Credit Limit</td>
+						<td><input style= "width: 200px;"type="text" name="credit_limit" autocomplete="off"></td>
+					</tr>
+					<tr>
+						<td width="200">Credit Duration</td>
+						<td><input style= "width: 200px;"type="text"name="credit_duration" autocomplete="off"></td>
+					</tr>
+					<tr>
+						<td>Type</td>
+						<td>
+							<select type="text" class="text" name="customer_type" id="customer_type" style= "width: 212px;" >
+								<option value="">SELECT VALUE</option>
+								{{
+									customer_type=''
+									cid=session.cid
+									typeRecords_sql = 'select type from customer_type where cid="' + cid + '" order by id;'
+									typeRows = db.executesql(typeRecords_sql, as_dict=True)
+									for i in range(len(typeRows)):
+										records_dict=typeRows[i]
+										customer_type=str(records_dict["type"])	
+									}}
+								<option value="{{=customer_type}}">{{=customer_type}}</option>
+								{{pass}}
+							</select>
+					</td>
+					  
+				  </table>
+				  </td>
+				  
+				  <td width="450" valign="top">
+				  
+					<table width="450" class="blackCat">
+					
+					
+						<tr>
+							<td width="200">Payment Mode</td>
+
+							<td>
+							<select type="text" class="text" name="payment_mode" id="payment_mode" style= "width: 212px;" >
+			  
+								<option value="">SELECT</option>
+								<option value="CASH">CASH</option>
+								<option value="CREDIT">CREDIT</option>
+							</select>
+						</td>
+						</tr>
+					<tr>
+						<td width="200">Bank Account No</td>
+						<td><input style= "width: 200px;"type="text" name="bank_account_no" autocomplete="off"></td>
+					</tr>
+					<tr>
+						<td width="200">Address</td>
+						<td><input style= "width: 200px;"type="text" name="address" autocomplete="off"></td>
+					</tr>
+					<!-- <tr>
+					  <td width="200">Woner Name</td>
+					  <td><input style= "width: 200px;"type="text" name="woner_name" ></td>
+					</tr> -->
+					<tr>
+					  <td width="200">Contact No</td>
+					  <td><input style= "width: 200px;"type="text" name="contact_no1" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="200">NID</td>
+					  <td><input style= "width: 200px;"type="text" name="nid" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="200">Thana</td>
+					  <td><input style= "width: 200px;"type="text" name="thana" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="200">District ID</td>
+					  <td><input style= "width: 200px;"type="text" name="district_id" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="200">District</td>
+					  <td><input style= "width: 200px;"type="text" name="district" autocomplete="off"></td>
+					</tr>
+					<tr>
+					  <td width="12"></td>
+					  <td align="left" style="margin-left: 5px;" >
+						  <div align="left">
+							  <input align="left" type="submit" name="submit" id="submit" value=" Save " style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+						  </div>
+					  </td>
+					</tr>
+						</table>
+					  </td>
+				  </tr>
+				  </table>
+			   
+				<br />
+				
+				</td>
+			   </tr>
+		  </table>
+		  
+		  </td>
+		</tr>
+	  </table>
+  </form>
+

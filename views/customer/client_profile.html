@@ -1,0 +1,173 @@
+{{extend 'layout.html'}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="padding-top:0px; margin-top:0px;">
+  <tr >
+    <td width="800"><span class="blackCatTitle">Retailer - Profile</span></td>
+    <form action="{{=URL(c='customer',f='client')}}" method="post">
+      <td width="300" align="right"><input name="" type="submit"  value="Back"/></td>
+    </form>	
+    <td width="200" align="right">&nbsp;</td>	
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<!-- <hr /> -->
+	<form action="{{=URL(c='customer',f='client_profile')}}">
+    <table width="900" border="0" cellpadding="0" cellspacing="0" style="padding-top:0px; margin-top:20px; margin-left: 30px;" >      
+      <tr>
+        <td width="450" valign="top" style="padding-left:0px;">
+        
+              <table width="600" class="blackCat">
+                  <tr style="background-color: #E8E8E8">
+                        <td width="200"><strong>Basic Info</strong></td>
+                        <td width="2">&nbsp;</td>
+                        <td width="400">&nbsp;</td>
+                    </tr>
+                  <tr>
+                    <td width="200">New ID</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#=client_id}}</td>
+                </tr>
+                  <tr>
+                    <td>Old ID</td>
+                    <td>:</td>
+                    <td>{{#=records[0].client_old_id}}</td>
+                  </tr>
+                  <tr>
+                    <td width="200">Name</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#=records[0].name}}</td>
+                </tr>
+                  
+                  <tr>
+                    <td width="200">Distributor</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=territory_name}}  {{#=records[0].area_id}}</td>
+                </tr>
+                  <tr>
+                    <td width="200">Area ID</td>
+                    <td>:</td>
+                    <td width="400">{{#=records[0].depot_id}}  {{#=records[0].depot_name}}</td>
+                  </tr>
+                  <tr>
+                    <td>Balance</td>
+                    <td>&nbsp;</td>
+                    <td>{{#=records[0].store_id}}  {{#=records[0].store_name}}</td>
+                  </tr>
+                  <tr>
+                    <td width="200">Credit Limit</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].category_id}}  {{#=records[0].category_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Credit Duration</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].sub_category_id}}  {{#=records[0].sub_category_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Payment Mode</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].depot_belt_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Bank Account No</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].owner_name}}</td>
+                </tr>
+                  <tr>
+                    <td width="200">Address</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#if records[0].contact_no1!=None:}} {{#=records[0].contact_no1}}{{#pass}}</td>
+                </tr>
+                  <tr>
+                    <td width="200">Depot ID</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#if records[0].contact_no2!=None:}} {{#=records[0].contact_no2}}{{#pass}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Store ID</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#if records[0].address!=None:}} {{#=records[0].address}}{{#pass}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Category ID</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].market_id}}  {{#=records[0].market_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Sub Category ID</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].market_id}}  {{#=records[0].market_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Market ID</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].market_id}}  {{#=records[0].market_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Owner Name</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].market_id}}  {{#=records[0].market_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Contact No</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].market_id}}  {{#=records[0].market_name}}</td>
+                </tr>
+                <tr>
+                    <td width="200">NID</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#if records[0].nid!=None:}} {{#=records[0].nid}}{{#pass}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Thana</td>
+                    <td>:</td>
+                    <td width="400">{{#=records[0].thana}}</td>
+                  </tr>
+                  <tr>
+                    <td width="200">District</td>
+                    <td>:</td>
+                    <td width="400">{{#=records[0].district_id}}  {{#=records[0].district}}</td>
+                  </tr>
+                  <tr>
+                    <td width="200">Drug Registration Number</td>
+                    <td>:</td>
+                    <td width="400">{{#=records[0].drug_registration_num}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Status</td>
+                    <td width="2">:</td>
+                    <td width="400"> {{#=records[0].status}}</td>
+                </tr>
+                <tr>
+                    <td width="200">Map</td>
+                    <td width="2">:</td>
+                    <td width="400">{{#if records[0].latitude=='0' and records[0].longitude=='0':}}Null{{#else:}}<a href="{{#='https://maps.google.com/?q='+str(records[0].latitude)+','+str(records[0].longitude)}}" target="_blank">Show</a>{{#pass}}</td>
+                </tr>
+                  <tr>
+                    <td width="200">Last Updated By</td>
+                    <td>:</td>
+                    <td width="400">{{#=records[0].updated_by}}</td>
+                  </tr>
+                  <tr>
+                    <td width="200">&nbsp;</td>
+                    <td width="2">&nbsp;</td>
+                    <td width="400">&nbsp;</td>
+                </tr>  
+          </table>
+        </td>
+                
+        
+
+  </tr>
+      <tr>
+        <td valign="top" style="padding-left:0px;">&nbsp;</td>
+        <td valign="top"></td>
+      </tr>
+</table>
+<br />
+<br />
+<br />
+<br />
+  </form>
+
+

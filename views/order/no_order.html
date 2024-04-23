@@ -1,0 +1,361 @@
+{{extend 'layout.html'}}
+
+<script>
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+  $(function () {
+  
+  $('#rep_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'order/get_rep_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#rep_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#rep_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#rep_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+
+  //=========
+  $('#region_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'order/get_region_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#region_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#region_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#region_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });
+  
+  //=========
+  $('#zone_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'order/get_zone_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#zone_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#zone_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#zone_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  });
+  
+  //=========
+  $('#area_id_filter').keyup(function(){
+		$.ajax({
+			  url: base_url+'order/get_area_id_list',
+			  success: function(refStr) {
+				  refListFilterStr=refStr;
+			  }
+		});
+	})
+	 
+	$('#area_id_filter').keyup(function(){
+		//-------------------------
+		var ref_list = refListFilterStr.split(',');				
+		var ref_name=$("#area_id_filter").val();
+		
+		//---------------- auto complete combo list
+		var ref_list_new=new Array();
+		lc=0;
+		i =0;
+		var refStr="";				
+		while (i < ref_list.length)
+		{
+			refStr=ref_list[i];
+			i=i+1;					
+			var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+			if (res!=null){
+				ref_list_new[lc]=refStr;
+				lc=lc+1;
+				if (lc==30){
+					break;
+				};
+			}else{
+				continue;
+			}					
+		};
+		//alert (ref_list_new);
+		
+		//-------------- auto complete source
+		$( "input#area_id_filter" ).autocomplete({
+			source: ref_list_new
+		});
+	
+  }); 
+  
+  })
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+    <tr height="30px" >
+      <td width="500"><span class="blackCatTitle">No Order</span></td>
+
+      <td align="right">&nbsp;</td>
+    </tr>
+    <tr  height="1px" style="background-color:#CCCCCC;">
+          <td width="300" ></td><td ></td><td ></td>
+    </tr>
+    </table>
+    
+    
+    <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+      <td>
+      <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+        <tr>
+          <td width="5">&nbsp;</td>
+          <td>			
+              <br />
+              <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+                <form id="form1" name="form1" method="post" action="{{=URL(c='order',f='no_order')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+								  <td width="50" >
+					          {{if session.from_date == '' or session.from_date == 'None' or session.from_date == None :}}
+										<input
+										name="from_dt_filter"
+										type="text"
+										id="from_dt_filter"
+										size="25"
+										value=""
+										autocomplete="off"
+										placeholder="From Date"
+										style="width: 100px"
+										class="date"/>
+
+		                {{else:}}
+		                <input  name="from_dt_filter" type="text" id="from_dt_filter" size="25" value="{{=session.from_date}}" placeholder="From Date" autocomplete="off" style="width:100px" class="date"/>
+		               {{pass}}
+	               </td>
+				   				<td width="50px" >
+                    {{if session.to_date == '' or session.to_date == 'None' or session.to_date == None :}}
+										<input
+										name="to_dt_filter"
+										type="text"
+										id="to_dt_filter"
+										size="25"
+										placeholder="To Date"
+										autocomplete="off"
+										value=""
+										style="width: 100px"
+										class="date"/>
+                    {{else:}}
+                     <input  name="to_dt_filter" type="text" id="to_dt_filter" size="25" value="{{=session.to_date}}" placeholder="To Date" autocomplete="off" style="width:100px" class="date"/>
+                   {{pass}}
+                  </td>
+
+
+                  <td width="70px" >
+                    {{if session.rep_id_filter == '' or session.rep_id_filter == 'None' or session.rep_id_filter == None :}}
+                      <input  name="rep_id_filter" type="text" id="rep_id_filter" size="25" value="" placeholder="Rep ID/Name" autocomplete="off" style="width:140px"/>
+                    {{else:}}
+                       <input  name="rep_id_filter" type="text" id="rep_id_filter" size="25" value="{{=session.rep_id_filter}}" placeholder="Rep ID/Name" autocomplete="off" style="width:100px"/>
+                   {{pass}}
+                  </td>
+                   
+                  <td width="70px" >
+                    {{if session.region_id_filter == '' or session.region_id_filter == 'None' or session.region_id_filter == None :}}
+                      <input  name="region_id_filter" type="text" id="region_id_filter" size="25" value="" placeholder="Region ID|Name" autocomplete="off" style="width:140px"/>
+                    {{else:}}
+                      <input  name="region_id_filter" type="text" id="region_id_filter" size="25" value="{{=session.region_id_filter}}" placeholder="Visit SL" autocomplete="off" style="width:140px"/>
+                   {{pass}}
+                  </td>
+
+                  <td width="70px" >
+                    {{if session.zone_id_filter == '' or session.zone_id_filter == 'None' or session.zone_id_filter == None :}}
+                      <input  name="zone_id_filter" type="text" id="zone_id_filter" size="25" value="" placeholder="Zone ID|Name" autocomplete="off" style="width:140px"/>
+                    {{else:}}
+                      <input  name="zone_id_filter" type="text" id="zone_id_filter" size="25" value="{{=session.zone_id_filter}}" placeholder="Zone ID/Name" autocomplete="off" style="width:140px"/>
+                    {{pass}}
+                  </td>
+
+                  <td width="70px" >
+                    {{if session.area_id_filter == '' or session.area_id_filter == 'None' or session.area_id_filter == None :}}
+                      <input  name="area_id_filter" type="text" id="area_id_filter" size="25" value="" placeholder="Area ID/Name" autocomplete="off" style="width:140px"/>
+                    {{else:}}
+                      <input  name="area_id_filter" type="text" id="area_id_filter" size="25" value="{{=session.area_id_filter}}" placeholder="Area ID/Name" autocomplete="off" style="width:140px"/>
+                    {{pass}}
+                  </td>
+                
+                  <td width="150px" >
+                    	<input type="submit" name="btn_filter" id="btn_filter" value="Filter" class="button_update" style="width:80px;height: 25px;"/>
+                   		<input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"style="width:60px;height: 25px;"/>
+                  </td>
+                     
+                 	<td align="right" >
+                   		<a href="{{=URL(c='order',f='no_order_Download')}}">
+                        <input type="button" name="btn_download" id="btn_download" value="Download"   class="button_update" />
+                      </a> 
+                  </td>
+                </tr>
+              </form>
+
+            </table  width="100%">
+               <strong>Total:</strong> {{=total_rec}}<br />
+            <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+                   <td width="150" >Employee</td>
+                   <td width="150" >Retailer</td>
+                   <td width="150" >Region&nbsp;</td>
+                   <td width="150" >Zone&nbsp;</td>
+                   <td width="150" >Area&nbsp;ID|Name</td>
+                   <td width="100" >&nbsp;Visit&nbsp;DateTime</td>
+                   <td width="80" >&nbsp;Visited LatLong</td>
+                   <td width="80">Location</td>
+                 </tr>
+                
+				{{ 
+					for visit_record in visit_data_record: 
+						retailer_id = visit_record['visited_to_id']
+						retailer_name = visit_record['visited_to_name']
+						latlong = visit_record['visited_latlong']
+						if retailer_id == '' or retailer_id == 'None' or retailer_id == None:
+							try:
+								lat = str(latlong).split(',')[0]
+								longitude = str(latlong).split(',')[1]
+							except:
+								lat = 0
+								longitude = 0
+							pass
+					
+							get_retailer_info_sql = "SELECT client_id, name FROM sm_client where latitude = '"+lat+"' and longitude ='"+longitude+"' group by client_id limit 1 ;"
+							get_retailer_info = db.executesql(get_retailer_info_sql, as_dict = True)
+							for r in range(len(get_retailer_info)):
+								retailer_records = get_retailer_info[r]
+								retailer_id = str(retailer_records["client_id"])
+								retailer_name = str(retailer_records["name"])
+							pass
+						pass
+
+				}}
+				
+				<tr class="table-light">
+					<td class="text">{{=visit_record['rep_id']}} | {{=visit_record['rep_name']}}</td>
+					<td>{{=retailer_id}} | {{=retailer_name}}</td>
+					<td class="text">{{=visit_record['region_id']}} | {{=visit_record['region_name']}}</td>
+					<td class="text">{{=visit_record['zone_id']}} | {{=visit_record['zone_name']}}</td>
+					<td class="text">{{=visit_record['area_id']}} | {{=visit_record['area_name']}}</td>
+					<!-- <td class="text">{{#=visit_record['call_type']}}</td> -->
+					<td class="text" >{{=str(visit_record['visit_time']).split('.')[0]}}</td>
+					<td class="text" >
+						<a href="https://maps.google.com/?q={{=latlong}}" target="_blank">{{=latlong}}</a>
+					</td>
+					<td class="text">{{=visit_record['location_detail']}}</td>
+				</tr>
+				{{ pass }}
+                        
+          </table>
+		  		{{if page:}}
+              	<a href="{{=URL(args=[0])}}">First</a> | &nbsp;&nbsp;
+              	<a href="{{=URL(args=[page-1 if page>0 else 0])}}">Previous</a> |
+              	{{pass}}
+              	{{if len(visit_data_record)>=clients_per_page:}}
+              	&nbsp;&nbsp;
+              	<a href="{{=URL(args=[page+1])}}">Next &nbsp;&nbsp;</a>
+              	{{pass}}
+
+          </td>
+          </tr>
+
+      </table>
+      </td>
+    </tr>
+  </table>

@@ -1,0 +1,109 @@
+{{extend 'layout.html'}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Supervisor  Edit</span></td>
+    <form action="{{=URL(c='supervisor',f='sup')}}" method="post">
+    <td width="300" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  <form action="{{=URL(c='supervisor',f='sup_edit', args=[rep_id])}}">
+	<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+		<tr height="100%"  style="vertical-align:top;">
+		  <td>
+		  <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+			
+			<tr>
+			  <td width="5">&nbsp;</td>
+			  <td width="900" valign="top">
+	  
+			  <br /> 
+			  <table width="900">
+				  <tr>
+					  <td width="450" valign="top">
+				<table width="450" class="blackCat">
+					<tr>
+					  <td width="200">Sup ID</td>
+					  <td><pre style= "width: 192px;" name="rep_id" id="rep_id" readonly>{{=rep_id}}</pre></td>
+					  </tr>
+					<tr>
+					  <td width="200">Name</td>
+					  <td><input style= "width: 200px;" type="text" name="name" value="{{=name}}"></td>
+					  </tr>
+					<tr>
+					  <td width="200">Mobile No</td>
+					  <td><input style= "width: 200px;"type="text" name="mobile_no" value="{{=mobile_no}}"></td>
+					</tr>
+					<tr>
+					  <td width="200">Designation</td>
+					  <td><input style= "width: 200px;"type="text" name="designation" value="{{=designation}}"></td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input style= "width: 200px;"type="text" name="password" value="******"></td>
+					</tr>
+					<tr>
+						<td width="200">Status</td>
+						<td>
+            	<select type="text" class="text" name="status" id="status" style= "width: 214px;" >
+               {{if status=='ACTIVE':}}       
+            	<option value="{{=status}}">{{=status}}</option>
+            	<!-- <option value="ACTIVE">ACTIVE</option> -->
+            	<option value="INACTIVE">INACTIVE</option>
+            	{{else:}}
+            	<option value="{{=status}}">{{=status}}</option>
+            	<option value="ACTIVE">ACTIVE</option>
+            	<!-- <option value="INACTIVE">INACTIVE</option> -->
+            	{{pass}}
+                      
+                      
+			</select>
+            </td>
+              
+						<!-- <td><input style= "width: 200px;"type="text" name="status" value="{{#=status}}"></td> -->
+					</tr>
+					<tr>
+						<td></td>
+						<td style="padding-left: 130px;">
+						  <div align="left">
+							<input align="left" type="submit" name="update_btn" id="update_btn" value=" Update " style="vertical-align:middle;height:30px ;border-radius:4px; background-color: rgb(85, 189, 116); color: white; width: 80px;"/>
+						  </div>
+						</td>
+					  </tr>
+					  <tr>
+						<td></td>
+						<td style="padding-left: 130px;"><input type="submit" name="delete_btn" value=" Delete " style="width: 80px; background-color: red; color: white; border-radius: 4px; vertical-align:middle;height:30px ;" onclick="if (!confirm('Do you really want to Delete?')) { return false }">
+						</td>
+					  </tr>
+				  </table>
+				  </td>
+				  
+				  
+                    <tr>
+                        <td width="200"></td>
+                        
+                      </tr>
+					  <!-- <br> -->
+					
+						</table>
+					  </td>
+				  </tr>
+				  </table> 
+			   
+				<br />
+				
+				</td>
+			   </tr>
+		  </table>
+		  
+		  </td>
+		</tr>
+	  </table>
+  </form>
+

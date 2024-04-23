@@ -1,0 +1,619 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+ <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+ <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+ 
+  <style type="text/css">
+ input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	width:250px;
+}
+
+select{ width:265px; margin:2px 0px 2px 0px;}
+
+textarea{
+    width:250px;
+	height:50px;
+	margin:2px 0px 2px 0px;
+}
+
+div.error {
+    margin-left:0px;
+	width:265px;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	}
+	
+#uni_middle_str4{
+width:100px;
+}
+#btn_filter{
+	background-color:#CE295E;
+	color:#fff;
+	border-radius:3px;}
+#btn_all{
+	background-color:#CE295E;
+	color:#fff;
+	border-radius:3px;}	
+#btn_go{
+	background-color:#CE295E;
+	color:#fff;
+	border-radius:3px;}	
+
+.checkbox{
+	padding-left:0px;
+}
+.multiselect{ text-align:left;}
+
+ </style>
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	$('#userTypeagency').hide();
+	//alert(userTypeagency);
+	$('#sm_user_user_role').change(function(){
+	var userType=$('#sm_user_user_role').val();
+	
+	if (userType=='AGENCY'){
+		$('#userTypeagency').show();
+		//alert(userType);
+	}else{
+		$('#userTypeagency').hide();
+	}
+	})
+	 	var refListStr="";
+		
+		$('#searchType').blur(function(){	
+				
+			if ($('#searchType').val()=='userID'){				
+				$.ajax({
+					  url: base_url+'user/get_user_list',
+					  success: function(resStr) {
+						  refListStr=resStr
+						  //alert(refListStr);
+					  }
+					});
+			}else if ($('#searchType').val()=='status'){	
+				refListStr="ACTIVE,INACTIVE";
+			}							
+			
+	 	});
+	 
+		$('#searchValue').keyup(function(){
+			//-------------------------
+			var ref_list = refListStr.split(',');				
+			var ref_name=$("#searchValue").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#searchValue" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	   //==============
+	   $.ajax({
+			  url: base_url+'user/agencyList',
+			  success: function(resStr) {
+				  refListStr=resStr
+			  }
+	});
+	
+	$('#uAgency').keyup(function(){
+			//-------------------------
+			var ref_list = refListStr.split(',');				
+			var ref_name=$("#uAgency").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#uAgency" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  	   
+}); 
+
+
+</script>
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">User</span></td>
+	<td width="500" align="right">&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	<td colspan="3" ></td>
+  </tr>
+</table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	
+	<table width="900px"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="10">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td valign="top">		
+		 {{if access_permission==True and (session.user_role=='VERIFIER' or session.user_role=='ADMIN'):}}
+          <table width="700" class="blackCat" id="form_table">
+		  {{=form.custom.begin}}            
+            <tr>
+              <td width="100">ID</td>
+              <td width="500" >{{=form.custom.widget.user_id}}</td>
+              <td width="100" rowspan="6" >
+              	Town<select id="town_code" name="town_code" class="test-build-select-all-select" multiple="multiple" style="width:250px; height:300px;">
+                <option value="ALL">ALL</option>
+                {{for row in townList:}}
+                <option value="{{=row.town_code}}">{{=row.town_name}}-{{=row.town_code}}</option>
+                {{pass}}
+            </select>
+              
+              </td>
+              </tr>
+            <tr >
+              <td width="100" align="left">Name</td>
+              <td width="500" >{{=form.custom.widget.user_name}}</td>
+              </tr>                     
+            <tr>
+              <td width="100">Password</td>
+              <td width="500">
+                <!-- <input type="password" name="searchValue" id="searchValue" style="width:250px;" value="" placeholder="Password Minimum 8 Characters" autocomplete="off"/>-->
+                {{=form.custom.widget.password}}
+              </td>
+              </tr>            
+            <tr>
+              <td width="100">Mobile No </td>
+              <td width="500" >{{=form.custom.widget.mobile}}</td>
+              </tr>   
+              <tr>
+              <td width="100">Email</td>
+              <td width="500" >{{=form.custom.widget.email}}</td>
+              </tr>   
+             <tr>
+              <td width="100">Email Notification</td>
+              <td width="500" >{{=form.custom.widget.email_notification}}</td>
+              </tr>            		                  
+            <tr>
+              <td width="100">Status</td>
+              <td width="500" >{{=form.custom.widget.status}}</td>
+              </tr>
+            <tr>
+              <td width="100" height="41">Access  Role </td>
+              <td width="500" >{{=form.custom.widget.user_role}}</td>
+              </tr>
+            <tr id="userTypeagency">
+				  <td width="100" align="left"> Agency </td>
+				  <td width="500" ><input type="text" name="uAgency" id="uAgency"  placeholder="Select Agency"/></td>
+			</tr>
+          
+            <tr>
+              <td width="100">&nbsp;</td>
+              <td width="500">{{=form.custom.submit}}</td>
+              <td width="100"><!--<input type="button" name="btn_hide" id="btn_hide" value=" - " title="Hide"/>--></td>
+              <td width="50">&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="100" >&nbsp;</td>
+              <td width="500" >&nbsp;</td>
+              <td width="100">&nbsp;</td>
+            </tr>
+		{{=form.custom.end}}
+		</table>     
+		<!--<table width="900">
+		   	<tr>
+				<td><input type="button" name="btn_show" id="btn_show" value=" + " title="New Lab"/></td>
+				<td align="right">&nbsp;</td>
+			</tr>
+		   </table>	-->	
+		{{pass}}
+         
+		   
+		<table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+			 <form id="form1" name="form1" method="post" action="{{=URL(c='user',f='user_add')}}">
+               <tr align="left" height="20px">
+                 <td >
+				 
+				 <select name="searchType" id="searchType" style="width:140px" title="Search Type">
+				  	<option value="">Select Type</option>					 
+					 {{if session.searchType=='userID':}}<option value="userID" selected="selected">ID/ Mobile No</option>{{else:}}	<option value="userID">ID/ Mobile No</option>{{pass}}	
+                     {{if session.searchType=='status':}}<option value="status" selected="selected">Status</option>{{else:}}	<option value="status">Status</option>{{pass}}						 
+				 </select>
+                   {{if session.searchValue=='' or session.searchValue==None:}}				 
+				   <input type="text" name="searchValue" id="searchValue" style="width:300px;" value="" placeholder="Search Value" autocomplete="off"/>{{else:}}
+                   <input type="text" name="searchValue" id="searchValue" style="width:300px;" value="{{=session.searchValue}}"  autocomplete="off"/>{{pass}}
+                   
+				 <input type="submit" name="btn_filter" id="btn_filter" value="Filter" class="button_update" title=""/>
+                   <input type="submit" name="btn_all" id="btn_all" value="All"   class="button_update"/>
+                </tr>
+			   </form>
+        </table>
+        
+        <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+                 <td width="100"  > ID</td>
+                 <td width="150"  >Name</td>
+                 <td width="100"  >Password</td>
+                 <td width="120"  >Mobile No</td>   
+                  <td width="120" align="left" >Email </td>
+                  <td width="120" align="left" >Email Notification </td>            
+                 <td width="120" align="left" >Access  Role </td>
+                  <td width="120" align="left" >Agency Code </td>
+                  <td width="120" align="left" >Agency Name</td>
+                  <td width="120" align="left" >Town</td>
+                 <td width="80" align="left" >Status</td>
+                 <td width="30"></td>
+               </tr>
+	  
+			   {{for i,record in enumerate(records):}}
+			    {{ if i==items_per_page: break}} 
+				<tr  align="left" class="blackCat"  style="vertical-align:middle; font-size:11px;"> 
+				  <td width="100" >{{=record.user_id}}</td>
+				  <td width="150" >{{=record.user_name}}</td>
+				  <td width="100" >********</td>
+				  <td width="120" >{{=record.mobile}}</td>	
+                  <td width="120" >{{=record.email}}</td>		
+                  <td width="120" >{{=record.email_notification}}</td>		  
+				  <td width="120" align="left"  >{{=record.user_role}}</td>
+                   <td width="120" align="left"  >{{=record.agency_code}}</td>
+                   <td width="120" align="left"  >{{=record.agency_name}}</td>
+                   <td width="120" align="left"  >{{=record.town_code}}</td>
+                  
+                  <td width="80" align="left"  >{{=record.status}}</td>
+				  <form id="form1" name="form1" method="post" action="{{=URL(c='user',f='user_edit',args=[page,record.id,record.user_id,record.agency_code,record.agency_name], vars=dict(townCode=record.town_code))}}">
+                  
+				  <td width="30" align="right"  >
+                  {{if (session.user_role=='VERIFIER' or session.user_role=='ADMIN'):}}
+                  	<input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/>
+                  {{pass}}
+                  </td>
+			      </form>
+				</tr>
+
+			   {{pass}}
+		    </table>
+			 
+		  </td>
+      </tr>
+    </table>
+
+
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+	</td>
+  </tr>
+</table>
+ <br /> <br /> <br />
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		// Test build of multiselect.
+		var build = function(select, tr) {
+			select.multiselect();
+			
+			if (select.length === 0) {
+				return 'Select not present anymore.';
+			}
+			
+			if (select.css('display') !== 'none') {
+				return 'Select still visible (expected <code>display: none;</code>).';
+			}
+			
+			if ($('button.multiselect', tr).length === 0) {
+				return 'Multiselect button not present.';
+			}
+			
+			if ($('option', select).length !== 5) {
+				return 'Not all options present anymore.';
+			}
+			
+			if ($('ul.multiselect-container', tr).length === 0) {
+				return 'Unordered list <code>.multiselect-container</code> not present.';
+			}
+			
+			if ($('ul.multiselect-container li', tr).length !== 5) {
+				return 'No list item for each option present.';
+			}
+			
+			if ($('ul.multiselect-container li a', tr).length !== 5) {
+				return 'Not all list items come with an anchor inside.';
+			}
+			
+			return false;
+		}($('#test-build-select'), $('#test-build-tr'));
+		
+		if (build) {
+			$('#test-build-tr').removeClass('success').addClass('danger');
+			$('#test-build-tr td').last().html(build);
+		}
+		
+		// Test build with optgroups.
+		var buildOptgroups = function(select, tr) {
+			select.multiselect();
+			
+			if ($('optgroup', select).length !== 2) {
+				return 'Optgroups not present anymore (2 expected).';
+			}
+			
+			var first = $('optgroup', select).get(0);
+			var second = $('optgroup', select).get(1);
+			
+			if ($('option', $(first)).length !== 2) {
+				return 'First optgroup does not have 2 options.';
+			}
+			
+			if ($('option', $(second)).length !== 3) {
+				return 'Second optgroup does not have 3 options.';
+			}
+			
+			// Check the corresponding labels.
+			if ($('label.multiselect-group', tr).length !== 2) {
+				return 'Expected 2 labels within the unordered list.';
+			}
+			
+			// Check labeling of groups.
+			var firstLabel = $('label.multiselect-group', tr).get(0);
+			var secondLabel = $('label.multiselect-group', tr).get(1);
+			
+			if ($(firstLabel).text() !== $(first).prop('label')) {
+				return 'First group labeled incorrectly.';
+			}
+			
+			if ($(secondLabel).text() !== $(second).prop('label')) {
+				return 'Second group labeled incorrectly.';
+			}
+			
+			return false;
+		}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+		
+		if (buildOptgroups) {
+			$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+			$('#test-build-optgroups-tr td').last().html(build);
+		}
+		
+		var buildSelected = function(select, tr ) {
+			select.multiselect();
+			
+			if ($('option:selected', select).length !== 1) {
+				return 'Multiselect did not adopt selected options (1 selected option).';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length !== 1) {
+				return 'Corresponding list item not set to <code>.active</code>.';
+			}
+			
+			return false;
+		}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+		
+		if (buildSelected) {
+			$('#test-build-selected-tr').removeClass('success').addClass('danger');
+			$('#test-build-selected-tr td').last().html(buildSelected);
+		}
+		
+		var buildSelectAll = function(select, tr ) {
+			var value ="all";
+			select.multiselect({
+				maxHeight: 150,
+				selectedClass: null,
+				//buttonWidth:'155px',
+				includeSelectAllOption: true,
+				selectAllValue: value
+			});
+			
+			if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+				return 'Expected exactly one input with value ' + value + ' as select all option.';
+			}
+			
+			return false;
+		}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+		
+		if (buildSelectAll) {
+			$('#test-build-select-all-tr').removeClass('success').addClass('');
+			$('#test-build-select-all-tr td').last().html(buildSelectAll);
+		}
+		
+		var buildFilter = function(select, tr) {
+			select.multiselect({
+				enableFiltering: true
+			});
+			
+			if ($('.multiselect-search', tr).length !== 1) {
+				return 'No search input present.';
+			}
+			
+		}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+		
+		if (buildFilter) {
+			$('#test-build-filter-tr').removeClass('success').addClass('danger');
+			$('#test-build-filter-tr td').last().html(buildFilter);
+		}
+		
+		// Test select.
+		var select = function(selectElement, tr) {
+			selectElement.multiselect();
+			
+			// Check for no selected options and no active li's.
+			if ($('option:selected', selectElement).length > 0) {
+				return 'There are already selected options (0 expected).';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length > 0) {
+				return 'There are already active list items (0 expected).';
+			}
+			
+			selectElement.multiselect('select', '1');
+			
+			if ($('option:selected', selectElement).length !== 1) {
+				return 'Just selected an option - option not marked selected.';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length !== 1) {
+				return 'Just selected an option - list item not set active.';
+			}
+			
+			if ($('option:selected', selectElement).first().val() !== '1') {
+				return 'Wrong option selected.';
+			}
+			
+			selectElement.multiselect('select', ['2', '3']);
+			
+			if ($('option:selected', selectElement).length !== 3) {
+				return 'Just selected two additional options - options not marked selected.';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length !== 3) {
+				return 'Just selected two additional options - list items not set active.';
+			}
+			
+			var second = $('option:selected', selectElement).get(1),
+				third = $('option:selected', selectElement).get(2);
+			
+			if (second === undefined || second.length === 0) {
+				return 'Could not get second option.';
+			}
+			
+			if (third === undefined || third.length === 0) {
+				return 'Could not get third option.';
+			}
+			
+			if ($(second).val() !== '2' || $(third).val() !== '3') {
+				return 'Wrong options selected.';
+			}
+			
+			return false;
+		}($('#test-select-select'), $('#test-select-tr'));
+		
+		if (select) {
+			$('#test-select-tr').removeClass('success').addClass('danger');
+			$('#test-select-tr td').last().html(select);
+		}
+		
+		// Test deselect.
+		var deselect = function(select, tr) {
+			select.multiselect();
+			
+			// Check for no selected options and no active li's.
+			if ($('option:selected', select).length !== 3) {
+				return 'There should be 3 options selected.';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length !== 3) {
+				return 'There should be 3 list items set to active.';
+			}
+			
+			select.multiselect('deselect', '1');
+			
+			if ($('option:selected', select).length !== 2) {
+				return 'Just deselected an option - option not marked deselected.';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length !== 2) {
+				return 'Just deselected an option - list item not set inactive.';
+			}
+			
+			if ($('option:selected', select).first().val() !== '2') {
+				return 'Wrong option deselected.';
+			}
+			
+			select.multiselect('deselect', ['2', '3']);
+			
+			if ($('option:selected', select).length > 0) {
+				return 'Just deselected two additional options - options not marked deselected.';
+			}
+			
+			if ($('ul.multiselect-container li.active', tr).length > 0) {
+				return 'Just deselected two additional options - list items not set unactive.';
+			}
+			
+			return false;
+		}($('#test-deselect-select'), $('#test-deselect-tr'));
+		
+		if (deselect) {
+			$('#test-deselect-tr').removeClass('success').addClass('danger');
+			$('#test-deselect-tr td').last().html(deselect);
+		}
+		
+		var maxHeight = function(select, tr) {
+			
+			select.multiselect({
+				maxHeight: 100
+			});
+			
+			var height = $('.multiselect-container', tr).css('max-height');
+			if (height !== '100px') {
+				return 'Max height not set correctly (set: ' + height + ').';
+			}
+			
+			return false;
+		}($('#test-max-height-select'), $('#test-max-height-tr'));
+		
+		if (maxHeight) {
+			$('#test-max-height-tr').removeClass('success').addClass('danger');
+			$('#test-max-height-tr td').last().html(maxHeight);
+		}
+	});
+</script>

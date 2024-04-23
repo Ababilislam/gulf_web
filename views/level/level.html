@@ -1,0 +1,741 @@
+{{extend 'layout.html'}}
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/ui.theme.css')}}"
+  type="text/css"
+/>
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/jquery-ui.css')}}"
+  type="text/css"
+/>
+<link
+  rel="stylesheet"
+  href="{{=URL('static', 'js_and_css/style.css')}}"
+  type="text/css"
+/>
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+  input[type="text"],
+  input[type="password"] {
+    margin: 2px 0px 2px 0px;
+    width: 200px;
+  }
+  select {
+    margin: 2px 0px 2px 0px;
+    width: 215px;
+  }
+
+  div.error {
+    width: 200px;
+  }
+
+  .page_color,
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+  }
+</style>
+
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function () {
+
+// alert(base_url+'master/get_expense_head_list')
+
+$.ajax({
+    url: base_url + 'level/get_level_id_list',
+    success: function (retStr) {
+        zmStr = retStr
+        //alert (zmStr)
+    }
+});
+
+
+$('#level_search').keyup(function () {
+
+    // alert("YES")
+    //-------------------------
+    var ref_list = zmStr.split(',');
+    var ref_name = $("#level_search").val();
+
+    //---------------- auto complete combo list
+    var ref_list_new = new Array();
+    lc = 0;
+    i = 0;
+    var refStr = "";
+    while (i < ref_list.length) {
+        refStr = ref_list[i];
+        i = i + 1;
+        var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+        if (res != null) {
+            ref_list_new[lc] = refStr;
+            lc = lc + 1;
+            if (lc == 30) {
+                break;
+            };
+        } else {
+            continue;
+        }
+    };
+    //alert (ref_list_new);
+
+    //-------------- auto complete source
+    $("input#level_search").autocomplete({
+        source: ref_list_new
+    });
+
+});
+
+})
+</script>
+
+
+
+
+<table
+  width="100%"
+  border="0"
+  cellspacing="0"
+  cellpadding="0"
+  style="background-color: #ffffff"
+>
+  <tr height="30px">
+    <td width="410px"><span class="blackCatTitle">Area Structure </span></td>
+	{{if depth==1:}}
+	<form action="{{=URL(c='level',f='level',vars={'depth':depth-1,'national_id':national_id})}}" method="post">
+		<td align="right" width="400px">
+		  <input name="" type="submit" value="Back" />
+		</td>
+	  </form>
+	  {{pass}}
+	  {{if depth==2:}}
+	  <form action="{{=URL(c='level',f='level',vars={'depth':depth-1,'national_id':national_id,'national_name':national_name})}}" method="post">
+		<td align="right" width="400px">
+		  <input name="" type="submit" value="Back" />
+		</td>
+	  </form>
+	  {{pass}}
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr height="1px" style="background-color: #cccccc">
+    <td></td>
+    <td></td>
+    <td width="100"></td>
+    <td></td>
+  </tr>
+</table>
+
+<table width="800px" border="0" cellspacing="0" cellpadding="0">
+  <form id="form" name="form" method="post" action="{{=URL(c='level',f='level')}}">
+  
+    <tr>
+      <td align="right">Level ID/Name :
+        {{if session.level_search=='' or session.level_search==None:}}
+              <input type="text" name="level_search" id="level_search" size="25" value=""  autocomplete="off" style="width:250px" placeholder="Select Level ID/Name"/>
+      {{else:}}
+              <input type="text" name="level_search" id="level_search"  value="{{=session.level_search}}" placeholder="Select Level ID/Name" autocomplete="off" style="width:250px"/>
+      {{pass}}
+  
+        <input type="submit" name="btn_search" id="btn_search" value="Search"   class="button_update"/>
+  
+      </td>
+      </tr>
+    </form>
+  </table>
+
+<table width="100%" height="500px" class="page_color">
+  <tr height="100%" style="vertical-align: top">
+    <td>
+      <table width="100%">
+        <tr>
+          <td width="10px">&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            {{if depth==0:}}
+            <form action="{{=URL(c='level', f='level')}} " autocomplete="off">
+              <table width="500" class="blackCat">
+                <tr>
+                  <td>National ID</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="national_id"
+                      
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>National Name</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="national_name"
+                    />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td width=""></td>
+                  <td align="left" style="margin-left: 5px">
+                    <div align="left">
+                      <input
+                        align="left"
+                        type="submit"
+                        name="submit"
+                        id="submit"
+                        value=" Save "
+                        style="
+                          vertical-align: middle;
+                          height: 30px;
+                          border-radius: 4px;
+                        "
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            {{pass}} {{if depth==1:}}
+            <form action="{{=URL(c='level', f='level',vars={'depth':depth,'national_id':national_id,'national_name':national_name})}}"autocomplete="off">
+              <table width="500" class="blackCat">
+                <tr>
+                  <td>Divisional ID</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="divisional_id"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Divisional Name</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="divisional_name"
+                    />
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="depth"
+                      value="{{=depth}}"
+                    />
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="national_id"
+                      value="{{=national_id}}"
+                    />
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="national_name"
+                      value="{{=national_name}}"
+                    />
+                  </td>
+                </tr>
+               
+
+                <tr>
+                  <td width=""></td>
+                  <td align="left" style="margin-left: 5px">
+                    <div align="left">
+                      <input
+                        align="left"
+                        type="submit"
+                        name="submit"
+                        id="submit"
+                        value=" Save "
+                        style="
+                          vertical-align: middle;
+                          height: 30px;
+                          border-radius: 4px;
+                        "
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            {{pass}} {{if depth==2:}}
+            <form action="{{=URL(c='level', f='level')}}" autocomplete="off">
+              <table width="500" class="blackCat">
+                <tr>
+                  <td>Distributor ID</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="distributor_id"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Distributor Name</td>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="text"
+                      name="distributor_name"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="depth"
+                      value="{{=depth}}"
+                    />
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="national_id"
+                      value="{{=national_id}}"
+                    />
+                  </td>
+                  
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="national_name"
+                      value="{{=national_name}}"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="divisional_id"
+                      value="{{=divisional_id}}"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      style="width: 200px"
+                      type="hidden"
+                      name="divisional_name"
+                      value="{{=divisional_name}}"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td width=""></td>
+                  <td align="left" style="margin-left: 5px">
+                    <div align="left">
+                      <input
+                        align="left"
+                        type="submit"
+                        name="submit"
+                        id="submit"
+                        value=" Save "
+                        style="
+                          vertical-align: middle;
+                          height: 30px;
+                          border-radius: 4px;
+                        "
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            {{pass}}
+
+            {{if depth==0:}}
+            <table width="800px" border="0" cellpadding="0" cellspacing="0">
+              <tr align="left" height="20px">
+                
+                <td width="100">&nbsp;</td>
+
+                <td align="right">
+                  <a href="{{=URL(c='level',f='download_level')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download"
+                      class="button_update"
+                  /></a>
+                  <a href="{{=URL(c='level',f='download_level_classic')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download Classic"
+                      class="button_update"
+                  /></a>
+                </td>
+              </tr>
+            </table>
+            <br>
+            {{pass}}
+
+            {{if depth==1:}}
+            <table width="800px" border="0" cellpadding="0" cellspacing="0">
+              <tr align="left" height="20px">
+                
+                <td width="114">
+                  <form action="{{=URL(c='level',f='level',vars={'depth':depth-1,'national_id':national_id})}}" method="post">
+                    <input
+                      type="submit"
+                      name="return_btn"
+                      id="return_btn"
+                      value="{{=national_name}} ({{=national_id}})"
+                    />
+                  </form>
+                </td>
+                
+                <td width="100">&nbsp;</td>
+
+                <td align="right">
+                  <a href="{{=URL(c='level',f='download_level')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download"
+                      class="button_update"
+                  /></a>
+                  <a href="{{=URL(c='level',f='download_level_classic')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download Classic"
+                      class="button_update"
+                  /></a>
+                </td>
+              </tr>
+            </table>
+            {{pass}}
+
+            {{if depth==2:}}
+            <table width="800px" border="0" cellpadding="0" cellspacing="0">
+              <tr align="left" height="20px">
+                
+                <td width="114">
+                  <form action="{{=URL(c='level',f='level',vars={'depth':depth-1,'national_id':national_id,'national_name':national_name})}}" method="post">
+                    <input
+                      type="submit"
+                      name="return_btn"
+                      id="return_btn"
+                      value="{{=national_name}} ({{=national_id}}) > {{=divisional_name}} ({{=divisional_id}})"
+                    />
+                  </form>
+                </td>
+                
+                
+                <td width="100">&nbsp;</td>
+
+                <td align="right">
+                  <a href="{{=URL(c='level',f='download_level')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download"
+                      class="button_update"
+                  /></a>
+                  <a href="{{=URL(c='level',f='download_level_classic')}}"
+                    ><input
+                      type="button"
+                      name="download"
+                      id="download"
+                      value="Download Classic"
+                      class="button_update"
+                  /></a>
+                </td>
+              </tr>
+            </table>
+            {{pass}}
+            
+
+            <table
+              width="800"
+              border="1"
+              cellpadding="1"
+              cellspacing="1"
+              class="sample_border"
+            >
+              <tr align="left" class="blackCatHead" height="20px">
+                {{if depth==0:}}
+                <td width="110">National ID</td>
+                <td>&nbsp;</td>
+                {{elif depth==1:}}
+                <td width="110">Divisional ID</td>
+                <td>&nbsp;</td>
+                {{elif depth==2:}}
+                <td width="110">Distributor ID</td>
+                <td>&nbsp;</td>
+
+                {{pass}} {{if depth==0:}}
+                <td>National Name</td>
+                {{elif depth==1:}}
+                <td>Divisional Name</td>
+                {{elif depth==2:}}
+                <td>Distributor Name</td>
+                {{pass}}
+
+                <td width="50" align="right"></td>
+                <td width="50" align="right"></td>
+                
+              </tr>
+              {{if depth==0:}} {{for i in range(len(level_records)):
+                depth_0_national_id = level_records[i]['level_id']
+                depth_0_national_name = level_records[i]['level_name']
+              }}
+              
+              <tr align="left" class="blackCat">
+                <td width="110">{{=level_records[i]['level_id']}}</td>
+                <form
+                  id="form"
+                  name="form"
+                  method="post"
+                  action="{{=URL(c='level',f='level',vars={'depth':1,'national_id':depth_0_national_id,'national_name':depth_0_national_name})}}"
+                >
+                  <td width="46">
+                    <input
+                      type="submit"
+                      name="button_go"
+                      id="button_go"
+                      value="&gt;&gt;"
+                      class="button_go"
+                    />
+                  </td>
+                </form>
+
+                <form
+                  id="form"
+                  name="form"
+                  method="post"
+                  action="{{=URL(c='level',f='level',vars={'depth':depth,'national_id':depth_0_national_id})}}"
+                >
+                  <td>
+                    <input
+                      type="text"
+                      style="width: 150px"
+                      name="national_name"
+                      id="national_name"
+                      value="{{=level_records[i]['level_name']}}"
+                    />
+                  <td>
+                    <input
+                      type="hidden"
+                      name="item_id"
+                      id="item_id"
+                      value="{{=level_records[i]['id']}}"
+
+                    />
+                    <input
+                      type="submit"
+                      name="update_btn"
+                      id="update_btn"
+                      value="Update"
+
+                    />
+                    
+                  </td>
+
+                  <td width="50" align="right">
+                    <input
+                      type="submit"
+                      name="delete_btn"
+                      id="delete_btn"
+                      value="X"
+
+                    />
+                  </td>
+
+                  <!-- <td width="50" align="right" >
+					<input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+				</td>	   -->
+                </form>
+              </tr>
+              {{pass}} {{elif depth == 1:}} {{for i in range(len(level_records)):
+                depth_1_divisional_id = level_records[i]['level_id']
+                depth_1_divisional_name = level_records[i]['level_name']
+              }}
+              <tr align="left" class="blackCat">
+                <td width="110">{{=level_records[i]['level_id']}}</td>
+                <form
+                  id="form"
+                  name="form"
+                  method="post"
+                  action="{{=URL(c='level',f='level',vars={'depth':2,'national_id':national_id,'national_name':national_name,'divisional_id':depth_1_divisional_id,'divisional_name':depth_1_divisional_name})}}"
+                >
+                  <td width="46">
+                    <input
+                      type="submit"
+                      name="btn_go"
+                      id="btn_go"
+                      value="&gt;&gt;"
+                      class="button_go"
+                    />
+
+                  </td>
+                </form>
+
+                <form
+                  id="form"
+                  name="form"
+                  method="post"
+                  action="{{=URL(c='level', f='level',vars={'depth':depth,'national_id':national_id,'national_name':national_name})}}"
+                >
+                  <td>
+                    <input
+                      type="text"
+                      style="width: 150px"
+                      name="divisional_name"
+                      id="divisional_name"
+                      value="{{=level_records[i]['level_name']}}"
+                      class="button_update"
+                    />
+                    
+                  </td>
+
+                  <td width="50" align="right">
+                    <input
+                      type="hidden"
+                      name="item_id"
+                      id="item_id"
+                      value="{{=level_records[i]['id']}}"
+
+                    />
+                    <input
+                      type="submit"
+                      name="update_btn"
+                      id="update_btn"
+                      value="Update"
+                    />
+                  </td>
+                  <td width="50" align="right">
+                    <input
+                      type="hidden"
+                      style="width: 150px"
+                      name="divisional_id"
+                      id="divisional_id"
+                      value="{{=level_records[i]['level_id']}}"
+                    />
+                    <input
+                      type="submit"
+                      name="delete_btn"
+                      id="delete_btn"
+                      value="X"
+
+                    />
+                  </td>
+
+                  <!-- <td width="50" align="right" >
+					<input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+				</td>	   -->
+                </form>
+              </tr>
+              {{pass}} {{elif depth == 2:}} {{for i in range(len(level_records)): 
+                depth_2_national_id = level_records[i]['level_id']
+                depth_2_national_name = level_records[i]['level_name']
+              }}
+              <tr align="left" class="blackCat">
+                <td width="110">{{=level_records[i]['level_id']}}</td>
+                  <td width="46">
+                  </td>
+
+                <form
+                  id="form"
+                  name="form"
+                  method="post"
+                  action="{{=URL(c='level',f='level',vars={'depth':depth,'national_id':national_id,'national_name':national_name,'divisional_id':divisional_id,'divisional_name':divisional_name})}}"
+                >
+                  <td>
+                    <input
+                      type="text"
+                      style="width: 150px"
+                      name="distributor_name"
+                      id="distributor_name"
+                      value="{{=level_records[i]['level_name']}}"
+                    />
+                  </td>
+
+                  <td width="50" align="right">
+                    <input
+                      type="hidden"
+                      name="item_id"
+                      id="item_id"
+                      value="{{=level_records[i]['id']}}"
+
+                    />
+                    <input
+                      type="submit"
+                      name="update_btn"
+                      id="update_btn"
+                      value="Update"
+                      class="button_update"
+                    />
+                    
+                  </td>
+                  <td width="50" align="right">
+                    <input
+                      type="submit"
+                      name="delete_btn"
+                      id="delete_btn"
+                      value="X"
+
+                    />
+                  </td>
+
+                  <!-- <td width="50" align="right" >
+					<input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+				</td>	   -->
+                </form>
+              </tr>
+              {{pass}} {{pass}}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br />
+<br />

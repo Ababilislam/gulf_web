@@ -1,0 +1,252 @@
+{{extend 'layout.html'}}
+
+<script>
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+  
+  $(function () {
+  
+  // alert(base_url+'master/get_expense_head_list')
+  
+  $.ajax({
+      url: base_url + 'representative/get_sup_id_list',
+      success: function (retStr) {
+          zmStr = retStr
+          //alert (zmStr)
+      }
+  });
+  
+  
+  $('#rep_id_filter').keyup(function () {
+  
+      // alert("YES")
+      //-------------------------
+      var ref_list = zmStr.split(',');
+      var ref_name = $("#rep_id_filter").val();
+  
+      //---------------- auto complete combo list
+      var ref_list_new = new Array();
+      lc = 0;
+      i = 0;
+      var refStr = "";
+      while (i < ref_list.length) {
+          refStr = ref_list[i];
+          i = i + 1;
+          var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res != null) {
+              ref_list_new[lc] = refStr;
+              lc = lc + 1;
+              if (lc == 30) {
+                  break;
+              };
+          } else {
+              continue;
+          }
+      };
+      //alert (ref_list_new);
+  
+      //-------------- auto complete source
+      $("input#rep_id_filter").autocomplete({
+          source: ref_list_new
+      });
+  
+  });
+  
+  });
+
+  </script>
+  
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Supervisor
+      
+    </span></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td>
+	    <td width="100" ></td>
+	    <td ></td>
+  </tr>
+</table>
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+          <!--=====INPUT VALUES===========-->
+                        <form action="{{=URL(c='supervisor',f='sup')}}" method="post">
+                          <table width="800">
+                            <tr>
+                              <td width="400">
+                                <table width="350" class="blackCat">
+                                    <tr>
+                                        <td width="180"> Supervisor ID </td>
+                                        <td><input style= "width: 200px;"type="text" name="rep_id" id= "rep_id" autocomplete="off"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="180"> Name </td>
+                                        <td><input style= "width: 200px;"type="text" name="name" autocomplete="off"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="180"> Mobile </td>
+                                        <td><input style= "width: 200px;"type="text" name="mobile" autocomplete="off"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="180">User Type</td>
+                                      
+                                         <td>
+                      <select type="text" class="text" name="user_type" id="user_type" style= "width: 212px;" >
+                      
+                            <option value="">SELECT</option>
+                            <option value="sup">sup</option>
+                      
+                      
+
+            </td>
+              </select>
+                                    </tr>
+                                </table>
+                              </td>
+
+
+                              <td width="400">
+                                <table width="300" class="blackCat">
+                                    <tr>
+                                        <td width="140"> Designation </td>
+                                        <td><input style= "width: 200px;"type="text" name="designation" autocomplete="off"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="140"> Password </td>
+                                        <td><input style= "width: 200px;"type="password" name="password" autocomplete="off"></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td width="140"> Status </td>
+                                        <td>
+                                        <select type="text" class="text" name="status" id="status" style= "width: 212px;" >
+                      
+                            <option value="">SELECT</option>
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="INACTIVE">INACTIVE</option>
+                      
+                      
+
+            </td>
+              </select>
+                                    </tr>
+                                    <tr>
+                                        <td width="12"></td>
+                                        <td align="left" style="margin-left: 5px;" >
+                                            <div align="left">
+                                              <input align="left" type="submit" name="submit" id="submit" value='Save' style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        <!--========END=========-->
+                        
+
+                        <!--=======FILTER/ALL/DOWNLOAD/BATCHUP==========-->
+                        <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+                            <form id="form1" name="form1" method="post" action="{{=URL(c='supervisor',f='sup')}}">
+                             <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                               
+                               <td width="166" >
+                                {{if session.rep_id_filter == '' or session.rep_id_filter == 'None' or session.rep_id_filter == None :}}
+                                  <input  name="rep_id_filter" type="text" id="rep_id_filter" size="25" value="" placeholder="Sup ID/Name" autocomplete="off" style="width:300px"/>
+                                {{else:}}
+                                  <input  name="rep_id_filter" type="text" id="rep_id_filter" size="25" value="{{=session.rep_id_filter}}" placeholder="Sup ID/Name" autocomplete="off" style="width:300px"/>
+                               {{pass}}
+                               
+                               </td>
+                               <td width="100" >
+                                <input type="submit" name="btn_filter_rep" id="btn_filter_rep" value="Filter" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               <input type="submit" name="btn_all" id="btn_all" value="All" style="border-radius: 4px; height: 30px;" class="button_update"/>		
+                                  </td>
+                                 
+                               <td align="right" >
+                               <a href="{{=URL(c='supervisor',f='sup_Download')}}">
+                                      <input type="button" name="" id="" value="Download" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                                     </a>
+                               <a href="{{=URL(c='supervisor',f='supervisor_batch_upload')}}">
+                               <input type="button" name="" id="" value="Batch Upload" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               </a>
+                               </td>
+                             </tr>
+                            </form>
+                        </table>
+                        <strong>Total:</strong> {{=len(supRows)}}<br />
+                        <br/>
+                        <!--======END=========-->
+
+
+                        <!--=========SHOW TABLE========-->
+                        <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+                              <td width="950px" >Supervisor ID</td>
+                              <td width="1000px" >Name</td>
+                              <td width="950px">Mobile</td>
+                              <td width="950px">Designation</td>
+                              <td width="950px">Password</td>
+                              <td width="950px">Status</td>
+                              <td width="950px" align="right"  ></td>
+                            </tr>
+
+                            {{for j in range(len(supRows)):
+                              records_ov_dict=supRows[j]
+                              rep_id=str(records_ov_dict["rep_id"])
+                              name=str(records_ov_dict["name"])
+                              mobile_no=str(records_ov_dict["mobile_no"])
+                              designation=str(records_ov_dict["designation"])
+                              password=str(records_ov_dict["password"])
+                              status=str(records_ov_dict["status"])                                 
+                            }}
+
+                            
+                              
+                              <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+                                <td width="50" >{{=rep_id}}</td>
+                                <td width="250">{{=name}}</td>
+                                <td >{{=mobile_no}}</td>
+                                <td >{{=designation}}</td>
+                                <td >*******</td>
+                                <td >{{=status}}</td>
+
+                                <form id="form1" name="form1" method="post" action="{{=URL(c='supervisor',f='sup_edit')}}" target="_blank">
+                                  <td width="38" align="right"  > 
+                                    <a href="{{=URL(c='supervisor',f='sup_edit',args=[rep_id])}}">
+                                      <input type="button" name="submit" id="submit" value="&gt;&gt;"   class="button_update"/>
+                                    </a>
+                                  </td>
+                                </form>
+                              </tr>
+                            
+                            {{pass}}
+                        </table>
+                        {{if page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+                        {{pass}}
+                        
+                        {{if len(supRows)>sup_per_page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+                        {{pass}}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+                            

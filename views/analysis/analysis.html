@@ -1,0 +1,1755 @@
+{{extend 'layout.html'}}
+
+
+
+<head>
+
+<link rel="stylesheet" href="{{=URL('static', 'jchart/styles/jchartfx.css')}}" type="text/css" />
+
+<script src="{{=URL('static','jchart/js/jchartfx.system.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.coreVector.js')}}"></script>
+
+<script src="{{=URL('static','jchart/js/jchartfx.advanced.js')}}"></script>
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+
+
+<style type="text/css">
+
+	.jchartfx .Title {
+
+		 font-size:12pt;
+
+		 font-weight: bold;
+
+		 color:#000000;
+
+	}
+
+
+
+	<!--Chart color-->
+
+	.jchartfx .Attribute3{
+
+		 fill:#C44000;
+
+	}
+
+	.jchartfx .Attribute0{
+
+		 fill:#4F81BD; 
+
+	}
+
+	.jchartfx .Attribute1{
+
+		 fill:#C0504D;
+
+	}
+
+	
+
+	.jchartfx .Attribute0Line{
+
+		 stroke:#C0504D;
+
+		 stroke-width:2;
+
+	}
+
+	 .jchartfx .Attribute1Line{
+
+		 stroke:#4F81BD;
+
+		 stroke-width:2;	
+
+	}
+
+	<!--color-->
+
+	
+
+	input[type=submit] {
+
+		margin: 2px 0px 2px 0px;
+
+		padding: 0px 0px 2px 0px;
+
+		width:200px;
+
+	}
+
+	
+
+	input[type=text] {
+
+		width:120px;
+
+	}
+
+	
+
+	.checkbox{
+
+	padding-left:0px;
+
+	}
+
+	
+
+	.multiselect{ 
+
+			text-align:left;
+
+			height:28px;
+
+	}
+
+	
+
+	.page_color,body{
+
+			font-family:Arial, Helvetica, sans-serif;
+
+			font-size:13px;	
+
+			}
+
+
+
+</style>
+<script>
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+$(function() {
+		 
+	var refListStrposmCodeListAgency='';
+	$.ajax({
+			  url: base_url+'reports/posmCodeListAgency',
+			  success: function(resStr) {
+				  refListStrposmCodeListAgency=resStr
+			  }
+	});
+	var refListStrTown='';
+	$.ajax({
+			  url: base_url+'reports/posmCodeList',
+			  success: function(resStr) {
+				  refListStrTown=resStr
+			  }
+	});
+	
+	var refListStrterritoryName='';
+	$.ajax({
+			  url: base_url+'settings/terriToryNameList',
+			  success: function(resStr) {
+				  refListStrterritoryName=resStr
+			  }
+	});
+	
+	var refListStrTownCode='';
+	$.ajax({
+			  url: base_url+'settings/townNameList',
+			  success: function(resStr) {
+				  refListStrTownCode=resStr
+			  }
+	});
+	var townCodeAgencyReport='';
+	$.ajax({
+			  url: base_url+'analysis/townNameList',
+			  success: function(resStr) {
+				  townCodeAgencyReport=resStr
+			  }
+	});
+	var refListStrAgencyCode='';
+	$.ajax({
+			  url: base_url+'reports/agencyCodeList',
+			  success: function(resStr) {
+				  refListStrAgencyCode=resStr
+			  }
+	});
+	$('#posmCode').keyup(function(){
+			//-------------------------
+			var ref_list = refListStrTown.split(',');				
+			var ref_name=$("#posmCode").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			i =0;
+			var refStr="";				
+			while (i < ref_list.length)
+			{
+				refStr=ref_list[i];
+				i=i+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#posmCode" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  $('#townCode').keyup(function(){
+			//-------------------------
+			var ref_list = refListStrTownCode.split(',');				
+			var ref_name=$("#townCode").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			k =0;
+			var refStr="";				
+			while (k < ref_list.length)
+			{
+				refStr=ref_list[k];
+				k=k+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#townCode" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  $('#agencyCode').keyup(function(){
+			//-------------------------
+			var ref_list = refListStrAgencyCode.split(',');				
+			var ref_name=$("#agencyCode").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			j =0;
+			var refStr="";				
+			while (j < ref_list.length)
+			{
+				refStr=ref_list[j];
+				j=j+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#agencyCode" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  $('#posmCodeAgency').keyup(function(){
+			//-------------------------
+			var ref_list = refListStrposmCodeListAgency.split(',');				
+			var ref_name=$("#posmCodeAgency").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			l =0;
+			var refStr="";				
+			while (l < ref_list.length)
+			{
+				refStr=ref_list[l];
+				l=l+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#posmCodeAgency" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  $('#territory_Name').keyup(function(){
+			//-------------------------
+			var ref_list = refListStrterritoryName.split(',');				
+			var ref_name=$("#territory_Name").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			t =0;
+			var refStr="";				
+			while (t < ref_list.length)
+			{
+				refStr=ref_list[t];
+				t=t+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#territory_Name" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  $('#townCode_Name').keyup(function(){
+			//-------------------------
+			var ref_list = townCodeAgencyReport.split(',');				
+			var ref_name=$("#townCode_Name").val();
+			
+			//---------------- auto complete combo list
+			var ref_list_new=new Array();
+			lc=0;
+			x =0;
+			var refStr="";				
+			while (x < ref_list.length)
+			{
+				refStr=ref_list[x];
+				x=x+1;					
+				var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+				if (res!=null){
+					ref_list_new[lc]=refStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#townCode_Name" ).autocomplete({
+				source: ref_list_new
+			});
+		
+	  }); 
+	  
+	  	   
+}); 
+
+
+</script>
+ 
+<script>
+
+ $(function() { 
+
+	/*$( "#htmlbody" ).click(function(){		
+
+		$("#ChartDivSalesTrend").empty();		
+
+		 loadChart();
+
+    });*/
+
+	
+
+	$( "#accordionReport" ).accordion({
+
+	  active:1,
+
+      heightStyle: "content",
+
+	  collapsible: true
+
+    });
+
+	
+
+  });
+function comRegion_select(){
+	
+	var region=$("#regionCompliance").val();
+	$("#comTownCodeNAmeList").val("");
+	$("#comTerritoryStrList").val("");
+	$("#comTerritoryCMStrList").val("");
+	//alert(base_url+'settings/territory_Summary_check?&region='+region);
+	$.ajax({
+		
+		  url:base_url+'settings/territory_Summary_check?&region='+region,
+		  success: function(result) {
+				var resultArray = result.split('rdrd')
+				
+					if (resultArray[0]=='Success'){	
+						territoryName=resultArray[1];
+						
+						if(territoryName!=''){	
+						var townterritoryName=territoryName.split('fdfd');
+						var territoryStr = '<option selected="selected" value="">Select Territory</option>'
+						territoryStr += '<option value="ALL">ALL</option>'
+						for (j=0;j<townterritoryName.length;j++){
+														
+							territoryStr += '<option>'+townterritoryName[j]+'</option>'
+							
+						}
+						territoryStr =territoryStr
+						localStorage.comTerritoryStrNAme=territoryStr;
+						$("#comTerritoryStrList").empty();
+						$("#comTerritoryStrList").append(localStorage.comTerritoryStrNAme).trigger('create');
+						}else{
+							$("#comTerritoryStrList").empty();
+							
+						}
+						
+				}
+		  }
+	});
+ 
+}
+function comTrritory_select(){
+	
+	$("#comTownCodeNAmeList").val("");
+	$("#comTerritoryCMStrList").val("");
+	var territoryStrList=$("#comTerritoryStrList").val();
+	
+	//alert(base_url+'settings/region_check?&region='+region);
+	$.ajax({
+		
+		  url:base_url+'settings/town_for_summary_check?&territoryStrList='+territoryStrList,
+		  success: function(result) {
+				var resultArray = result.split('rdrd')
+				
+					if (resultArray[0]=='Success'){	
+						townName=resultArray[1];
+						
+						if(townName!=''){	
+						var townCodeName=townName.split('fdfd');
+						var townStr = '<option selected="selected" value="">Select Town</option>'
+						townStr += '<option value="ALL">ALL</option>'
+						for (i=0;i<townCodeName.length;i++){	
+							townCodeNAmeStr=townCodeName[i].split('-');	
+														
+							townStr += '<option>'+townCodeNAmeStr[0]+'-'+townCodeNAmeStr[1]+'</option>'
+						}
+						townStr =townStr
+						localStorage.comTownCodeNAme=townStr;
+						$("#comTownCodeNAmeList").empty();
+						$("#comTownCodeNAmeList").append(localStorage.comTownCodeNAme).trigger('create');
+						}else{
+							$("#comTownCodeNAmeList").empty();
+							
+						}
+				}
+		  }
+	});
+ 
+}
+function comCM_select(){
+	$("#comTerritoryCMStrList").val("");
+	var townCodeNAmeList=$("#comTownCodeNAmeList").val().split('-');
+	var townCode=townCodeNAmeList[0];
+	
+	//alert(base_url+'reports/cm_check_forReports?&townCode='+townCode);
+	$.ajax({
+		
+		  url:base_url+'reports/cm_check_forReports?&townCode='+townCode,
+		  success: function(result) {
+				var resultArray = result.split('rdrd')
+				
+					if (resultArray[0]=='Success'){	
+						cmID=resultArray[1];
+						if(cmID!=''){	
+						var townterritoryCM=cmID.split('fdfd');
+						var territoryCMStr = '<option selected="selected" value="">Select CM</option>'
+						territoryCMStr += '<option value="ALL">ALL</option>'
+						for (k=0;k<townterritoryCM.length;k++){
+														
+							territoryCMStr += '<option>'+townterritoryCM[k]+'</option>'
+						}
+						
+						localStorage.comCMListSTR=territoryCMStr;
+						$("#comTerritoryCMStrList").empty();
+						$("#comTerritoryCMStrList").append(localStorage.comCMListSTR).trigger('create');
+						}else{
+							$("#comTerritoryCMStrList").empty();
+							
+						}
+				}
+		  }
+	});
+ 
+}
+  </script>
+
+  
+
+<style>
+
+	.rptlist{font-size:15px; height:auto; }
+
+	.rptlist:hover{ height:auto;}
+
+	.rptul{color:#0076AE; background-color:#F0F0F0;}
+
+	.rptdiv{  font-size:16px; color:#0076AE; background-color:#F0F0F0;}
+
+	
+
+	#accordionReport ul{	list-style-type:none;margin:0; font-size:15px; }
+
+	#accordionReport li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:15px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+
+	
+
+	#accordionReport li:hover{ height:21px;background-color:#F5F5F5; font-size:15px;}
+
+</style>
+
+
+
+</head>
+
+<body id="htmlbody">
+
+<!--<input type="hidden" value="{{#=salesTrendList}}" id="chartDataSalesTrend"/>-->
+
+
+
+{{currYear=str(date_fixed)[0:4]}}
+
+{{currMonth=str(date_fixed)[5:7]}}
+
+
+
+<!--Form Title -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+
+  <tr height="30px">
+
+    <td><div class="blackCatTitle">&nbsp;POSM Reports</div></td>
+
+  </tr>
+
+  <tr >
+
+    <td height="1px" style="background-color:#CCCCCC;"></td>
+
+  </tr>
+
+</table>
+
+<!--Form Content -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="page_color">
+
+  
+
+  <tr height="20px">
+
+  	<td width="10px"></td>
+
+  	<td> </td>	
+
+  </tr>
+
+  
+
+  <tr >
+
+    <td width="10px"></td>
+
+	<td valign="top">	
+		 <div id="accordionReport"  style="width:90%">	 	
+		  {{if (check_role('agency_reportM')==True):}}
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">Agency Execution Report</li>
+ 					
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form2" id="form2" action="{{=URL(c='analysis',f='analysis')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="250px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">POSM Code <span style="color:#F00">*</span></td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="posmCodeAgency" id="posmCodeAgency" value="" placeholder="Search a POSM Code" autocomplete="off" style="width:200px;"/></td>
+                          </tr>
+						  <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">Agency <span style="color:#F00">*</span></td>
+                            <td style="padding-top:6px;">:</td>
+							{{if userCheck[0].user_role == "AGENCY":}}
+								 <td><select name="agencyCode" id="agencyCode"> 
+								 <option value="{{=userCheck[0].agency_code}}|{{=userCheck[0].agency_name}}" selected="selected">{{=userCheck[0].agency_code}}|{{=userCheck[0].agency_name}}</option>
+								</select>
+							{{else:}}
+								<td><input type="text" name="agencyCode" id="agencyCode" value="" placeholder="Search a Agency" autocomplete="off" style="width:200px;"/></td>
+							{{pass}}
+						  </tr>
+						 <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">Territory <span style="color:#F00">*</span></td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="territory_Name" id="territory_Name" value="" placeholder="Search a Territory" autocomplete="off" style="width:200px;"/></td>
+                          </tr>
+						  <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">Town Code</td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="townCode_Name" id="townCode_Name" value="" placeholder="Search a Town" autocomplete="off" style="width:200px;"/></td>
+                          </tr>
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td>Date Range<span style="color:#F00">*</span><br/><span style=" font-size:8px;">( Max 3 Months )</span></td>
+                            <td>:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt}}</span></td>
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                            
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350" height="250px;" >
+
+                        	
+
+                            <tr style="height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+							<tr style=" height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+                                <td><input type="submit" style="width:350px" name="btn_agency_report" value="Show" title=""/></td>
+                            </tr> 
+                             <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>         
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+
+                
+
+		   </div>
+           {{pass}}
+           {{if (check_role('DeadlineMissedV')==True):}}
+           <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">Deadline Missed POSM</li>
+ 					
+                </ul>
+
+		   </div>
+
+		   <div >  
+
+           
+
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<!--<form name="form2" id="form2" action="{{#=URL(c='analysis',f='analysis')}}" target="_blank">-->
+
+                <tr>
+
+                	<td style="width:25%; padding:8px;">
+    
+      <div>
+		<table width="100%">
+			<tr>
+				<td width="60%" style="background-color:#990099;border-radius:2px; color:#FFF;padding-left:3px;">Deadline Missed POSM</td>
+				
+				<td style="background-color:#990099; padding-right:6px;" width="40%" align="right"><a style="color:#fff; background-color:#CE295E; border-radius:2px;" href="{{=URL(c='default',f='summary_dedlineMissTown_details_download')}}" target="_blank">Download (Summary)</a>
+				<a style="color:#fff; background-color:#CE295E; border-radius:2px;" href="{{=URL(c='default',f='all_dedlineMissTown_details_download')}}" target="_blank">Download (Details)</a>
+				</td>
+			</tr>
+		</table>
+	  </div>
+	  <table width="100%" class="table-responsive sample_border" align="center" >
+          <tr style="background-color:#DDD;font-size:9px;line-height:13px;" >
+            <td width="15%" align="">Brand</td>
+            <td width="29%" align="">POSM Code</td>
+            <td width="31%" align="">POSM Type</td>
+            <td width="10%" align="center">Town</td>
+            <td width="15%" align="">Deadline Date</td>
+          </tr>
+		</table>  
+      <div style="width:100%; height:330px; overflow:scroll; ">
+        <table width="100%" class="table-responsive sample_border" align="center" >
+          {{for rec in record2:}}
+          <tr align="" style="vertical-align:middle;font-size:9px; line-height:13px;" >
+            <td width="15%" align="" ><a style="font-size:9px; " href="{{=URL(c='default',f='details_town',args=[page],vars=dict(brand_id=rec[db.alc.brand],posm_code=rec[db.alc.posm_code],posm_type=rec[db.alc.posm_type],town_code=rec[db.alc_detail.town_code]))}}" target="_blank">{{=rec[db.alc.brand]}}</a></td>
+            <td width="30%" align=""><a style="font-size:9px; " href="{{=URL(c='default',f='details_town',args=[page],vars=dict(brand_id=rec[db.alc.brand],posm_code=rec[db.alc.posm_code],posm_type=rec[db.alc.posm_type],town_code=rec[db.alc_detail.town_code]))}}" target="_blank">{{=rec[db.alc.posm_code]}}</a></td>
+            <td width="30%" align=""><a style="font-size:9px; " href="{{=URL(c='default',f='details_town',args=[page],vars=dict(brand_id=rec[db.alc.brand],posm_code=rec[db.alc.posm_code],posm_type=rec[db.alc.posm_type],town_code=rec[db.alc_detail.town_code]))}}" target="_blank">{{=rec[db.alc.posm_type]}}</a></td>
+            <td width="10%" align="right"><a style="font-size:9px; " href="{{=URL(c='default',f='details_town',args=[page],vars=dict(brand_id=rec[db.alc.brand],posm_code=rec[db.alc.posm_code],posm_type=rec[db.alc.posm_type],town_code=rec[db.alc_detail.town_code]))}}" target="_blank">{{=rec[db.alc_detail.town_code.count()]}}</a></td>
+            <td width="15%" align="center"><a style="font-size:9px; " href="{{=URL(c='default',f='details_town',args=[page],vars=dict(brand_id=rec[db.alc.brand],posm_code=rec[db.alc.posm_code],posm_type=rec[db.alc.posm_type],town_code=rec[db.alc_detail.town_code]))}}" target="_blank">{{=rec[db.alc.due_date]}}</a></td>
+          </tr>
+          {{pass}}
+        </table>
+      </div></td>
+      </tr>
+      
+
+            </table>
+
+                
+
+		   </div>
+		{{pass}}
+		
+		<!-------------------Start------------------------>
+		
+		{{if (check_role('execution_discrepancy_View')==True):}}
+		 
+         <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">POSM Execution Discrepancy</li>
+ 					
+                </ul>
+
+		   </div>
+
+		   <div >  
+           
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form3" id="form3" action="{{=URL(c='analysis',f='analysis')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="100px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                          
+
+                          <!---<tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">Town Code</td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="townCode" id="townCode" value="" placeholder="Search a Town Code" autocomplete="off" style="width:200px;"/></td>
+                          </tr>---->
+						  <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">POSM Code <span style="color:#F00">*</span></td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="posmCode" id="posmCode" value="" placeholder="Search a POSM Code" autocomplete="off" style="width:200px;"/></td>
+                          </tr>
+                          <tr >
+
+            
+
+                            <td width="10">&nbsp;</td>
+
+                            <td>&nbsp;</td>
+
+                            <td>&nbsp;</td>
+
+                            <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+                               <td><input type="submit" style="width:350px; color:#000; background-color:#c1c1c1;" name="exe_discrepancy" value="Show" title=""/></td>
+                            </tr> 
+                            
+                            <tr >
+
+                              <td><input type="submit" style="width:350px; color:#000; background-color:#c1c1c1;" name="exe_discrepancy_download" value="Download" title=""/></td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>                           
+                             
+                            
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+            
+            
+
+        
+		   </div>
+           
+		 
+		 {{pass}}
+		 
+		<!-------------------end------------------------>
+
+        {{if (check_role('cmComplianceV')==True):}}
+         <div  class="rptdiv">
+
+                <ul class="rptul">
+
+                    <li class="rptlist">POSM Wise CM Compliance</li>
+ 					
+                </ul>
+
+		   </div>
+
+		   <div >  
+           
+           <table width="900" border="0" cellpadding="0" cellspacing="0">
+
+				<form name="form3" id="form3" action="{{=URL(c='analysis',f='analysis')}}" target="_blank">
+
+                <tr>
+
+                	<td valign="top">
+
+                   	  <table width="550" height="100px;" style="background-color:#F8F8F8;">
+
+                        	
+
+                          <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td width="10">&nbsp;</td>
+
+                              <td width="150">&nbsp;</td>
+
+                              <td width="2">&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                          
+
+                          <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">POSM Code <span style="color:#F00">*</span></td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><input type="text" name="posmCode" id="posmCode" value="" placeholder="Search a POSM Code" autocomplete="off" style="width:200px;"/></td>
+                          </tr>
+                         <tr >
+                            <td>&nbsp;</td>
+                            <td style="padding-top:6px;">Execution Date From</td>
+                            <td style="padding-top:6px;">:</td>
+                            <td><span style="vertical-align:middle;">{{=search_form.custom.widget.from_dt}}&nbsp;To&nbsp;{{=search_form.custom.widget.to_dt}}</span></td>
+                          </tr>
+
+                          <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+
+                            <tr >
+
+                              <td width="10">&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td>&nbsp;</td>
+
+                              <td width="400">&nbsp;</td>
+
+                          </tr>
+                            <tr >
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+
+                      </table>
+
+                    
+
+                    
+
+                  </td>
+
+                    <td valign="top">
+
+                    	<table width="350">
+
+                        	
+
+                            <tr style="background-color:#E9E9E9; height:25px">
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+
+                            <tr >
+                                <td><input type="submit" style="width:350px; color:#000; background-color:#c1c1c1;" name="cm_compliance" value="Show" title=""/></td>
+                            </tr> 
+                            
+                            <tr >
+
+                              <td>&nbsp;</td>
+
+                            </tr>
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+                             <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>                           
+                             
+                            
+                            <tr style="height:25px" >
+
+                              <td></td>
+
+                            </tr>
+
+
+                    </table>
+
+                    
+
+                    </td>                    
+
+                </tr>
+
+                
+
+               </form>
+
+            </table>
+            
+            
+
+        
+		   </div>
+           {{pass}}
+		  
+       
+	  </div>
+      </td>  
+  </tr>
+  
+</table>
+
+		  
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	
+
+	// Test build of multiselect.
+
+	var build = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if (select.length === 0) {
+
+			return 'Select not present anymore.';
+
+		}
+
+		
+
+		if (select.css('display') !== 'none') {
+
+			return 'Select still visible (expected <code>display: none;</code>).';
+
+		}
+
+		
+
+		if ($('button.multiselect', tr).length === 0) {
+
+			return 'Multiselect button not present.';
+
+		}
+
+		
+
+		if ($('option', select).length !== 5) {
+
+			return 'Not all options present anymore.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container', tr).length === 0) {
+
+			return 'Unordered list <code>.multiselect-container</code> not present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li', tr).length !== 5) {
+
+			return 'No list item for each option present.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li a', tr).length !== 5) {
+
+			return 'Not all list items come with an anchor inside.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-select'), $('#test-build-tr'));
+
+	
+
+	if (build) {
+
+		$('#test-build-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-tr td').last().html(build);
+
+	}
+
+	
+
+	// Test build with optgroups.
+
+	var buildOptgroups = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		if ($('optgroup', select).length !== 2) {
+
+			return 'Optgroups not present anymore (2 expected).';
+
+		}
+
+		
+
+		var first = $('optgroup', select).get(0);
+
+		var second = $('optgroup', select).get(1);
+
+		
+
+		if ($('option', $(first)).length !== 2) {
+
+			return 'First optgroup does not have 2 options.';
+
+		}
+
+		
+
+		if ($('option', $(second)).length !== 3) {
+
+			return 'Second optgroup does not have 3 options.';
+
+		}
+
+		
+
+		// Check the corresponding labels.
+
+		if ($('label.multiselect-group', tr).length !== 2) {
+
+			return 'Expected 2 labels within the unordered list.';
+
+		}
+
+		
+
+		// Check labeling of groups.
+
+		var firstLabel = $('label.multiselect-group', tr).get(0);
+
+		var secondLabel = $('label.multiselect-group', tr).get(1);
+
+		
+
+		if ($(firstLabel).text() !== $(first).prop('label')) {
+
+			return 'First group labeled incorrectly.';
+
+		}
+
+		
+
+		if ($(secondLabel).text() !== $(second).prop('label')) {
+
+			return 'Second group labeled incorrectly.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-optgroups-select'), $('#test-build-optgroups-tr'));
+
+	
+
+	if (buildOptgroups) {
+
+		$('#test-build-optgroups-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-optgroups-tr td').last().html(build);
+
+	}
+
+	
+
+	var buildSelected = function(select, tr ) {
+
+		select.multiselect();
+
+		
+
+		if ($('option:selected', select).length !== 1) {
+
+			return 'Multiselect did not adopt selected options (1 selected option).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Corresponding list item not set to <code>.active</code>.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-build-selected-select'), $('#test-build-selected-tr'));
+
+	
+
+	if (buildSelected) {
+
+		$('#test-build-selected-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-selected-tr td').last().html(buildSelected);
+
+	}
+
+
+
+//-----------	Editing code
+
+	var buildSelectAll = function(select, tr ) {
+
+		var value ="all";
+
+		select.multiselect({
+
+			maxHeight: 150,
+
+			selectedClass: null,
+
+			//buttonWidth:'200px',
+
+			//buttonHeight:'50px',
+
+			includeSelectAllOption: true,
+
+			selectAllValue: value
+
+		});
+
+		
+
+		if ($('.multiselect-container input[value="' + value + '"]', tr).length !== 1) {
+
+			return 'Expected exactly one input with value ' + value + ' as select all option.';
+
+		}
+
+		
+
+		return false;
+
+	}($('.test-build-select-all-select'), $('#test-build-select-all-tr'));
+
+	
+
+	if (buildSelectAll) {
+
+		$('#test-build-select-all-tr').removeClass('success').addClass('');
+
+		$('#test-build-select-all-tr td').last().html(buildSelectAll);
+
+	}
+
+	//------- close editing code
+
+	
+
+	var buildFilter = function(select, tr) {
+
+		select.multiselect({
+
+			enableFiltering: true
+
+		});
+
+		
+
+		if ($('.multiselect-search', tr).length !== 1) {
+
+			return 'No search input present.';
+
+		}
+
+		
+
+	}($('.test-build-filter-select'), $('#test-build-filter-tr'));
+
+	
+
+	if (buildFilter) {
+
+		$('#test-build-filter-tr').removeClass('success').addClass('danger');
+
+		$('#test-build-filter-tr td').last().html(buildFilter);
+
+	}
+
+	
+
+	// Test select.
+
+	var select = function(selectElement, tr) {
+
+		selectElement.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', selectElement).length > 0) {
+
+			return 'There are already selected options (0 expected).';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'There are already active list items (0 expected).';
+
+		}
+
+		
+
+		selectElement.multiselect('select', '1');
+
+		
+
+		if ($('option:selected', selectElement).length !== 1) {
+
+			return 'Just selected an option - option not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 1) {
+
+			return 'Just selected an option - list item not set active.';
+
+		}
+
+		
+
+		if ($('option:selected', selectElement).first().val() !== '1') {
+
+			return 'Wrong option selected.';
+
+		}
+
+		
+
+		selectElement.multiselect('select', ['2', '3']);
+
+		
+
+		if ($('option:selected', selectElement).length !== 3) {
+
+			return 'Just selected two additional options - options not marked selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'Just selected two additional options - list items not set active.';
+
+		}
+
+		
+
+		var second = $('option:selected', selectElement).get(1),
+
+			third = $('option:selected', selectElement).get(2);
+
+		
+
+		if (second === undefined || second.length === 0) {
+
+			return 'Could not get second option.';
+
+		}
+
+		
+
+		if (third === undefined || third.length === 0) {
+
+			return 'Could not get third option.';
+
+		}
+
+		
+
+		if ($(second).val() !== '2' || $(third).val() !== '3') {
+
+			return 'Wrong options selected.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-select-select'), $('#test-select-tr'));
+
+	
+
+	if (select) {
+
+		$('#test-select-tr').removeClass('success').addClass('danger');
+
+		$('#test-select-tr td').last().html(select);
+
+	}
+
+	
+
+	// Test deselect.
+
+	var deselect = function(select, tr) {
+
+		select.multiselect();
+
+		
+
+		// Check for no selected options and no active li's.
+
+		if ($('option:selected', select).length !== 3) {
+
+			return 'There should be 3 options selected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 3) {
+
+			return 'There should be 3 list items set to active.';
+
+		}
+
+		
+
+		select.multiselect('deselect', '1');
+
+		
+
+		if ($('option:selected', select).length !== 2) {
+
+			return 'Just deselected an option - option not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length !== 2) {
+
+			return 'Just deselected an option - list item not set inactive.';
+
+		}
+
+		
+
+		if ($('option:selected', select).first().val() !== '2') {
+
+			return 'Wrong option deselected.';
+
+		}
+
+		
+
+		select.multiselect('deselect', ['2', '3']);
+
+		
+
+		if ($('option:selected', select).length > 0) {
+
+			return 'Just deselected two additional options - options not marked deselected.';
+
+		}
+
+		
+
+		if ($('ul.multiselect-container li.active', tr).length > 0) {
+
+			return 'Just deselected two additional options - list items not set unactive.';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-deselect-select'), $('#test-deselect-tr'));
+
+	
+
+	if (deselect) {
+
+		$('#test-deselect-tr').removeClass('success').addClass('danger');
+
+		$('#test-deselect-tr td').last().html(deselect);
+
+	}
+
+	
+
+	var maxHeight = function(select, tr) {
+
+		
+
+		select.multiselect({
+
+			maxHeight: 100
+
+		});
+
+		
+
+		var height = $('.multiselect-container', tr).css('max-height');
+
+		if (height !== '100px') {
+
+			return 'Max height not set correctly (set: ' + height + ').';
+
+		}
+
+		
+
+		return false;
+
+	}($('#test-max-height-select'), $('#test-max-height-tr'));
+
+	
+
+	if (maxHeight) {
+
+		$('#test-max-height-tr').removeClass('success').addClass('danger');
+
+		$('#test-max-height-tr td').last().html(maxHeight);
+
+	}
+
+});
+
+</script>
+
+</body> 
+

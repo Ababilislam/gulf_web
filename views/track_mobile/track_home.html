@@ -1,0 +1,108 @@
+{{extend 'layout_mobile.html'}}
+
+ <style type="text/css">
+
+ input[type=number]{
+    margin: 2px 0px 2px 0px;
+	width:100%;
+}
+.page_color,body{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+
+ </style>
+
+
+<script> 
+ /*window.onpopstate=function(){
+	 window.location.href;
+	 location.reload();
+}; history.pushState({},'');*/
+ 
+</script>
+
+
+<body >   
+
+<table style="border-collapse:collapse;width:100%;">
+    <tr style="background-color:#ECF4FD; font-weight:bold; font-size:14px;" >
+    	<td style="width:100%; padding-left: 2%; padding-top: 1%;">List</td></tr>
+    </tr>
+</table>
+<br/>
+      
+      
+<table style="border-collapse:collapse; width:100%;">	  
+    <tr style="background-color:#0099ff; color:#FFF; font-weight:bold; font-size:10px;" >
+    	<td style="width:20%;  padding-left: 2%;">ID</td><td style="width:30%;">Name</td>
+        <td style="width:40%;">{{=session.level_heading}}</td><td style="width:8%;">Activity</td><td style="width:10%;"><!--Track--></td>
+    </tr>
+
+
+   
+    
+    {{for i in range(len(level_user_list)):}}
+    
+        {{userStr=level_user_list[i]}}
+        
+    <tr style="background-color:#e6f5ff; font-size:12px; height:35px; border-bottom:1px solid #E6E6E6;">
+        <td style=" padding-left: 2%;">{{=userStr['u_id']}}</td>
+        <td>{{=userStr['u_name']}}<br>
+        {{#=session.level_heading}}
+        {{depth=int(userStr['user_type'])
+           
+            u_type=''
+            
+            if depth==0:
+                u_type='National'
+            pass
+            
+            if depth==1:
+                u_type='Divisional'
+            pass
+            
+            if depth==2:
+                u_type='Distributor'
+            pass
+            
+            if depth==3:
+                u_type='Territory'
+            pass}}
+          
+          <font style="color: #C66225">{{#=u_type}}</font>  
+
+        </td> 
+        <td>{{=userStr['area_id']}}|{{=userStr['area_name']}}</td>  
+            
+        <form id="form1" name="form1" method="post" action="{{=URL(c='track_mobile',f='activity',vars=dict(u_id=userStr['u_id']))}}" target="blank">
+        <td><input type="submit" value=" A " title="Activity" /></td>
+        </form> 
+        {{#=str(session.rep_id).upper()}}
+        {{#=userStr['u_id']}}
+        {{if str(session.rep_id).upper()==userStr['u_id']:}}
+        {{if depth<3:}}
+            <form id="form1" name="form1" method="post" action="{{=URL(c='track_mobile',f='tracking_drilldown',vars=dict(u_id=userStr['u_id']))}}" target="blank">
+                
+                <a href="{{=URL(c='track_mobile',f='tracking_drilldown',vars=dict(u_id=userStr['u_id']))}}" target="blank">
+                    <td><input type="submit" value=" >> " title="Track" /></td>
+                </a>
+             </form>
+         {{pass}}    
+        {{pass}}
+
+                <a href="{{#=URL(c='track_mobile',f='u_track',vars=dict(u_id=userStr['u_id']))}}"></a>             
+    </tr>            
+    {{pass}}
+</table>
+    	
+    
+     <hr/>      
+   
+</body>
+
+
+
+
+

@@ -1,0 +1,705 @@
+{{extend 'layout.html'}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+     <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 font-family: Helvetica;}
+      #map_canvas { height: 100% }
+      .InfoWindow {
+      background: #000;
+      }
+	  img 
+		{
+			max-width: none;
+		}
+    </style>
+	
+	
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu--SRHoHCMbwyIhDv29b_uTHkTa6sh3o&sensor=true&region=BD"></script>
+    <script>
+// This example adds a predefined symbol (an arrow) to a polyline.
+// Setting offset to 100% places the arrow at the end of the line.
+//var abc={{=center_point}};
+
+function initialize() {
+  
+  	
+  var myLatlng = new google.maps.LatLng({{=center_point}});
+  //var myLatlng = new google.maps.LatLng(20.291, 153.027);
+ // var a= $("#description").val();
+   //alert (a);
+  
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng,
+	
+    //mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+  
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+ 
+ 
+ 
+ 
+ // drwow visit path========================
+
+ var a= $("#description").val();
+
+  var fields = a.split('rdrd');
+  var total_fields=a.split("rdrd").length-1
+  //alert (total_fields);
+  
+  
+var locations = [];
+ var field=[];
+ var j=0;
+ var lineCoordinates=[]
+ 
+ var lineSymbol = {
+   // path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+	path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
+  };
+ 
+ for (j = 0; j < total_fields; j++){
+	 
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length-1
+	 //alert (total_fields_single);
+	 var arr=[];
+	 
+	 for (s = 0; s < total_fields_single; s++){
+		 arr.push(fields_single[s]);
+		 lineCoordinates.push(new google.maps.LatLng(fields_single[1],fields_single[2]));
+		// alert (lineCoordinates.length);
+		   // if (lineCoordinates.length>1){
+				 
+				//var flightPlanCoordinates ={{#=map_string_ac}};
+				//alert (s);
+				
+					var flightPlanCoordinates =lineCoordinates;
+			
+					   var flightPath = new google.maps.Polyline({
+							path: flightPlanCoordinates,
+						//path: lineCoordinates,
+						strokeColor: '#C00A29',
+						icons: [{
+						  icon: lineSymbol,
+						  offset: '100%',
+						  strokeOpacity: 1.0,
+						  strokeWeight: 2
+						}],
+						map: map
+					  });
+			 
+  		}
+	locations.push(arr);
+	
+ }
+ 
+ // end drwow visit path========================
+ 
+
+
+// Show Police Station================================
+ 
+  var p_station=$("#desc_p").val();
+  var fields_p = p_station.split('rdrd');
+  var total_fields_p=p_station.split("rdrd").length-1
+  var infowindow_p = new google.maps.InfoWindow();
+  
+ var locations_p = [];
+ var field_p=[];
+ var p=0;
+
+ for (p = 0; p < total_fields_p; p++){
+	 var st=0;
+	 var fields_single_p = fields_p[p].split(',');
+  	 var total_fields_single_p=fields_p[p].split(",").length-1
+	 var arr_p=[];
+	 for (st = 0; st < total_fields_single_p; st++){
+		 
+		 arr_p.push(fields_single_p[st]);
+  		}
+	locations_p.push(arr_p);
+	
+ }
+  
+ 
+ var marker_p, ip;
+ var icons_p="{{=URL('static','images/uni_small.png')}}";
+ 
+ for (ip = 0; ip < locations_p.length; ip++) {  
+		
+		//check double shop==============
+	    var searchS_pi=locations_p[ip][1]+','+locations_p[ip][2];
+		 
+
+		  var mOutlet_pi = p_station.split('rdrd');
+  	      var total_mOutlet_pi=p_station.split("rdrd").length-1
+		  
+		  var show_result_pi='';
+		
+		  for (var pi = 0; pi < total_mOutlet_pi; pi++){
+			 if ( (mOutlet_pi[pi].search(searchS_pi))!= -1 ){
+				 var gOutlet_pi=mOutlet_pi[pi].split(',');
+				
+				 
+				 if (show_result_pi==''){
+					 show_result_pi=gOutlet_pi[0];
+					 icons_p="{{=URL('static','images/uni_small.png')}}";
+				 }
+				 else{
+					 
+				 	show_result_pi=show_result_pi+'<div style="background-color:#408080; height:2px"></div>'+ gOutlet_pi[0];
+					icons_p="{{=URL('static','images/uni_red.png')}}";
+				 }
+			 }
+			  
+		  }
+	   
+	   
+	   //======check double shop end========
+		   
+	    marker_p = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations_p[ip][1], locations_p[ip][2]),
+		map: map,
+		icon: icons_p
+
+	   
+      });
+
+	  
+      google.maps.event.addListener(marker_p, 'click', (function(marker_p, ip) {
+        return function() {
+          //infowindow.setContent(locations_p[ip][0]);
+		  
+		  
+		//check double shop==============
+	    var searchS_p=locations_p[ip][1]+','+locations_p[ip][2];
+		 
+
+		  var mOutlet_p = p_station.split('rdrd');
+  	      var total_mOutlet_p=p_station.split("rdrd").length-1
+		  
+		  var show_result_p='';
+		
+		  for (var pp = 0; pp < total_mOutlet_p; pp++){
+			 if ( (mOutlet_p[pp].search(searchS_p))!= -1 ){
+				 var gOutlet_p=mOutlet_p[pp].split(',');
+				// var gOutlet_p_list=gOutlet_p[0].split('(');
+				 
+				 //var outlet_show= gOutlet_p_list[0];
+				 //var outlet_id_show= gOutlet_p_list[1].replace(')', '');
+				 //alert (outlet_id_show);
+				
+				// var c_info="<input type='submit' style='width:400px' onClick='show_dialog(" + row.outlet_id_show + ")' value='" + gOutlet_p[0] + " '>" +outlet_id_show
+				 if (show_result_p==''){
+					 
+					 show_result_p=gOutlet_p[0]; //+ 'fgfdhh';
+				 }
+				 else{
+					 
+				 	show_result_p=show_result_p+'<div style="background-color:#408080; height:2px"></div>'+ gOutlet_p[0] ;
+				 }
+			 }
+			  
+		  }
+	   
+	   
+	   //======check double shop end========
+		  infowindow.setContent(show_result_p);
+          infowindow.open(map, marker_p);
+        }
+      })(marker_p, ip));
+  
+  
+  }  
+  
+
+//  ==================================Planned  Start======================
+
+ var desc_po= $("#desc_po").val();
+ 
+ var infowindow_po = new google.maps.InfoWindow();
+ var marker_po, i;
+ 
+ var fields_po = desc_po.split('rdrd');
+ var total_fields_po=desc_po.split("rdrd").length-1
+ var locations_po = [];
+ var field_po=[];
+ var arr_po=[];
+ var j=0;
+ 
+ for (j = 0; j < total_fields_po; j++){
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single_po = fields_po[j].split(',');
+  	 var total_fields_single_po=fields_po[j].split(",").length-1
+	// alert (total_fields_single);
+	 var arr_po=[];
+	 for (s = 0; s < total_fields_single_po; s++){
+		 
+		 arr_po.push(fields_single_po[s]);
+  		}
+	locations_po.push(arr_po);
+	
+ }
+  
+ var infowindow = new google.maps.InfoWindow();
+ var marker_po, i;
+ var icons_po="{{=URL('static','images/v_red.png')}}";
+ 
+ for (i = 0; i < locations_po.length; i++) {  
+ 	  //alert (locations[i][1]);
+        marker_po = new google.maps.Marker({
+        position: new google.maps.LatLng(locations_po[i][1], locations_po[i][2]),
+		map: map,
+		icon: icons_po   
+      });
+//alert (locations.length);
+//	  ===============================================================
+      google.maps.event.addListener(marker_po, 'click', (function(marker_po, i) {
+        return function() {
+          //infowindow.setContent(locations_p[ip][0]);
+		 
+		  
+		//check double shop==============
+	    var searchS_po=locations_po[i][1]+','+locations_po[i][2];
+		 
+		  
+		  var mOutlet_po = desc_po.split('rdrd');
+  	      var total_mOutlet_po=desc_po.split("rdrd").length-1
+		  
+		  var show_result_po='';
+		   
+		  for (var po = 0; po < total_mOutlet_po; po++){
+			 
+			 if ( (mOutlet_po[po].search(searchS_po))!= -1 ){
+				 var gOutlet_po=mOutlet_po[po].split(',');
+				 //alert ('nadira');
+				 
+				 if (show_result_po==''){
+					 show_result_po=gOutlet_po[0];
+				 }
+				 else{
+					 
+				 	show_result_po=show_result_po+'<div style="background-color:#408080; height:2px"></div>'+ gOutlet_po[0];
+				 }
+			 }
+			  
+		  }
+	   //======check double shop end========
+		  infowindow.setContent(show_result_po);
+          infowindow.open(map, marker_po);
+        }
+      })(marker_po, i));
+  
+ 
+ 
+	}  
+	  
+//	  ======================Planned End==========================  
+	  
+//  ================================== Visit Start======================
+
+ var desc_pl= $("#description").val();
+ 
+ var infowindow_pl = new google.maps.InfoWindow();
+ var marker_pl, i;
+ 
+ var fields = desc_pl.split('rdrd');
+ var total_fields=desc_pl.split("rdrd").length-1
+ var locations_pl = [];
+ var field_pl=[];
+ var arr_pl=[];
+ var j=0;
+ 
+ for (j = 0; j < total_fields; j++){
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length-1
+	// alert (total_fields_single);
+	 var arr_pl=[];
+	 for (s = 0; s < total_fields_single; s++){
+		 
+		 arr_pl.push(fields_single[s]);
+  		}
+	locations_pl.push(arr_pl);
+	
+ }
+  
+ var infowindow = new google.maps.InfoWindow();
+ var marker, i;
+ var icons_pl="{{=URL('static','images/v_blue.png')}}";
+ 
+ for (i = 0; i < locations_pl.length; i++) {  
+ 	  //alert (locations[i][1]);
+      marker = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations_pl[i][1], locations_pl[i][2]),
+		map: map,
+		icon: icons_pl
+//		icon: iconBase + 'http://127.0.0.1:8000/touries/static/images/loading143.gif'
+	   
+      });
+	  
+	  
+	  
+	 
+//=============================================
+	  
+       google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+		 		
+		 var all_value=$("#description").val();
+		 var searchS=locations_pl[i][1]+','+locations_pl[i][2];
+		 
+		  var mOutlet_pl = all_value.split('rdrd');
+  	      var total_mOutlet_pl=all_value.split("rdrd").length-1
+		  var show_result_pl='';
+		  //alert (total_mOutlet_pl)
+		  for (var d = 0; d < total_mOutlet_pl; d++){
+			
+			 
+			// if ( (mOutlet_pl[d].search(searchS))!= -1  ){
+				 
+				//alert (mOutlet_pl[d]);
+				 var gOutlet=mOutlet_pl[d].split(',');
+				 //show_name = gOutlet[0].split('</br>')
+				 
+				 
+				 if (show_result_pl.length==0){
+					// show_result_pl='<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[1]+'</br>'+show_name[2]+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					//show_result_pl='<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[2].replace('EndTime: ', 'Visitime: ')+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					
+					show_result_pl='<span style=" font-size:12px; color:#C00A29">'+gOutlet[0]+'</span>'+'</br>'+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					// alert (show_result_pl);
+				 }
+				 else{
+					 
+				 //	show_result_pl=show_result_pl+'<div style="background-color:#408080; height:2px"></div>'+ '<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[1]+'</br>'+show_name[2]+'</br>Location: '+gOutlet[1]+','+gOutlet[1];			
+					//show_result_pl=show_result_pl+'<div style="background-color:#408080; height:2px"></div>'+ '<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[2]+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					
+					show_result_pl=show_result_pl+'<div style="background-color:#408080; height:2px"></div>'+ '<span style=" font-size:12px; color:#C00A29">'+gOutlet[0]+'</span>'+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					// alert (show_result_pl);
+				 }
+				 
+			 }
+			  
+		//  }
+		
+		  	
+		   infowindow.setContent(show_result_pl);
+           infowindow.open(map, marker);
+        }
+      })(marker, i));
+  
+ 
+ 
+	}  
+	  
+//	  ======================Planned Visit End==========================
+  
+  
+  //  ==================================UnPlanned Visit Start======================
+ 
+ var desc_unpl= $("#desc_unpl").val();
+ 
+ var infowindow_unpl = new google.maps.InfoWindow();
+ var marker_unpl, i;
+
+ var fields_unpl = desc_unpl.split('rdrd');
+ var total_fields_unpl=desc_unpl.split("rdrd").length-1
+ 
+ var arr_unpl = []; 
+ var locations_unpl = [];
+ var field_unpl=[];
+ var j=0;
+
+ for (j = 0; j < total_fields_unpl; j++){
+	
+	 var s=0;
+	 
+	 var fields_single_unpl = fields_unpl[j].split(',');
+  	 var total_fields_single_unpl=fields_unpl[j].split(",").length-1
+	// alert (total_fields_single);
+	 var arr_unpl=[];
+	 for (s = 0; s < total_fields_single_unpl; s++){
+		 
+		 arr_unpl.push(fields_single_unpl[s]);
+  		}
+	locations_unpl.push(arr_unpl);
+	
+ }
+
+
+ var marker, i;
+ var icons_unpl="{{=URL('static','images/v_blue.png')}}";
+ 
+ for (i = 0; i < locations_unpl.length; i++) {  
+		
+        marker = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations_unpl[i][1], locations_unpl[i][2]),
+		map: map,
+		icon: icons_unpl
+	   
+      });
+////alert (locations.length);
+//	  
+//=============================================
+	  
+       google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+		 		
+		 var all_value=$("#description").val();
+		 var searchS=locations_unpl[i][1]+', '+locations_unpl[i][2];
+		 
+		  var mOutlet_pl = all_value.split('rdrd');
+  	      var total_mOutlet_pl=all_value.split("rdrd").length-1
+		  var show_result_pl='';
+		  
+		  for (var d = 0; d < total_mOutlet_pl; d++){
+			//alert ( mOutlet_pl[d]);
+			 //alert (searchS);
+			// if ( (mOutlet_pl[d].search(searchS))== -1  ){
+			 	//alert ('nadira');
+				 
+				
+				 var gOutlet=mOutlet_pl[d].split(',');
+				 show_name = gOutlet[0].split('</br>')
+				 
+				 
+				 if (show_result_pl.length==0){
+					// show_result_pl='<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[1]+'</br>'+show_name[2]+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					 show_result_pl='<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[2].replace("EndTime","VisitTime")+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					// alert (show_result_pl);
+				 }
+				 else{
+					 
+				 //	show_result_pl=show_result_pl+'<div style="background-color:#408080; height:2px"></div>'+ '<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[1]+'</br>'+show_name[2]+'</br>Location: '+gOutlet[1]+','+gOutlet[1];			
+					show_result_pl=show_result_pl+'<div style="background-color:#408080; height:2px"></div>'+ '<span style=" font-size:12px; color:#C00A29">'+show_name[0]+'</span>'+'</br>'+show_name[2].replace("EndTime","VisitTime")+'</br>Location: '+gOutlet[1]+','+gOutlet[1];
+					 
+				 }
+				 
+			 }
+			  
+		 // }
+		
+		   //alert (show_result_pl);	
+		   infowindow.setContent(show_result_pl);
+           infowindow.open(map, marker);
+        }
+      })(marker, i));
+ 
+	}  
+	  
+//	  ======================UnPlanned Visit End==========================
+ 
+
+	  
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+ 
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+  
+    <td width="600px">
+    <div style="width:900px" align="left"> 
+ &nbsp;&nbsp;<img src="{{=URL('static','images/uni_small.png')}}" alt="" /> : Single  &nbsp;&nbsp;
+ <img src="{{=URL('static','images/uni_red.png')}}" alt="" /> : Multiple  &nbsp;&nbsp;
+ <!--<img src="{{=URL('static','images/v_green.png')}}" alt="" /> : Scheduled Visit  &nbsp;&nbsp;-->
+ <img src="{{=URL('static','images/v_blue.png')}}" alt="" /> : Visit  &nbsp;&nbsp;
+ <!--<img src="{{=URL('static','images/v_red.png')}}" alt="" /> : Missed &nbsp;&nbsp;-->
+ 
+ </div>
+	<div  id="map-canvas" style="height:600px; width:100%"></div>	</td>
+   
+    <td></br>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>Rep</td>
+          <td>:</td>
+          <td>{{=session.search_repname_map}}</br>
+            ({{=session.search_rep_map}})</td>
+        </tr>
+        <tr>
+          <td>Date</td>
+          <td>:</td>
+          <td>{{=session.search_date_map}}</td>
+        </tr>
+        {{#=map_string_name_show}}
+        {{     
+        
+        from datetime import time,datetime, timedelta
+        
+        
+        map_string_single=map_string_name.split('rdrd',map_string_name.count('rdrd'))
+        map_string_total=map_string_name.count('rdrd')
+       # =map_string_single[0]
+        }}
+        {{
+        
+       r=0
+	  while (r < map_string_total ):
+				
+			   map_string_single_outlet=map_string_single[r].split(',')
+			   outlet=map_string_single_outlet[0]
+			   lat=map_string_single_outlet[1]
+			   long=map_string_single_outlet[2]
+			  
+				
+			   
+				}}
+				<tr>
+					  <td colspan="3"> {{#=str(start_time)[11:30]}}
+						{{#=str(end_time)[9:30]}}
+						{{#=tdelta}}
+						<div style="color:#C00A29"> {{# =map_string_name_pl.find(outlet)}}
+						  {{#=map_string_name_pl}}
+						  {{#=outlet}}
+						  
+						  {{if (map_string_name_pl.find(str(outlet).strip())==-1):}} <img src="{{=URL('static','images/v_blue.png')}}" alt="" /> {{else:}} <img src="{{=URL('static','images/v_green.png')}}" alt="" /> {{pass}}
+						  
+						  {{=outlet}}</div>
+						{{#=start_time}}
+						<!--</br>-->
+						{{#=str(end_time).replace("EndTime:","VisitTime:")}}</br>
+						Location:{{=lat}},{{=long}}
+						<div style="background-color:#408080; height:2px"></div>
+						{{
+						r=r+1
+						pass}} </td>
+				</tr>
+					<!-- ====================Schedule but not visited========================-->
+				{{        
+				sch_string=map_string_name_po.split('rdrd',map_string_name_po.count('rdrd'))
+				sch_string_total=map_string_name_po.count('rdrd')
+				
+				}}
+				{{
+				r=0
+				while (r < sch_string_total ):
+				
+				show_s_info_single=sch_string[r].split(',',sch_string[r].count(','))
+				show_s_info = show_s_info_single[0]
+				
+				
+				outlet=show_s_info_single[0]
+				
+				lat=show_s_info_single[1]
+				long=show_s_info_single[2]
+				
+				
+				}}
+				<tr>
+					  <td colspan="3"> {{ #=map_string_name}}
+						{{ #=outlet}}
+						{{# =map_string_name.find(str(outlet).strip())}}
+						{{if (map_string_name.find(str(outlet).strip())==-1):}}
+						<div style="color:#C00A29"> <img src="{{=URL('static','images/v_red.png')}}" alt="" /> {{=outlet}}</div>
+						Location:{{=lat}},{{=long}}
+						
+						{{pass}}   
+						
+						
+						{{
+						r=r+1
+						pass}} </td>
+				</tr>
+      </table></td>
+  </tr>
+</table>
+
+</br>
+<!--<input type="submit" style="width:400px"-->
+<input name="desc_p" id="desc_p" placesholder="" value="{{=map_string_name_p}}" type="hidden">
+    
+    <input name="description" id="description" value="{{=map_string_name}}" type="hidden">
+	
+	<input name="description_ac" id="description_ac" value="{{=map_string_name_ac}}" type="hidden">
+    
+    
+    <input name="desc_po" id="desc_po" placesholder="" value="{{=map_string_name_po}}" type="hidden">
+    
+    
+    <input name="desc_pl" id="desc_pl" placesholder="" value="{{=map_string_name_pl}}" type="hidden">
+    
+    
+    
+    <input name="desc_unpl" id="desc_unpl" placesholder="" value="{{=map_string_name_unpl}}" type="hidden">
+	
+	
+	
+	
+	
+
+ 
+  <script src="{{=URL('static','js_and_css/myScript.js')}}"></script>
+  
+  <script>
+ 
+var my_url ="http://127.0.0.1:8000/mrepnovelta/";
+//var my_url ="http://e2.businesssolutionapps.com/mrepnovelta/";
+function show_dialog(a){ 
+//$("#dialog-message").html( my_url+'showMap/client_detail/'+a);
+$.ajax({
+		
+		  url: my_url+'showMap/client_detail/'+a ,
+		 
+		  success: function(dialog) {
+			dialog_show=dialog
+			//var dialog_show_array = dialog_show.split('fd-fd');	
+			//var dialog_show_final = dialog_show_array[0];
+			//alert 'nadira';	
+			$("#dialog-message").html(dialog_show);
+			//$("#dialog-message").html( my_url+'showMap/client_detail/'+a);
+			
+		  }		  
+	});
+
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+ }
+  </script>
+
+
+ <div style="width:1000px" id="dialog-message" title="Client Info">    
+ 
+
+</div>
+
+
+
+  </body>
+</html>

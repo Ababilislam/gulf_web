@@ -1,0 +1,305 @@
+{{extend 'layout.html'}}
+ 
+<script>
+    var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+    
+    $(function () {
+    
+    // alert(base_url+'master/get_expense_head_list')
+    
+    $.ajax({
+        url: base_url + 'item/get_item_id_list',
+        success: function (retStr) {
+            zmStr = retStr
+            //alert (zmStr)
+        }
+    });
+    
+    
+    $('#item_id_filter').keyup(function () {
+    
+        // alert("YES")
+        //-------------------------
+        var ref_list = zmStr.split(',');
+        var ref_name = $("#item_id_filter").val();
+    
+        //---------------- auto complete combo list
+        var ref_list_new = new Array();
+        lc = 0;
+        i = 0;
+        var refStr = "";
+        while (i < ref_list.length) {
+            refStr = ref_list[i];
+            i = i + 1;
+            var res = refStr.toUpperCase().match(ref_name.toUpperCase());
+            if (res != null) {
+                ref_list_new[lc] = refStr;
+                lc = lc + 1;
+                if (lc == 30) {
+                    break;
+                };
+            } else {
+                continue;
+            }
+        };
+        //alert (ref_list_new);
+    
+        //-------------- auto complete source
+        $("input#item_id_filter").autocomplete({
+            source: ref_list_new
+        });
+    
+    });
+    
+    });
+  
+    </script>
+
+
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="280px"><span class="blackCatTitle">Item
+      
+    </span></td>
+    <form action="{{=URL(c='item',f='unit')}}" method="post">
+        <td width="380" align="right"><input name="" type="submit"  value="Unit Type"/></td>
+        </form>
+    <td width="10px"></td>
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td>
+	    <td width="100" ></td>
+	    <td ></td>
+  </tr>
+</table>
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+          <!--=====INPUT VALUES===========-->
+                        <form action="{{=URL(c='item',f='Item')}}">
+                            <table width="800">
+                                <tr>
+                                    <td width="400">
+                                        <table width="400" class="blackCat">
+                                            <tr>
+                                                <td width="140"> Item ID </td>
+                                                <td><input style= "width: 200px;"type="text" name="item_id" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Name </td>
+                                                <td><input style= "width: 200px;"type="text" name="name" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Pack Size </td>
+                                                <td><input style= "width: 200px;"type="text" name="pack_size" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Description </td>
+                                                <td><input style= "width: 200px;"type="text" name="description" autocomplete="off" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Category ID </td>
+                                                <td><input style= "width: 200px;"type="text" name="category_id" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Category ID sp </td>
+                                                <td><input style= "width: 200px;"type="text" name="category_id_sp" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Unit Type </td>
+                                                <!-- <td><input style= "width: 200px;"type="text" name="unit_type" ></td>
+                                                {{#=len(cat_type)}} -->
+                                                <td >
+                                                <select  style= "width: 215px;" name="unit_type" id="unit_type" class="auto_break" >
+                            <option value="">Select Unit Type</option>
+                            
+                            {{for j in range(len(cat_type)):
+
+                                records_ov_dict=cat_type[j]
+                                unit_type=str(records_ov_dict["cat_type_id"])
+
+
+                        }}
+
+                            
+
+                                <option  value="{{=unit_type}}">{{=unit_type}}</option>
+                            {{pass}}
+                        </select>
+                    </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+    
+    
+                                    <td width="400">
+                                        <table width="400" class="blackCat">
+                                            <tr>
+                                                <td width="140"> Manufacturer </td>
+                                                <td><input style= "width: 200px;"type="text" name="manufacture" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Item Carton </td>
+                                                <td><input style= "width: 200px;"type="text" name="item_carton" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Price </td>
+                                                <td><input style= "width: 200px;"type="text" name="price" autocomplete="off"></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Dist Price </td>
+                                                <td><input style= "width: 200px;"type="text" name="dist_price" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> VAT Amount </td>
+                                                <td><input style= "width: 200px;"type="text" name="vat_amount" ></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="140"> Status </td>
+                                                <td>
+                                                    <select type="text" class="text" name="status" id="status" style= "width: 212px;" >
+                                                        <option value="ACTIVE">ACTIVE</option>
+                                                        <option value="INACTIVE">INACTIVE</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="12"></td>
+                                                <td align="left" style="margin-left: 5px;" >
+                                                    <div align="left">
+                                                      <input align="left" type="submit" name="submit" id="submit" value=" Save " style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <!--========END=========-->
+
+                        <!--=======FILTER/ALL/DOWNLOAD/BATCHUP==========-->
+                        <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+		   
+                            <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='Item')}}" >
+                             <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                               <td width="166" >
+                                {{if session.item_id_filter == '' or session.item_id_filter == 'None' or session.item_id_filter == None :}}
+                                   <input  name="item_id_filter" type="text" id="item_id_filter" size="25" value="" placeholder="Item ID/Name" autocomplete="off" style="width:300px"/>
+                                {{else:}}
+                                    <input  name="item_id_filter" type="text" id="item_id_filter" size="25" value="{{=session.item_id_filter}}" placeholder="Item ID/Name" autocomplete="off" style="width:300px"/>
+                               {{pass}}
+                               
+                               </td>
+                               <td width="100" >
+                                
+                                <input type="submit" name="btn_filter_item" id="btn_filter_item" value="Filter" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               <input type="submit" name="btn_all" id="btn_all" value="All" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                                  </td>
+                                 
+                               <td align="right" >
+                               <a href="{{=URL(c='item',f='item_Download')}}">
+                                      <input type="button" name="btn_download" id="btn_download" value="Download" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                                     </a> 
+                               <a href="{{=URL(c='item',f='item_batch_upload')}}">
+                               <input type="button" name="" id="" value="Batch Upload" style="border-radius: 4px; height: 30px;" class="button_update"/>
+                               </a>
+                               </td>
+                             </tr>
+                            </form>
+                        </table>
+                        <strong>Total:</strong> {{=total_rec}}<br />
+                        <br/>
+                        <!--======END=========-->
+
+
+                        <!--=========SHOW TABLE========-->
+                        <table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+                            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+                              <td width="215" >ItemID<br>Name</td>
+                              <!-- <td width="100" >Name</td> -->
+                              <td width="80">Pack Size<br>Description</td>
+                              <!-- <td width="100">Description</td> -->
+                              <td width="100" align="left" >Category ID<br>Category ID sp</td>
+                              <!-- <td width="100" align="left" >Category ID sp</td> -->
+                              <td width="80" align="left" >Unit Type<br>Manufacturer</td>
+                              <!-- <td width="100" align="left" >Manufacturer</td> -->
+                              <td width="50" align="left" >I.Carton</td>
+                              <td width="80" align="left"  >Dist Amount</td>
+                              <td width="80" align="left"  >VAT Amount</td>
+                              <td width="80" align="left"  >Total Amount</td>
+                              <td width="50" align="left"  >Status</td>
+                              <td align="right"  ></td>
+                            </tr>
+
+                            {{for j in range(len(itemRows)):
+                                records_ov_dict=itemRows[j]
+                                item_id=str(records_ov_dict["item_id"])
+                                name=str(records_ov_dict["name"])
+                                pack_size=str(records_ov_dict["pack_size"])
+                                description=str(records_ov_dict["des"])
+                                category_id=str(records_ov_dict["category_id"])
+                                category_id_sp=str(records_ov_dict["category_id_sp"])
+                                unit_type=str(records_ov_dict["unit_type"])
+                                manufacturer=str(records_ov_dict["manufacturer"])
+                                item_carton=str(records_ov_dict["item_carton"])
+                                dist_price=str(records_ov_dict["dist_price"])
+                                vat_amount=str(records_ov_dict["vat_amt"])
+                                status=str(records_ov_dict["status"])                                 
+                              }}
+
+              <form id="form1" name="form1" method="post" action="">
+                
+                <tr  align="left" class="blackCat"  style=" font-size:13px"> 
+                  <td width="215" ><input  name="item_id" type="hidden" id="item_id" size="25" value="{{#=record.id}}" title="" />
+                    {{=item_id}}<br>{{=name}}</td>
+                  <!-- <td width="100" >{{#=name}}</td> -->
+                  <td width="80">{{=pack_size}}<br>{{=description}}</td>
+                  <!-- <td >{{#=description}}</td> -->
+                  <td width="100" align="left" >{{=category_id}}<br>{{=category_id_sp}}</td>
+                  <!-- <td width="100" align="right" >{{#=category_id_sp}}</td> -->
+                  <td width="80" align="right"  >{{=unit_type}}<br>{{=manufacturer}}</td>
+                  <!-- <td width="100" align="right"  >{{#=manufacturer}}</td> -->
+                  <td width="50" align="right"  >{{=item_carton}}</td>
+                  <td width="80" align="right"  >{{=dist_price}}</td>
+                  <td width="80" align="right"  >{{=vat_amount}}</td>
+                  <td width="80" align="right"  >{{#=total_amt}}</td>
+                  <td width="50" align="right"  >{{=status}}</td>
+                  <form id="form1" name="form1" method="post" action="{{=URL(c='item',f='item_edit')}}" target="_blank">
+                    <td width="38" align="right"  > 
+                      <a href="{{=URL(c='item',f='item_edit',args=[item_id])}}">
+                        <input type="button" name="submit" id="submit" value="&gt;&gt;"   class="button_update"/>
+                      </a>
+                    </td>
+                  </form>
+                </tr>
+              </form>
+                            {{pass}}
+                        </table>
+
+                        {{if page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+                        {{pass}}
+                        
+                        {{if len(itemRows)>items_per_page:}}
+                        &nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+                        {{pass}}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+                            

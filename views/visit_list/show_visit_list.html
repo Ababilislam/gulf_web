@@ -1,0 +1,118 @@
+{{extend 'layout_visit_report.html'}}
+<style>
+   #sm_search_date_to_dt_2,#sm_search_date_to_dt_3{
+    width: 100px;
+    height:25px;
+    padding: 0px 5px;
+  }
+  #btn_filter,#btn_all{
+    
+  }
+
+  .table tr:nth-child(even) {background-color: transparent;}
+  
+</style>
+
+<div class="table-responsive-sm">
+  <table class="table mb-0" >
+    <tbody>
+      <form action="{{=URL(c='visit_list',f='show_visit_list',vars = dict(rep_id=rep_id,call_type=call_type))}}">
+
+        <input type="hidden" name="cid" value="{{=cid}}">
+        <input type="hidden" name="rep_id"  id="rep_id" value="{{=rep_id}}">
+        
+        <input type="hidden" name="call_type" value="{{=call_type}}">
+        
+        <!-- <input type="hidden" name="synccode" value="{{#=synccode}}"> -->
+        <!-- <tr class="bg-light">
+          <td style="border:0px solid #fff;padding: 0px 7px;font-weight: bold; " class="table-responsive-sm" colspan="3"> Visit Date </td>
+          
+        </tr> -->
+        <tr class="bg-light">
+         <td style="border:0px solid #fff" class="table-responsive-sm">
+          <label for="html">From Date</label>
+            {{if session.from_date!='' and  session.from_date!='None':}}
+            <input class="date" id="sm_search_date_to_dt_2" name="from_date" type="text" value="{{=session.from_date}}">
+            {{else:}}
+            <input class="date" id="sm_search_date_to_dt_2" name="from_date" type="text" value="" placeholder="From Date">
+            {{pass}}
+            <label for="html">To Date</label>
+            {{if session.to_date!='' and  session.to_date!='None':}}
+            <input class="date" id="sm_search_date_to_dt_3" name="to_date" type="text" value="{{=session.to_date}}">
+            {{else:}}
+             <input class="date" id="sm_search_date_to_dt_3" name="to_date" type="text" value="" placeholder="To Date">
+             {{pass}}
+            
+            
+           </td>
+ 
+          <td style="border:0px solid #fff;" class="table-responsive-sm">
+           <input type="submit"  class="form-control-sm bg-dark text-light" name="btn_filter" id="btn_filter" value="Filter"  style="width: 49%;" />
+             <input type="submit"  class="form-control-sm bg-dark text-light " name="btn_all" id="btn_all" value="All"  style="width: 49%;" />
+          </td>
+
+      </tr>
+      </form>
+    </tbody>  
+  </table>
+
+  <!--  ==========================       sm_tracking_live2      ================================              -->
+
+  <table class="table table-striped table-hover table-bordered table-responsive-sm" > 
+    
+    <thead class="table-dark" >
+      <!-- <th scope="col">Order Date</th> -->
+        <!--<th scope="col"style="width: 50% !important;">Area</th>-->
+        <td scope="col">Employee</td>
+        <td scope="col">Territory&nbsp;ID|Name</td>
+        <td scope="col">Call&nbsp;Type</td>
+        <td scope="col" >&nbsp;Visit&nbsp;Date&nbsp;&nbsp;&nbsp;</td>
+        <td scope="col">Location&nbsp;&nbsp;&nbsp;</td>
+        <!--<th scope="col" class="text-right">Order Amount</th>-->
+        <!-- <th scope="col">Invoice Count</th> -->
+        <!-- <th scope="col" class="text-right">Invoice Amount</th> -->
+        <!--<th scope="col"></th>-->
+    </thead>
+    <tbody>
+  
+      
+      <tr class="table-primary">
+        
+        <td class="text" ></td>
+        <td class="text"></td>
+        <td class="text"></td>
+        <td class="text"></td>
+        <td class="text"></td>
+        
+        
+    
+       
+        
+      </tr>
+      {{ for visit_record in visit_data_record: }}
+   <tr class="table-light">
+       <!--<td class="text-center">{{=visit_record['area_id']}}|{{=visit_record['area_name']}}</td>-->
+      <td class="text">{{=visit_record['rep_id']}} | {{=visit_record['rep_name']}}</td>
+      <td class="text">{{=visit_record['territory_id']}} | {{=visit_record['territory_name']}}</td>
+      <!--<td class="text-center">{{=visit_record['zone_id']}} | {{=visit_record['zone_name']}}</td>-->
+      <td class="text">{{=visit_record['call_type']}}</td>
+      <td class="text" >{{=visit_record['visit_date']}}</td>
+      <td class="text">{{=visit_record['location_detail']}}</td>
+   </tr>
+{{ pass }}
+
+     
+       
+        
+     
+    </tbody>
+  </table>
+
+
+
+
+
+
+
+
+</div>

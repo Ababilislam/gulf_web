@@ -1,0 +1,683 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lafarge Holcim</title>
+    <!--<link rel="stylesheet" href="static/c.min.css" />
+    <link rel="stylesheet" href="static/jquery.mobile-1.4.0.min.css" /> -->
+    
+    
+    <link rel="stylesheet" href="static/d.min.css" />
+    <link rel="stylesheet" href="static/jquery.mobile-1.4.0.min.css" /> 
+    
+        
+    <link rel="stylesheet" href="static/list.css" /> 
+    <script src="static/jquery-1.10.2.min.js"></script>
+    <!--<script src="static/jquery.mobile-1.4.0.min.js"></script>-->	
+    <script src="static/jquery.mobile-1.4.5.min.js"></script>	
+    <script src="static/list.min.js"></script>	
+	<script src="my.js"></script>
+	
+	<script>
+	document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+		//alert(device.cordova +'==='+device.serial+'==='+device.model+'==='+device.manufacturer+'==='+device.uuid);
+		localStorage.deviceSerial=device.serial;
+		localStorage.deviceModel=device.model;
+		localStorage.deviceManufacturer=device.manufacturer;
+		localStorage.deviceUuid=device.uuid;
+	}
+	
+	
+	
+		$(document).ready(function(){
+			
+			
+			if (localStorage.synced=='YES'){
+				$("#mobile").val(localStorage.SyncMobile);
+				$("#password").val(localStorage.SyncPass);
+			}
+					
+						
+		});
+
+	</script>
+<style>
+	.auto_break{
+		word-wrap:break-word!important;
+		white-space:normal!important;
+	}
+	#reportPosmAudRec> table{
+		border-collapse:collapse;
+		}
+	#reportPosmAudRec> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#reportPosmAudRec> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}	
+	#stockAgencyS> table{
+		border-collapse:collapse;
+		}
+	#stockAgencyS> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#stockAgencyS> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}	
+
+	#usageReportAgency> table{
+		border-collapse:collapse;
+		}
+	#usageReportAgency> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#usageReportAgency> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}	
+	#stockReportOnHand> table{
+		border-collapse:collapse;
+		}
+	#stockReportOnHand> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#stockReportOnHand> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		border:1px solid #0063C6;
+		font-weight:bold;
+		}	
+	#reportAudAgencyS> table{
+		border-collapse:collapse;
+		}
+	#reportAudAgencyS> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#reportAudAgencyS> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}	
+	#targetVSach> table{
+		border-collapse:collapse;
+		}
+	#targetVSach> table tr th{
+		font-size:16px;
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:bold;
+		border:1px solid #fff;
+		}
+	#targetVSach> table tr td{
+		font-size:12px;
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}
+	
+	#psInstallSummary> table{
+		border-collapse:collapse;
+		}
+	#psInstallSummary> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:1;
+		border:1px solid #0063C6;
+		}
+	#psInstallSummary> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}	
+	
+	#syncBasicBtn{
+		background-color:#FFF;
+		font-weight:1;
+		font-family:'Montserrat',sans-serif;
+		color:#D42E5C;
+	}
+	#leaveViewTable> table{
+		border-collapse:collapse;
+		}
+	#leaveViewTable> table tr th{
+		background-color:#0063C6;
+		color:#FFF;
+		font-weight:bold;
+		border:1px solid #fff;
+		}
+	#leaveViewTable> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0063C6;
+		}
+	
+	.headerc{
+		color:#000;
+		}
+	
+	#stockReport> table{
+		border-collapse:collapse;
+		}
+	#stockReport> table tr th{
+		background-color:#0063C6;
+		color:#fff;
+		font-size:16px;
+		font-weight:bold;
+		border:1px solid #fff;
+		
+		}
+	
+	#stockReport> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0080FF;
+		}
+	#usageReportR> table{
+		border-collapse:collapse;
+		}
+	#usageReportR> table tr th{
+		background-color:#0063C6;
+		color:#fff;
+		font-size:14px;
+		font-weight:bold;
+		border:1px solid #fff;
+		}
+	#usageReportR> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0080FF;
+		}	
+		
+	#receiveReportR> table{
+		border-collapse:collapse;
+		}
+	#receiveReportR> table tr th{
+		background-color:#0063C6;
+		color:#fff;
+		font-size:14px;
+		font-weight:bold;
+		font-weight:1;
+		}
+	#receiveReportR> table tr td{
+		background-color:#FFF;
+		color:#00376F;
+		font-weight:bold;
+		border:1px solid #0080FF;
+		}
+		
+	#btn_submit_AddMore{
+		color:#fff;
+		border:1px solid #0080FF;
+		}
+	.hoverButton {
+	  background-color: #5BADFF; /* Green */
+	  border: none;
+	  color: white;
+	  padding: 8px 8px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size: 16px;
+	  margin: 0px;
+	  -webkit-transition-duration: 0.4s; /* Safari */
+	  transition-duration: 0.4s;
+	  
+	}
+	.hoverButton:hover {
+	background-color:#0063C6; /* Green */
+	color: white;
+	}
+</style>    
+<style>
+	.custom-size-flipswitch.ui-flipswitch .ui-btn.ui-flipswitch-on {
+		text-indent: -5.9em;
+	}
+	.custom-size-flipswitch.ui-flipswitch .ui-flipswitch-off {
+		text-indent: 0.5em;
+	}
+	/* Custom widths are needed because the length of custom labels differs from
+	the length of the standard labels */
+	.custom-size-flipswitch.ui-flipswitch {
+		width: 8.875em;
+	}
+	.custom-size-flipswitch.ui-flipswitch.ui-flipswitch-active {
+		padding-left: 7em;
+		width: 1.875em;
+	}
+	@media (min-width: 28em) {
+	// Repeated from rule .ui-flipswitch above
+	.ui-field-contain > label + .custom-size-flipswitch.ui-flipswitch {
+		width: 1.875em;
+	}
+	}
+	input[type=number],input[type=text]{ background-color:#F4FFFF;}
+	.full-width-slider input {
+		display: none;
+	}
+	.full-width-slider .ui-slider-track {
+		margin-left: 15px;
+	}
+	.disabledAnchor a{
+		pointer-events: none !important;
+		cursor: default;
+		color:white;
+	}
+	
+	
+	
+	
+	</style>     	
+</head>
+
+<body >
+
+
+
+<!-- ------------------- home page---------------------------------------------------------------------------------------- --> 
+ <div data-theme="d" data-role="page" id="pagesync" style=" background-color:#FFF;">
+    </br></br></br></br></br>
+    <div><center><img  src="lafargeHolcim_logo.png" alt="Lafarge" style="width:100px;"/></center></div>
+    <div data-role="content" style="height:90% position:relative;" >    
+    
+    <font face="Arial, Helvetica, sans-serif" size="-1"> 
+        <input type="text" name="mobile" id="mobile" placeholder="Login ID" value="" style="border:0px solid #CCFFCC; height:38px">
+        <input type="password" name="password" id="password" placeholder="Password" value="" style="border:0px solid #CCFFCC; height:38px">
+    </font>  
+    </br></br> 
+    <a id="syncBasicBtn" data-role="button" class="ui-btn ui-mini" onClick="syncBasic(); getLocationInfoSelfe();" style="background:linear-gradient(to top, #0073af -50%, #0073af 100%); color:#fff; border-radius:4px; font-size:15px;">Login</a>
+    </br></br>
+    <div id="bufferImageSync" style="text-align:center;"><img height="40px" width="40px" src="running.gif"></div>
+    </br>
+    
+    <div class="errorMsg" style="color:#F00; text-align:center;"></div>    
+    </div>
+    </br> </br></br> </br></br>
+    <div data-position="fixed" style="font-size:12px; color:#7A7A7A; background-color:#FFF; font-weight:1;" align="center">v.20211109</div>
+    <!--<div><img src="bottom.png" alt="Post-it" style="height:65px; width:100%;"/></div>-->
+ </div>
+
+ 
+ 
+<div data-theme="d" data-role="page" id="homePage">
+	<div data-role="panel" id="left-panel" data-display="overlay">
+        <ul data-role="listview">
+            <li style="height:120px; background-color:#0073af;">
+            	<table width="100%" style="cell-spacing:0px; color:#002E5B; background-color:#FFFFFF; font-size:14px; border:0px solid #0073af; "  data-role="table" data-theme="d"  data-mode="display:none">
+            <tr style="background-color:#0073af; color:#FFF;">
+            	<td ><a style="background:none; border:none; " class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-user ui-btn-icon-notext"></a></td>
+            </tr>
+            <tr style="background-color:#0073af; color:#FFF;">
+            	<td >Rahim Enterprise <br /> <a style="background:none; border:none; float:right;" class="ui-btn ui-corner-all ui-btn-icon-left ui-icon-edit ui-btn-icon-notext" onClick="profile_edit();"></a><span style="font-size:10px;">rahim@gmail.com   </span>
+                
+                </td>
+            </tr>
+        </table>
+            	
+                
+            </li>
+             <div style="background:#0073af; height:1px"></div>
+                <li style="text-align:center;"><a href="#pagesync" onClick="clear_autho();"><img src="sync.png"></a></li>
+            <div style="background:#0073af; height:1px"></div>
+        </ul>
+    </div><!-- /panel -->
+	<!--<div data-theme="d" data-role="panel" id="syncPanel" data-position="left" data-display="overlay" style="width:60%;">-->
+        <!-- panel content goes here -->
+        <!--<p style="background-color:#00803C; height:150px; margin:0px; padding:0px;">
+        
+        </p>
+        
+        <img style="width:100%;"  src="lagarge_login_logo.png" alt="Lafarge" /><br>
+       
+        <br><br><br>
+        
+        <ul data-role="listview">            
+            <div style="background:#008A8A; height:1px"></div>
+                <li style="text-align:center;"><a href="#pagesync" onClick="clear_autho();"><img src="sync.png"></a></li>
+            <div style="background:#008A8A; height:1px"></div>
+           
+        </ul>
+        <br>
+        <div style="margin:100%;"></div>        
+    </div>--><!-- /panel -->
+<!--onClick="syncValueClean();"-->
+    <div data-theme="d" data-role="header" data-position="fixed" style="border:none;background:#0073af;">
+        <a href="#left-panel" data-iconpos="left" style="background:#0073af; border:none;"  class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-bars ui-btn-icon-notext"></a>
+       
+        <!--<a style="background:none; border:none;" id="menuLogo" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-right ui-icon-power ui-btn-icon-notext " onClick="exit()" ></a>-->
+    <a style="background:none; border:none;" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-arrow-r ui-btn-icon-notext" onClick="exit()" ></a>
+    	<h3 class="headerc" style=" color:#fff;">Home</h3>
+    
+    </div><!--00803C-->
+    <div data-role="content" style="height:90%"> 
+    <br />
+    	
+        <h3 class="ui-bar ui-bar-a ui-corner-all" style="background-color:#b3e4ff;">Present Enrollment</h3>
+       
+        
+        	<!--<li><a href="#present_enrollment_upgrade">
+                <h2>Stephen Weber</h2>
+                <p><strong>Target Monthly 250 bag Total 6500 bag</strong></p>
+                <p>Ach 200 bag. Total  4500 bag</p>
+                <p class="ui-li-aside"><strong>6:24</strong>PM</p>
+                </a>
+        	</li>-->
+             <ul id="showList" data-role="listview" data-inset="true">
+            <!--<li data-role="list-divider">Holcim TLP Plan 2001 <span class="ui-li-count">Slab 1</span></li>
+            <li><a href="#present_enrollment_upgrade">
+                <p><strong>Target Monthly 250 bag Total 6500 bag</strong></p>
+                <p>Ach 200 bag. Total  4500 bag</p>
+                </a>
+        	</li>
+            <li data-role="list-divider">Supercrete TLP Plan 2001 <span class="ui-li-count">Slab 2</span></li>
+            <li><a href="#">
+                <p><strong>Target Monthly 350 bag Total 8500 bag</strong></p>
+                <p>Ach 300 bag. Total  5500 bag</p>
+                </a>
+        	</li>
+            <li data-role="list-divider">Holcim TLP Plan 2001 <span class="ui-li-count">Slab 3</span></li>
+            <li><a href="#">
+                <p><strong>Target Monthly 6500 bag Total 12000 bag</strong></p>
+                <p>Ach 600 bag. Total  8500 bag</p>
+                </a>
+        	</li>-->
+        </ul>
+        
+        <!--<ul data-role="listview" data-inset="true">
+            <li data-role="list-divider">Holcim TLP Plan 2001 <span class="ui-li-count">Slab 1</span></li>
+            <li><a href="#present_enrollment_upgrade">
+                <p><strong>Target Monthly 250 bag Total 6500 bag</strong></p>
+                <p>Ach 200 bag. Total  4500 bag</p>
+                </a>
+        	</li>
+            <li data-role="list-divider">Supercrete TLP Plan 2001 <span class="ui-li-count">Slab 2</span></li>
+            <li><a href="#">
+                <p><strong>Target Monthly 350 bag Total 8500 bag</strong></p>
+                <p>Ach 300 bag. Total  5500 bag</p>
+                </a>
+        	</li>
+            <li data-role="list-divider">Holcim TLP Plan 2001 <span class="ui-li-count">Slab 3</span></li>
+            <li><a href="#">
+                <p><strong>Target Monthly 6500 bag Total 12000 bag</strong></p>
+                <p>Ach 600 bag. Total  8500 bag</p>
+                </a>
+        	</li>
+        </ul>-->
+                
+        <h3 class="ui-bar ui-bar-a ui-corner-all" style="background-color:#b3e4ff;">Ongoing Program/Offer</h3>
+                
+        <ul id="ongoingProgram" data-role="listview" data-inset="true">
+            <!--<li><a href="#">
+                <p><strong>Holcim TLP Plan Jan-Jun'21</strong></p>
+                </a>
+        	</li>
+            <li><a href="#">
+                <p><strong>Supercrete TLP Plan Jan-Jun'21</strong></p>
+                </a>
+        	</li>-->
+        </ul>
+        
+        <!--<table table width="100%" class="ui-body-d ui-shadow table-stripe ui-responsive" style="cell-spacing:0px; color:#002E5B; background-color:#FFFFFF; font-size:14px; border:0px solid #00803C; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"  data-role="table" data-theme="d"  data-mode="display:none">
+            <tr style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <td>
+                    <font style="font-size:18px; ">Holcim TLP Plan 2001 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Slab 1 </font><br />
+                    <font style="font-size:12px; line-height:1.2em;"> Target Monthly 250 bag Total 6500 bag <br />
+                    Ach 200 bag. Total  4500 bag </font><br />
+                    <a href="#present_enrollment_upgrade">Detail & Upgrade</a><br />
+                </td>
+            </tr>
+           <tr style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <td>
+                    <font style="font-size:18px; ">Holcim TLP Plan 2001 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Slab 2 </font><br />
+                    <font  style="font-size:12px; line-height:1.2em;"> Target Monthly 350 bag Total 8500 bag <br />
+                    Ach 300 bag. Total  6500 bag </font><br />
+                    <a href="#">Detail & Upgrade</a><br />
+                </td>
+            </tr>
+            <tr style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <td>
+                    <font style="font-size:18px; ">Holcim TLP Plan 2001 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Slab 3 </font><br />
+                    <font  style="font-size:12px; line-height:1.2em;"> Target Monthly 8000 bag Total 10000 bag <br />
+                    Ach 700 bag. Total  8000 bag </font><br />
+                    <a href="#">Detail & Upgrade</a>
+                </td>
+            </tr>
+        </table>-->
+         
+     
+    </div>
+         
+    <div class="errorChk" style="color:#F00;" ></div>  
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>     
+    </div>
+ </div>
+ 
+ 
+<div data-theme="d" data-role="page" id="present_enrollment_upgrade">
+	<div data-theme="d" data-role="header" data-position="fixed" style="border:none;background:#0073af;">
+        <a style="background:#0073af; border:none;" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-icon-notext" onClick="homeBtn()"></a>
+        <!--<a onClick="homeBtn()"><img src="lagarge_logo.png" /></a>-->
+        <a style="background:#0073af; border:none;" data-rel="back" data-transition="slide" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-icon-notext ui-btn-right" onClick="backClick()"></a>
+    
+    	<h3 class="headerc" style="color:#fff;">Present Enrollment Upgrade</h3>
+    
+    </div>
+    <div data-role="content" style="height:90%;"> 
+    	<br />
+        <br />
+    <ul data-role="listview" data-inset="true" >
+        <li style="background-color:#e6f6ff;" class="ui-li-divider ui-bar-inherit ui-li-has-count ui-first-child"	>
+            <h3><span id="progName"></span> <span id="progSlab">Slab 1</span></h3>
+            <p><strong>Target Monthly 250 bag Total 6500 bag</strong></p>
+            <p>Ach 200 bag. Total  4500 bag</p>
+        </li>
+    </ul>
+    <ul id="giftShow" data-role="listview" data-inset="true">
+        <!--<li>
+            <img src="rice_coker.png">
+            <h2>Rich Coker</h2>
+            <p>1.8 ltr CL-01 - VE</p>
+        </li>
+        <li>
+            <img src="watch.png">
+            <h2>Watch</h2>
+            <p>Rolex Submariner</p>
+        </li>-->
+    </ul>
+    
+    <!--<ul data-role="listview" data-inset="true">
+        <li>
+            <img src="rice_coker.png">
+            <h2>Rich Coker</h2>
+            <p>1.8 ltr CL-01 - VE</p>
+        </li>
+        <li>
+            <img src="watch.png">
+            <h2>Watch</h2>
+            <p>Rolex Submariner</p>
+        </li>
+    </ul>-->
+        <!--<table table width="100%" class="ui-body-d ui-shadow table-stripe ui-responsive" style="cell-spacing:0px; color:#002E5B; background-color:#FFFFFF; font-size:14px; border:0px solid #00803C; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"  data-role="table" data-theme="d"  data-mode="display:none">
+            <tr>.
+                <td>
+                    <font size="+2">Holcim TLP Plan 2001 Slab 1 </font><br />
+                    <font style="font-size:12px; line-height:1.2em;"> Target Monthly 250 bag Total 6500 bag <br />
+                    Ach 200 bag. Total  4500 bag </font>
+                </td>
+            </tr>
+            <tr>
+            	<td>
+                	Rice Coker
+                </td>
+            </tr>
+            <tr style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <td style="text-align:center;">
+                    <img src="rice_coker.png"/>
+                </td>
+            </tr>
+            <tr>
+            	<td>
+                	Watch
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">
+                    <img src="three-iwatch-xjm.png"/>
+                </td>
+            </tr>
+        </table>-->
+         
+        
+        <!--<ul data-role="listview" data-inset="true">
+            <li ><a style="background-color:#b3e4ff;" href="#higher_slab">
+                <p><strong>Feeling Strong go for Higher Slab</strong></p>
+                </a>
+            </li>
+        </ul> -->   
+                 
+    </div>
+         
+    <div class="errorChk" style="color:#F00;" ></div>  
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>     
+    </div>
+</div>    
+
+
+
+<div data-theme="d" data-role="page" id="higher_slab">
+	<div data-theme="d" data-role="header" data-position="fixed" style="background:#0073af; border:none;">
+        <a style="background:#0073af; border:none;" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-icon-notext" onClick="homeBtn()"></a>
+        <a style="background:#0073af; border:none;" data-rel="back" data-transition="slide" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-icon-notext ui-btn-right" onClick="backClick()"></a>
+    
+    	<h3 class="headerc" style="color:#fff;">Higher Slab</h3>
+    
+    </div>
+    <div data-role="content" style="height:90%"> 
+    	<br />
+        <br />
+          
+    <ul id="higherSlabShow" data-role="listview" data-inset="true">
+        
+    </ul>    
+     <br />       
+                      
+    <div class="errorChk" style="color:#F00;" ></div>  
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>     
+    </div>
+</div> 
+
+
+
+<div data-theme="d" data-role="page" id="program_offer">
+	<div data-theme="d" data-role="header" data-position="fixed" style="background:#0073af; border:none;">
+        <a style="background:#0073af; border:none;" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-icon-notext" onClick="homeBtn()"></a>
+        <a style="background:#0073af; border:none;" data-rel="back" data-transition="slide" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-icon-notext ui-btn-right" onClick="backClick()"></a>
+    
+    	<h3 class="headerc" style="color:#fff;">Program Offer</h3>
+    
+    </div>
+    <div data-role="content" style="height:90%"> 
+    	<br />
+        <br />
+          
+    <ul id="programOfferShow" data-role="listview" data-inset="true">
+        
+    </ul>    
+     <br />       
+                      
+    <div class="errorChk" style="color:#F00;" ></div>  
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>     
+    </div>
+</div>  
+
+
+
+<div data-theme="d" data-role="page" id="profile">
+	<div data-theme="d" data-role="header" data-position="fixed" style="background:#0073af; border:none;">
+        <a style="background:#0073af; border:none;" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-home ui-btn-icon-notext" onClick="homeBtn()"></a>
+        <a style="background:#0073af; border:none;" data-rel="back" data-transition="slide" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-arrow-l ui-btn-icon-notext ui-btn-right" onClick="backClick()"></a>
+    
+    	<h3 class="headerc" style="color:#fff;">Profile</h3>
+    
+    </div>
+    <div data-role="content" style="height:90%"> 
+    	<br />
+        <table table width="100%" class="ui-body-d ui-shadow table-stripe ui-responsive" style="cell-spacing:0px; color:#002E5B; background-color:#FFFFFF; font-size:14px; border:0px solid #00803C; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"  data-role="table" data-theme="d"  data-mode="display:none">
+            <tr>
+                <td>
+                    <input type="text" name="userName" id="userName" placeholder="Name" />
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <input type="number" name="userMobile" id="userMobile" placeholder="Phone No" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="email" name="userEmail" id="userEmail" placeholder="Email" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="password" name="userPass" id="userPass" placeholder="Password" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="camera.png" width="70" height="70" alt="TakePic" onClick="getImage();">       
+                    <img width="100" height="100" alt="" id="myImageH">
+                    <input name="shopboy_path" id="shopboy_path" value=""  type="hidden">
+                    <input name="shopboy_name" id="shopboy_name" value=""  type="hidden">
+                </td>
+            </tr>
+            
+        </table>
+         
+        <br />
+         <a data-role="button" class="ui-btn ui-mini" style="background:linear-gradient(to top, #0073af -50%, #0073af 100%); color:#fff; border-radius:4px; font-size:15px;" onClick="profile_update();">Update</a>
+        <br />
+                 
+    <div class="errorChk" style="color:#F00;" ></div>  
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>     
+    </div>
+</div>  
+
+ 
+
+
+
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
+</html>

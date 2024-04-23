@@ -1,0 +1,47 @@
+{{extend 'layout_mobile.html'}}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hawkseye - SB</title>
+     
+</head>
+<style type="text/css">
+	.page_color{background-color:#FFF;}
+</style>
+<body style="background-color:#E8EEE6;">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1" style="background-color:#E8EEE6; border:1px solid #F3F3F3; ">
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+	    
+	  <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" style="margin:20px 0px 20px 0px; text-align:center">       
+        <tr height="10">
+          <td width="100%">
+           <form id="form1" name="form1" method="post" action="{{=URL(c='iq_exam',f='exam')}}" target="_blank">
+          	<input type="submit" name="btn_exam" id="btn_exam" value="Exam" style="height:30px; font-size:20px;"/>
+            </form>
+          </td>
+          
+        </tr>
+         <tr height="15">
+                    
+        </tr>
+        <tr height="10">
+          <td width="100%">
+          	<form id="form2" name="form2" method="post" action="{{#=URL(c='iq_exam',f='exam')}}" target="_blank">
+          	<input type="submit" name="btn_exam" id="btn_exam" value="Result" style="height:30px; font-size:20px;"/>
+            </form>
+          </td>
+          
+        </tr>
+      </table>
+	
+	
+</td>
+ </tr>
+</table>
+</body>
+

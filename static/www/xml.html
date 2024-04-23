@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>water aid</title>
+    
+    <link rel="stylesheet" href="static/themes/my.css" />
+    <link rel="stylesheet" href="static/jquery.mobile-1.4.0/jquery.mobile-1.4.0.min.css" />
+        
+    <script src="static/jquery/1.10.2/jquery-1.10.2.min.js">   </script>
+    <script src="static/jquery.mobile-1.4.0/jquery.mobile-1.4.0.min.js">   </script>
+	
+</head>
+
+<body >
+<script>
+$(document).ready(function(){
+	//alert("ok");
+	$.ajax({
+				type      :'post', 
+				dataType  :'xml', 
+				data      :{ 
+							fetch_url  :'http://10.1.1.14:8000/pp/default/sync_check_user.xml?cid=IFLRM&uid=admin&password=123'							
+						  }, 
+				success:function ( doc ) { 
+				   console.log( doc );
+				}
+		  });
+
+});
+	
+
+
+
+</script>
+
+
+
+</body>
+</html>

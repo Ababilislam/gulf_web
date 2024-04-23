@@ -1,0 +1,168 @@
+{{extend 'layout_mobile.html'}}
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">--><head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hawkseye</title>
+     
+</head>
+
+<style type="text/css">
+	.page_color{background-color:#FFF;}
+</style>
+<script type="text/javascript">
+ 
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+</script>
+<body style=" background-color:#E8EEE6;color:#3F3F3F;">
+<p style="color:#098CE3;"><strong>&nbsp;&nbsp;ID : {{=rep_id}}&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Mobile No : {{=mobileNo}}</strong></p>
+<table width="100%"  cellspacing="0" cellpadding="0" >
+  <tr>
+  	<td align="center" style="font-size:20px;"><strong>Exam</strong></td>
+  </tr>
+  
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+	<div style=" margin:15px; border-radius:5px; height:90%; background-color:#d6f5f5;">
+    {{if len(iqExamRowsLive)!=0:}} 
+	  <table width="100%" height="100%" border="1"  cellspacing="0" cellpadding="0" style="border:1px solid #eafafa;" >
+        <tr style="border:1px solid #eafafa;">
+          <td width="100%" colspan="3" align="" style="font-size:20px;border:1px solid #eafafa;"><strong>Live </strong></td>
+        </tr>
+        <tr style="border:1px solid #eafafa;">
+          <td width="15%" align="center" style="border:1px solid #eafafa;"><strong>ID</strong></td>
+          <td width="70%" align="center"style="border:1px solid #eafafa;"><strong>Exam Name</strong></td>
+          <td width="15%" style="border:1px solid #eafafa;"></td>
+        </tr>
+        
+        {{for i,examRowsLive in enumerate(iqExamRowsLive):}}
+                  
+        <tr>
+          <td width="15%" align="center" style="border:1px solid #eafafa;">{{=examRowsLive.id}}</td>
+          <td width="70%" style="border:1px solid #eafafa;">
+          	<strong>{{=examRowsLive.exam_name}}</strong><br />
+          	{{=examRowsLive.e_start_dt}} To <br />{{=examRowsLive.e_end_dt}}
+          </td>
+          <td width="15%" align="center" style="border:1px solid #eafafa; vertical-align:middle;">
+          
+          {{ex_date=datetime.datetime.strptime(str(examRowsLive.e_date),'%Y-%m-%d')}}
+          {{cu_date=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+          
+          {{start_time=examRowsLive.e_start_dt.strftime('%Y-%m-%d %I:%M:%S')}}
+          {{end_time=examRowsLive.e_end_dt.strftime('%Y-%m-%d %I:%M:%S')}}
+               	
+          {{if ex_date==cu_date:}}  
+          {{#if len(iq_exam_p_a_Rows) ==0:}} 
+          {{#for j,iq_exam_p_a in enumerate(iq_exam_p_a_Rows):}}
+         
+   			{{#if examRowsLive[db.iq_exam.id] == iq_exam_p_a[db.iq_exam_p_a.exam_id]:}} 
+            	
+            {{#else:}}
+                <form method="post" action="{{=URL(c='iq_exam',f='exam',vars=dict(rowId=examRowsLive.id))}}">
+                    <input type="submit" name="exam_btn" value=">>" id="" title="" style="width:50px; height:25px;" />
+                </form>
+            {{#pass}}
+            {{#pass}}
+            {{pass}}
+          </td>
+        </tr>
+        {{pass}}
+      </table>
+      {{pass}}
+      </div>
+      
+	<div style=" margin:15px; border-radius:5px; height:90%; background-color:#d6f5f5;">
+    {{if len(iqExamRowsUpcomming)!=0:}} 
+	  <table width="100%" height="100%" border="1"  cellspacing="0" cellpadding="0" style="border:1px solid #eafafa;" >
+        <tr style="border:1px solid #eafafa;">
+          <td width="100%" colspan="3" align="" style="font-size:20px;border:1px solid #eafafa;"><strong>Upcoming </strong></td>
+        </tr>
+        <tr style="border:1px solid #eafafa;">
+          <td width="15%" align="center" style="border:1px solid #eafafa;"><strong>ID</strong></td>
+          <td width="85%" align="center"style="border:1px solid #eafafa;"><strong>Exam Name</strong></td>
+          <!--<td width="15%" style="border:1px solid #eafafa;"></td>-->
+        </tr>
+        
+        {{for i,iqExamRows in enumerate(iqExamRowsUpcomming):}}
+                  
+        <tr>
+          <td width="15%" align="center" style="border:1px solid #eafafa;">{{=iqExamRows.id}}</td>
+          <td width="85%" style="border:1px solid #eafafa;">
+          	<strong>{{=iqExamRows.exam_name}}</strong><br />
+          	{{=iqExamRows.e_start_dt}} To <br />{{=iqExamRows.e_end_dt}}
+          </td>
+          <!--<td width="15%" align="center" style="border:1px solid #eafafa; vertical-align:middle;">-->
+          
+          {{#ex_date=datetime.datetime.strptime(str(iqExamRows.e_date),'%Y-%m-%d')}}
+          {{#cu_date=datetime.datetime.strptime(str(current_date),'%Y-%m-%d')}}
+          
+          {{#start_time=iqExamRows.e_start_dt.strftime('%Y-%m-%d %I:%M:%S')}}
+          {{#end_time=iqExamRows.e_end_dt.strftime('%Y-%m-%d %I:%M:%S')}}
+          {{#end_time=datetime.datetime.strptime(str(iqExamRows.e_end_dt),'Y%-%m-%d %H:%M:%S')}}
+          {{#cu_time= datetime.datetime.strptime(str(datetime_fixed),'%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %I:%M:%S')}}
+         
+          {{#if ex_date==cu_date:}}  
+   			
+            <!--<form method="post" action="{{#=URL(c='iq_exam',f='exam',vars=dict(rowId=iqExamRows.id))}}">
+            	<input type="submit" name="exam_btn" value=">>" id="" title="" style="width:50px; height:25px;" />
+            </form>-->
+            
+            {{#pass}}
+          <!--</td>-->
+        </tr>
+        {{pass}}
+      </table>
+      {{pass}}
+      </div>
+      
+      <div style=" margin:15px; border-radius:5px; height:90%; background-color:#d6f5f5;">
+      {{if len(iqExamRowsPrivious)!=0:}} 
+      <table width="100%" height="100%" border="1" cellspacing="0" cellpadding="0" style="border:1px solid #eafafa;" >
+        <tr style="border:1px solid #eafafa;">
+          <td width="100%" colspan="3" align="" style="font-size:20px; border:1px solid #eafafa;"><strong>Previous </strong></td>
+        </tr>
+        <tr style="border:1px solid #eafafa;">
+          <td width="15%" align="center" style="border:1px solid #eafafa;"><strong>ID</strong></td>
+          <td width="70%" align="center" style="border:1px solid #eafafa;"><strong>Exam Name</strong></td>
+          <td width="15%" style="border:1px solid #eafafa;"></td>
+        </tr>
+        
+        {{for i,rows in enumerate(iqExamRowsPrivious):}}
+        <tr>
+          <td width="15%" align="center" style="border:1px solid #eafafa;">{{=rows[db.iq_exam.id]}}</td>
+          <td width="70%" style="border:1px solid #eafafa;">
+          	<strong>{{=rows[db.iq_exam.exam_name]}}</strong><br />
+            {{=rows[db.iq_exam.e_start_dt]}} To <br />{{=rows[db.iq_exam.e_end_dt]}}
+          </td>
+          <td width="15%" align="center" style="border:1px solid #eafafa;">
+            
+          <form method="post" action="{{=URL(c='iq_exam',f='exam',vars=dict(rowId=rows[db.iq_exam.id]))}}">
+            	<input type="submit" name="result_btn" value="Result" id="" title="" style="width:65px; height:25px;" />
+            </form>
+            
+          <!--<a href="{{#=URL(c='iq_exam',f='result_page',vars=dict(rowId=rows[db.iq_exam.id],exam_name=rows[db.iq_exam.exam_name],e_start_dt=rows[db.iq_exam.e_start_dt],e_end_dt=rows[db.iq_exam.e_end_dt]))}}" target="_blank">
+          	<input type="submit" name="" value="Result" style="width:50px; height:25px;" />
+            </a>-->
+            {{#selse:}}
+            
+            {{#pass}}
+          </td>
+        </tr>
+        {{pass}}
+      </table>
+      {{else:}}
+      	
+      {{pass}}
+
+	</div>
+	
+</td>
+ </tr>
+  
+</table>
+</body>
+<!--</html>-->
+

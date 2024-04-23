@@ -1,0 +1,174 @@
+{{extend 'layout_login.html'}}
+    
+
+
+<style type="text/css">
+.row_class{
+background-color:#CCCCCC;
+font:Arial, Helvetica, sans-serif;
+color:#666666;
+font-size:14px;
+
+display: block;
+display: block;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+}
+</style>    
+    
+<script>
+  $(function() {
+	  	document.getElementById('uid').autocomplete='off';
+		$("#loginDiv").css({"transition":"100s ease"});
+		
+		//Sync code
+	  	$('#loginSyncCode').val(localStorage.loginSyncCode)
+		$('#userAgentKey').val(navigator.userAgent)
+		
+		//-------------
+	  	if (localStorage.saveCid!=undefined && localStorage.saveCid!=''){
+			$('#cid').val(localStorage.saveCid)
+		};
+	  	if (localStorage.saveUid!=undefined && localStorage.saveUid!=''){
+			$('#uid').val(localStorage.saveUid)
+		};
+	  	if (localStorage.savePass!=undefined && localStorage.savePass!=''){
+			$('#passwordid').val(localStorage.savePass)
+		};
+		if (localStorage.saveChecked!=undefined && localStorage.saveChecked!=''){			
+			$('input:checkbox[name=cmb_savpass]').attr('checked',true);			
+		};
+		
+		
+		$('#btnlogin').click(function(){			
+			var cmb_savpass=$("input[name='cmb_savpass']:checked").val()
+			var cid=$('#cid').val();
+			var userid=$('#uid').val();
+			var pass=$('#passwordid').val();
+			
+			if (cmb_savpass=="YES"){
+				localStorage.saveCid="";
+				localStorage.saveUid="";				
+				localStorage.savePass="";
+				localStorage.saveChecked="";
+				
+				if(typeof(Storage)!="undefined"){
+					localStorage.saveCid=cid
+					localStorage.saveUid=userid
+					localStorage.savePass=pass
+					localStorage.saveChecked=cmb_savpass;
+				}else{
+					alert("Error: local storage. Please communicate with system administrator.");
+				};	
+			}else{
+				localStorage.saveCid="";
+				localStorage.saveUid="";	
+				localStorage.savePass="";
+				localStorage.saveChecked="";		
+			}
+		});
+	});
+</script>
+
+<br />
+<!--<div align="left"><img src="{{=URL('static','images/large-1.jpg')}}" alt="Logo"/></div>-->
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div id="loginDiv" align="left" style=" width:350px; height:250px; margin:0px auto; background-color:#ffffff;-moz-border-radius: 10px;-webkit-border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<table style="margin:20px 0px 0px 40px;">
+	<form  name="form1" action="{{=URL(c='default',f='check_user')}}" method="post"  >
+	</br>
+    <tr>
+    	<td width="10">&nbsp;</td>
+      <td width="80">CID</td>
+      <td width="350">:&nbsp;<input  type="text" name="cid" id="cid" size="15" autocomplete="off" required="required"/></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+    	<td width="10">&nbsp;</td>
+      <td width="80">User ID</td>
+      <td width="350">:&nbsp;<input  type="text" name="uid" id="uid" size="15" autocomplete="off" required="required"/></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="10">&nbsp;</td>
+      <td width="80">Password</td>
+      <td width="350">:&nbsp;<input  type="password" name="password" id="passwordid" size="15" autocomplete="off" required="required"/></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="10">&nbsp;</td>
+      <td colspan="2"><span style="vertical-align:top">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="cmb_savpass" id="cmb_savpass" value="YES" title="Confirmation to save password" style="width:18px; height:18px;"/>
+        Remember  me on this computer</span></td>
+      <td>&nbsp;</td>
+    </tr>
+     <tr style="height:10px;">
+      <td width="10"></td>
+      <td width="80"></td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td width="10"></td>
+      <td width="80">
+      	<input type="hidden" style="width:100px" name="loginSyncCode" id="loginSyncCode" size="80"/>
+        <input type="hidden" style="width:250px" name="userAgentKey" id="userAgentKey" size="80"/>
+      </td>
+      <td width="350"><span style="text-align:left">
+        &nbsp;&nbsp;&nbsp;<input type="submit" name="btnlogin" id="btnlogin" value="Log in" onmouseover="device()" style="width:100px;"/>
+        </span></td><td></td>
+    </tr>
+    <tr>
+      <td width="10"></td>
+      <td width="80"></td>
+      <td colspan="2"><!--<textarea name="DeviceStatus" cols="250px" rows="5" id="DeviceStatus" style="width:250px; background-color:#FFFF99; visibility:hidden"></textarea>--></td>
+    </tr>
+   
+    <!--<input type="hidden" style="width:250px" name="uploadkey" id="uploadkey" size="80"/>-->
+    </form>
+    
+</table>
+<div style="color:#f00; float:right; margin-top:25px; width:100%; font-weight:bold; text-align:center;">{{if response.flash!='':}}{{=response.flash }}{{pass}}</div>
+</div>
+
+<br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+<!--<table width="100%" style="background-color:#CCCCCC">
+	<tr align="right" style="vertical-align:middle;">
+		<td >m-Reporting &nbsp; </td>
+  	</tr>		
+</table>
+<table width="100%">	  
+	<tr align="right" style="vertical-align:middle;">
+		<td height="38">Powered by&nbsp;<img src="{{=URL('static','images/gplogo_small.png')}}" alt="" /></td>
+	</tr>
+</table>-->
+<!--<script type="text/javascript">
+function uploadkey(key)
+{	
+	document.form1.uploadkey.value = key;
+	device()	
+}
+function device()
+{
+	var a=document.form1.uploadkey.value.length;
+	//alert (a);
+	if ( a == 0 ){
+	document.form1.DeviceStatus.value = "Please ensure you have enabled java in the browser. Also allow the applet to run when asked by the browser and select 'Always Trust' or similar option when asked."
+	document.form1.DeviceStatus.style.visibility = 'visible'; 	
+	}
+	else
+	{
+	document.form1.DeviceStatus.value = "Java is Enabled in browser" 
+	}
+
+}
+</script>
+  
+  <applet code="macaddverification.MacAddVerification.class" name="Login manager" alt="aa" width="10" height="10" archive="{{=URL('static','applet/MACAddVerification.jar')}}" class="bodylink5" title="-" />
+-->
+     

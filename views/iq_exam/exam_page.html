@@ -1,0 +1,139 @@
+{{extend 'layout_mobile.html'}}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hawkseye - SB</title>
+     
+</head>
+<style type="text/css">
+	.page_color{background-color:#FFF;}
+</style>
+<script type="text/javascript">
+ 
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+$(document).ready(function(){
+	$("#msg").hide();
+});
+
+function examDataSubmit(){
+	$("#examDataSubmit_btn").show();	
+	var examId=$("#examId").val();
+	var examAnsRowListId=$("#examAnsRowListId").val();
+	var examAnsStr=examAnsRowListId.split('||');
+	var ansStr='';
+	var flag=true;
+	for(i=0;i<examAnsStr.length;i++){
+		examAns=examAnsStr[i].split('|');
+		
+		var checkValue=$("input[name='examAns_"+examAns[0]+"']:checked").val();
+		if(checkValue==undefined){
+			flag=false;
+		}
+		
+		if (ansStr==''){
+			ansStr=examAns[0]+'|'+checkValue+'|'+examAns[1];
+		}else{
+			ansStr+='||'+examAns[0]+'|'+checkValue+'|'+examAns[1];
+		}
+	}
+	if (flag==true){
+		$("#msg").hide();
+		$("#errorMsg").text("");
+		//alert(base_url+'iq_exam/examDataSubmit?examId='+examId+'&dataAnsStr='+ansStr);
+		$.ajax({
+			  url:base_url+'iq_exam/examDataSubmit?examId='+examId+'&dataAnsStr='+ansStr,
+			  success: function(result) {
+				resultStr=result.split('|');				
+				if(resultStr[0]=='Success'){
+					
+					//alert(base_url+'iq_exam/exam?cid='+resultStr[1]+'&rep_id='+resultStr[2]+'&mobileNo='+resultStr[3]+'&rep_pass='+resultStr[4]);
+					$("#msg").show();
+					$("#examDataSubmit_btn").hide();
+					/*$("#successMsg").text(result);*/
+					
+					window.location.href=base_url+'iq_exam/exam?cid='+resultStr[1]+'&rep_id='+resultStr[2]+'&mobileNo='+resultStr[3]+'&rep_type='+resultStr[4]+'&rep_pass='+resultStr[5]
+				}else if(resultStr[0]=='Failed2'){
+					$("#msg").show();
+					$("#errorMsg").text("Time Over.");
+				}else{
+					$("#msg").show();
+					$("#errorMsg").text("Already Exam Complete");
+				}
+			  }
+		})
+	}else{
+		$("#msg").show();
+		$("#errorMsg").text("Required ALL");
+	}
+	
+}
+
+</script>
+<body style=" background-color:#E8EEE6;color:#3F3F3F;">
+<p style="color:#098CE3;margin:0px;"><strong>&nbsp;&nbsp;ID : {{=session.rep_id}}&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Mobile No : {{=session.mobileNo}}</strong></p>
+<table width="100%" border="1" cellspacing="1" cellpadding="1" >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+		
+	<div style=" margin:15px; box-shadow:#E1E1E1 0 0 10px; border-radius:5px; height:90%; border:1px solid #DADADA; background-color:#FFF;">
+    <br>
+      <div style="font-size:22px; text-align:center; margin-bottom:10px; "><strong>{{=exam_name}}</strong></div>
+        
+      <span style="font-size:15px; color:#00F;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start Time: {{=e_start_dt}} <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End Time: {{=e_end_dt}}</span>
+     <p style="border:1px solid;"></p> 
+	  <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" >
+         <tr height="15">
+          
+        </tr>
+        {{examAnsList=''}}
+        {{exam_id=''}}
+        {{for i,iqExamQRows in enumerate(iqExamQRows):}}
+                    
+            {{
+            if examAnsList=='':
+            	examAnsList=str(iqExamQRows.q_sl)+'|'+str(iqExamQRows.correct_a)
+            else:
+            	examAnsList+='||'+str(iqExamQRows.q_sl)+'|'+str(iqExamQRows.correct_a)
+            pass 
+            }}
+        <tr height="10">
+          <td width="100%">
+          	&nbsp;{{=iqExamQRows.q_sl}}.  {{=iqExamQRows.q_text_1}}<br>
+             {{exam_id=iqExamQRows.exam_id}}           
+          	<span style=" font-size:14px; font-weight:bold;">&nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_1}}">&nbsp;a)&nbsp;{{=iqExamQRows.a_1}}<br>&nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_2}}">&nbsp;b)&nbsp;{{=iqExamQRows.a_2}} <br>
+                    &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_3}}">&nbsp;c)&nbsp;{{=iqExamQRows.a_3}}<br> &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_4}}">&nbsp;d)&nbsp;{{=iqExamQRows.a_4}} <br>&nbsp; </span>
+                    
+                    
+                                        
+          </td>
+        </tr>
+        
+        {{pass}}
+      </table>
+      
+      <input type="hidden" id="examId" value="{{=exam_id}}" name="" />
+      <input type="hidden" id="examAnsRowListId" value="{{=examAnsList}}" name="" />
+      
+	</div>
+	
+</td>
+ </tr>
+ <tr id="msg" align="center">
+     <td>
+        <div id="errorMsg" style="color:#C00;"></div>
+        <div id="successMsg" style="color:#090;"></div>
+     </td>
+ </tr>
+ <tr>
+ 	<td align="center"><input type="submit" id="examDataSubmit_btn" onClick="examDataSubmit();"  value="Submit" style="background:linear-gradient(to top, #999 -50%, #FFF 100%); color:#000; font-size:24px; border-radius:4px; height:35px;  margin:0 auto; "/></td>
+ </tr>
+  <tr height="20">
+  
+  </tr>
+</table>
+</body>
+</html>
+

@@ -1,0 +1,137 @@
+{{extend 'layout.html'}}
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="500"><span class="blackCatTitle">Item Edit</span></td>
+    <form action="{{=URL(c='item',f='Item')}}" method="post">
+    <td width="380" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td>&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td colspan="3" ></td>
+  </tr>
+  </table>
+  
+  <form action="{{=URL(c='item',f='item_edit', args=[item_id])}}">
+	<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+		<tr height="100%"  style="vertical-align:top;">
+		  <td>
+		  <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+			
+			<tr>
+			  <td width="5">&nbsp;</td>
+			  <td width="900" valign="top">
+	  
+			  <br /> 
+			  <table width="900">
+				  <tr>
+                    <td width="450" valign="top">
+                        <table width="450" class="blackCat">
+                            <tr>
+                              <td width="200">ID</td>
+                              <td><pre style= "width: 200px;" name="item_id" id="item_id" readonly>{{=item_id}}</pre></td>
+                              </tr>
+                            <tr>
+                              <td width="200">Name</td>
+                              <td><input style= "width: 200px;" type="text" name="name" value="{{=name}}"></td>
+                              </tr>
+                            <tr>
+                              <td width="200">Pack Size</td>
+                              <td><input style= "width: 200px;"type="text" name="pack_size" value="{{=pack_size}}"></td>
+                            </tr>
+                            <tr>
+                              <td width="200">Description</td>
+                              <td><input style= "width: 200px;"type="text" name="description" value="{{=description}}"></td>
+                            </tr>
+                            <tr>
+                                <td>Category ID</td>
+                                <td><input style= "width: 200px;"type="text" name="category_id" value="{{=category_id}}"></td>
+                            </tr>
+                            <tr>
+                                <td width="200">Category ID sp</td>
+                                <td><input style= "width: 200px;"type="text" name="category_id_sp" value="{{=category_id_sp}}"></td>
+                            </tr>
+                            <tr>
+                                <td width="200">Unit Type</td>
+                                <td><input style= "width: 200px;"type="text" name="unit_type" value="{{=unit_type}}"></td>
+                            </tr>
+                          </table>
+                        </td>
+                  <td width="450" valign="top">
+                    <table width="450" class="blackCat">
+                        <tr>
+                          <td width="200">Manufacturer</td>
+                          <td><input style= "width: 200px;" type="text" name="manufacture" value="{{=manufacture}}"></td>
+                        </tr>
+                      
+                        <tr>
+                          <td width="200">Item Carton</td>
+                          <td><input style= "width: 200px;" type="text" name="item_carton" value="{{=item_carton}}"></td>
+                        </tr>
+                        <tr>
+                          <td width="200">Price</td>
+                          <td><input style= "width: 200px;"type="text" name="price" value="{{=price}}"></td>
+                        </tr>
+                        <tr>
+                          <td width="200">Dist Price</td>
+                          <td><input style= "width: 200px;"type="text" name="dist_price" value="{{=dist_price}}"></td>
+                        </tr>
+                        <tr>
+                            <td>VAT Amount</td>
+                            <td><input style= "width: 200px;"type="text" name="vat_amount" value="{{=vat_amount}}"></td>
+                        </tr>
+                        <tr>
+            <td>Status</td>
+            <td>
+              <select type="text" class="text" name="status" id="status" style= "width: 212px;" >
+                {{if status=='ACTIVE':}}
+                <option value="{{=status}}">{{=status}}</option>
+                <option value="INACTIVE">INACTIVE</option>
+                {{else:}}
+                <option value="{{=status}}">{{=status}}</option>
+                      <option value="ACTIVE">ACTIVE</option>
+                {{pass}}
+              </select>
+            </td>
+          </tr>
+                        <tr>
+                          <td></td>
+                          <td style="padding-left: 130px;">
+                            <div align="left">
+                              <input align="left" type="submit" name="update_btn" id="update_btn" value=" Update " style="vertical-align:middle;height:30px ;border-radius:4px; background-color: rgb(85, 189, 116); color: white; width: 80px;"/>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td style="padding-left: 130px;"><input type="submit" name="delete_btn" value=" Delete " style="width: 80px; background-color: red; color: white; border-radius: 4px; vertical-align:middle;height:30px ;" onclick="if (!confirm('Do you really want to Delete?')) { return false }">
+                          </td>
+                        </tr>
+                      </table>
+                      </td>
+                  </tr>
+				  
+				  
+                    <tr>
+                        <td width="200"></td>
+                        
+                      </tr>
+					  <!-- <br> -->
+            
+						</table>
+					  </td>
+				  </tr>
+				  </table> 
+			   
+				<br />
+				
+				</td>
+			   </tr>
+		  </table>
+		  
+		  </td>
+		</tr>
+	  </table>
+  </form>
+

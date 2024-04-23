@@ -1,0 +1,139 @@
+{{extend 'layout.html'}}
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+
+    width: 250px;
+
+}
+
+ </style>
+
+ 
+
+ 
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td><span class="blackCatTitle">Area Structure</span></td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td ></td>
+
+  </tr>
+
+  </table>
+
+  
+
+  
+
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+
+      <tr>
+
+        <td width="15px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td><br />
+
+			 <table width="600" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+                <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                  <td width="100" >AreaID</td>
+
+                  <td width="200" >AreaName</td>
+
+                  <td width="100" >ParenetID</td>
+
+                  <td width="200" >ParentName</td>
+
+                </tr>
+
+			    {{ p=0}} 		  
+
+			    {{for i,record in enumerate(records):}}
+
+			    {{ if i==items_per_page: break}}
+
+					<tr  align="left" class="blackCat"  style="vertical-align:middle"> 
+
+					  <td width="100" >{{=record.level_id}}</td>
+
+					  <td width="200" >{{=record.level_name}}</td>
+
+					  <td width="100" >{{=record.parent_level_id}}</td>
+
+					  <td width="200" >
+
+					  {{for rec in parentRecords:}}
+
+					  	{{levelId=rec.level_id}}
+
+						{{levelName=rec.level_name}}
+
+						{{if str(levelId)==str(record.parent_level_id):}}
+
+					  		{{=levelName}}
+
+					  	{{break}}					  
+
+					  {{pass}}					  </td>
+
+				     </tr>
+
+			    {{pass}}
+
+		    </table>
+
+	      </td></tr>
+
+    </table>
+
+    
+
+{{if page:}}
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}
+
+	</td>
+
+  </tr>
+
+</table>
+
+
+

@@ -1,0 +1,627 @@
+{{extend 'layout.html'}}
+
+
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+  
+
+  <style type="text/css">
+
+ input[type=text], input[type=password],  select {
+
+    margin: 2px 0px 2px 0px;
+
+}
+
+div.error {
+
+    padding: 0px;
+
+	width:inherit;
+
+	margin-left:0px;
+
+}
+
+.page_color,body{
+
+	font-family:Arial, Helvetica, sans-serif;
+
+	font-size:13px;	
+
+	}
+
+	
+
+ </style>
+
+
+
+ <script>
+
+ 
+
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+
+
+$(function() {
+
+	 	var valueListStr="";		
+
+		$('#level_search').keyup(function(){
+
+			$.ajax({
+
+				  url: base_url+'default/get_level_list',
+
+				  success: function(resStr) {
+
+					  valueListStr=resStr
+
+				  }
+
+				});
+
+			
+
+			//-------------------------
+
+			var valueList = valueListStr.split(',');				
+
+			var searchValue=$("#level_search").val();
+
+			
+
+			//---------------- auto complete combo list
+
+			var valueList_new=new Array();
+
+			lc=0;
+
+			i =0;
+
+			var valueStr="";				
+
+			while (i < valueList.length)
+
+			{
+
+				valueStr=valueList[i];
+
+				i=i+1;					
+
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+
+				if (res!=null){
+
+					valueList_new[lc]=valueStr;
+
+					lc=lc+1;
+
+					if (lc==30){
+
+						break;
+
+					};
+
+				}else{
+
+					continue;
+
+				}					
+
+			};
+
+			//alert (ref_list_new);
+
+			
+
+			//-------------- auto complete source
+
+			$( "input#level_search" ).autocomplete({
+
+				source: valueList_new
+
+			});
+
+		
+
+	  }); 
+
+	   //==============	   
+
+	   	   
+
+}); 
+
+</script>
+
+
+
+
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+
+  <tr height="30px" >
+
+    <td width="400"><span class="blackCatTitle">Area Structure </span></td>
+
+	<form id="form" name="form" method="post" action="{{=URL(c='level',f='level',args=[0,parent_level_id_filter])}}">
+
+    <td width="400" align="right">
+
+		{{ if parent_level_id_filter!='0':}}
+
+		  <input type="submit" name="btn_back" id="btn_back" value="Back"  class="button_update"/>
+
+		{{pass}}
+
+	</td>
+
+	</form>
+
+
+
+    <td>&nbsp;</td>
+
+  </tr>
+
+  <tr  height="1px" style="background-color:#CCCCCC;">
+
+	    <td colspan="3" ></td>
+
+  </tr>
+
+</table>
+
+  
+
+  <form id="form" name="form" method="post" action="{{=URL(c='level',f='level_search',args=[0,parent_level_id_filter])}}">
+
+  <table width="800px" border="0" cellspacing="0" cellpadding="0">
+
+  <tr>
+
+    <td align="right">Level ID/Name :
+
+    	{{if session.level_search=='' or session.level_search==None:}}
+
+            <input type="text" name="level_search" id="level_search" size="25" value=""  autocomplete="off" style="width:250px" placeholder="Select Level ID/Name"/>
+
+        {{else:}}
+
+            <input type="text" name="level_search" id="level_search"  value="{{=session.level_search}}" placeholder="Select Level ID/Name" autocomplete="off" style="width:250px"/>
+
+        {{pass}}
+
+      
+
+      <input type="submit" name="btn_search" id="btn_search" value="Search"   class="button_update"/>
+
+    </td>
+
+    </tr>
+
+</table>
+
+
+
+  </form>
+
+  
+
+  <table width="100%" height="500px"  class="page_color"  >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+
+	<table width="100%" >
+
+      <tr>
+
+        <td width="10px">&nbsp;</td>
+
+        <td>&nbsp;</td>
+
+      </tr>
+
+      <tr>
+
+        <td>&nbsp;</td>
+
+        <td>
+
+          
+
+		  
+
+{{#if access_permission==True:}} 		  
+
+
+
+       {{=form.custom.begin}} 
+
+		  <table class="blackCat">
+
+                            
+
+              <tr>
+
+                <td width="100"> Level ID </td>
+
+                <td>{{=form.custom.widget.level_id}}</td>
+
+                <td>&nbsp;</td>
+
+                <td>&nbsp;</td>
+
+              </tr>
+
+              <tr>
+
+                <td width="100">Name</td>
+
+                <td>{{=form.custom.widget.level_name}}</td>
+
+                <td>&nbsp;</td>
+
+                <td>&nbsp;</td>
+
+              </tr>
+
+              
+
+			  
+
+			  
+
+              <tr>
+
+                <td width="100">Depot ID </td>
+
+                <td><select name="depot_id" id="depot_id" style="width:100px"     >
+
+                    <option value="-" selected="selected">-</option>
+
+					{{if int(company_depth)==int(depth):}}
+
+                    {{for i in sorted(range(len(show_List))):}}
+
+		  			{{dictData=show_List[i]}}	
+
+					<option value="{{=dictData['depot_id']}}" >{{=dictData['depot_id']}}-{{=dictData['depot_name']}}</option>
+
+                    {{pass}}
+
+					{{pass}}
+
+                  </select>							</td>
+
+                <td>&nbsp;</td>
+
+                <td>&nbsp;</td>
+
+              </tr>
+
+              <tr>
+
+			  
+
+			 
+
+                <td width="100">&nbsp;</td>
+
+                <td>{{=form.custom.submit}}</td>
+
+                <td>&nbsp;&nbsp;</td>
+
+                <td>&nbsp;</td>
+
+              </tr>
+
+              <tr>
+
+                <td width="100"></td>
+
+                <td></td>
+
+                <td></td>
+
+                <td></td>
+
+              </tr>
+
+              <tr>
+
+                <td width="100"></td>
+
+                <td></td>
+
+                <td></td>
+
+                <td></td>
+
+              </tr>
+
+              <tr>
+
+                <td width="100"></td>
+
+                <td></td>
+
+                <td></td>
+
+                <td></td>
+
+              </tr>
+
+              <tr>
+
+                <td width="100"></td>
+
+                <td></td>
+
+                <td></td>
+
+                <td></td>
+
+              </tr>
+
+            </table>
+
+            {{=form.custom.end}}
+
+              {{#pass}}
+
+              
+
+			   <table width="800px" border="0" cellpadding="0" cellspacing="0" >
+
+		   <tr align="left"  height="20px" >
+
+              <td width="114" >&nbsp;</td>
+
+              <td width="100" >&nbsp;</td>
+
+              <td align="right" >
+
+			  
+
+              <a href="{{=URL(c='level',f='download_level')}}">
+
+                <input type="button" name="" id="" value="Download"   class="button_update"/></a>
+
+			
+
+			  <a href="{{=URL(c='level',f='download_level_classic')}}">
+
+			  	<input type="button" name="" id="" value="Download Classic"   class="button_update"/></a>
+
+              
+
+              </td>
+
+            </tr>
+
+          </table>
+
+              
+
+              {{ if parent_level_id_filter!='0':}}
+
+              {{=parent_level_string}}
+
+              {{else:}}
+
+              <br/>
+
+              {{pass}} 
+
+
+
+			<table width="800" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+
+		  
+
+              <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+
+                <td width="100"  >Level ID</td>
+
+                <td  >&nbsp;</td>
+
+                <td  >&nbsp;Name</td>
+
+                <td width="100"></td>
+
+                <td width="50" align="right" ></td>
+
+                <td width="50" align="right" ></td>
+
+              </tr>
+
+			  {{ p=0}} 		  
+
+			  {{for i,record in enumerate(records):}}
+
+			
+
+			
+
+			  {{ rows_check=db((db.sm_level.cid==session.cid) & (db.sm_level.parent_level_id==record.level_id)).select()}}
+
+				{{ckeck_parent=''}}
+
+				{{if rows_check:}}
+
+				{{ckeck_parent='1' }}
+
+			 		{{pass}}
+
+			  {{ if i==items_per_page: break}}
+
+			  			  
+
+			  
+
+  <form id="form" name="form" method="post" action="{{=URL(c='level',f='level',args=[page,record.level_id])}}">
+
+
+
+    {{ p=p%2 }}
+
+    
+
+    <tr  align="left" class="blackCat"  "vertical-align:middle"> 
+
+      <td width="100" ><input  name="record_id" type="hidden" id="record_id" size="25" value="{{=record.id}}" title="" />
+
+            <input  name="record_level" type="hidden" id="record_level" size="25" value="{{=record.level_id}}" title="" />
+
+        {{=record.level_id}}</td>
+
+		
+
+		
+
+      <td width="46" >
+
+	  {{ if record.is_leaf!='1':}}
+
+	  
+
+	  <input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/> 
+
+	  
+
+	  {{pass }}	         </td>
+
+	  
+
+	  
+
+	  
+
+      <td ><input type="text" name="level_name" id="level_name" value="{{=record.level_name}}"  class="button_update"/></td>
+
+      
+
+	  <td width="100"  >
+
+	  {{if int(company_depth)==int(depth):}}
+
+	    <input type="text" name="depot_id" id="depot_id" value="{{=record.depot_id}}"  class="button_update"/>
+
+	  {{pass}}	  </td>
+
+     
+
+	  <td width="50" align="right"  >{{#if access_permission==True:}}
+
+	    <input type="submit" name="btn_edit" id="btn_edit" value="Update"   class="button_update"/>        {{pass}}		</td>
+
+	  <td width="50" align="right"  >
+
+	  {{#if access_permission==True:}} 
+
+	   {{ if ckeck_parent!='1':}}
+
+	  <input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+
+	  
+
+	  {{pass}}	  </td>
+
+	  {{#pass}}    </tr>
+
+  </form>
+
+			  {{ p=p+1 }} 
+
+			  {{#pass}}
+
+		    </table>
+
+			<p>&nbsp;</p>
+
+		  </td>
+
+      </tr>
+
+    </table>
+
+
+
+		{{# if parent_level_id_filter=='0':}}
+
+           <!-- <table id="table_area_show">
+
+			<form>
+
+			  <tr>
+
+			    <td width="10">&nbsp;</td>
+
+			  	<td><textarea name="textarea" cols="60" rows="20">{{#=workingAreaString}}</textarea></td>
+
+			  </tr>
+
+			  <tr>
+
+			    <td width="10">&nbsp;</td>
+
+			  	<td><input type="button" name="btn_hide_area" id="btn_hide_area" value="Hide" /></td>
+
+			  </tr>
+
+			  </form>
+
+	  </table>-->
+
+          {{#pass}} 
+
+    
+
+{{if page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+
+{{pass}}
+
+
+
+{{if len(records)>items_per_page:}}
+
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+
+{{pass}}	</td>
+
+  </tr>
+
+</table>
+
+
+
+	<script>
+
+		jQuery("#btn_hide_area").click(function(){
+
+		   jQuery('#table_area_show').hide();
+
+		   });
+
+	</script>

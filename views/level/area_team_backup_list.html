@@ -1,0 +1,255 @@
+{{extend 'layout.html'}}
+
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password],  select {
+    margin: 2px 0px 2px 0px;
+	}
+	
+	#sm_client_status,#sm_client_category_id{
+	width:auto;
+	}
+	#sm_client_client_id,#sm_client_area_id{
+	width:70px;
+	}
+	
+	#sm_client_op_balance,#sm_client_balance,#sm_client_credit_limit{
+	width:60px;
+	text-align:right;
+	}
+	
+	div.error {
+		color: white;
+		padding: 0px;
+		width: auto; 
+		margin-left:0px;
+	}
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+<script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#x_search_type').blur(function(){
+			if ($('#search_type').val()=='ClientID'){				
+				$.ajax({
+					  url: base_url+'default/get_client_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='AreaID'){
+				$.ajax({
+					  url: base_url+'default/get_area_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});				
+			}else if ($('#search_type').val()=='Region'){
+				$.ajax({
+					  url: base_url+'default/get_region_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='District'){
+				$.ajax({
+					  url: base_url+'default/get_district_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Status'){
+				valueListStr='ACTIVE,INACTIVE'
+				
+			}else if ($('#search_type').val()=='DepotID'){
+				$.ajax({
+					  url: base_url+'default/get_depot_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});			
+			};			
+	 	});
+	 
+		$('#x_search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	    
+}); 
+
+</script>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td width="900"><span class="blackCatTitle">Area &amp; Team Structure (Backup)</span></td>
+    <form action="{{=URL(c='utility_mrep',f='utility')}}" method="post">
+    <td width="100" align="right"><input name="" type="submit"  value="Back"/></td>
+	</form>
+    <td align="right">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td width="100" ></td><td ></td>
+  </tr>
+  </table>
+  
+  
+  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+  <tr height="100%"  style="vertical-align:top;">
+    <td>
+	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>
+		
+		<table width="1000" border="0" cellpadding="0" cellspacing="0" >
+			<tr>
+            	<td width="800">&nbsp;</td>
+				<td width="100" align="right">&nbsp;</td>
+				<td width="100" align="right">&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>
+		</table>
+		
+		</td>
+      </tr>
+      <tr>
+        <td width="5">&nbsp;</td>
+        <td>			
+            <br />
+               <table width="1000" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               
+			   <form id="form1" name="form1" method="post" action="{{=URL(c='level',f='area_team_backup_list')}}">
+                 <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                   <td width="100" >                   
+                     {{if not(session.search_yearMonth_backup=='' or session.search_yearMonth_backup==None):}}                     
+                     	<input type="text" name="search_yearMonth" value="{{=session.search_yearMonth_backup}}" width="80px"/>
+                     {{else:}}                     
+                     	<input type="text" name="search_yearMonth" value="" width="100px" placeholder="Year-Month (YYYY-MM)"/>
+                     {{pass}}
+                   </td>
+                   
+                   <td width="150" >
+                   <select name="search_type" id="search_type" style="width:150px" >
+                     <option selected="selected">Select a Type</option>
+                     	{{if session.search_type_area_team_backup=='MsoID':}}<option value="MsoID" selected="selected">MSO</option>{{else:}}<option value="MsoID" >MSO</option>{{pass}}
+                        {{if session.search_type_area_team_backup=='RouteID':}}<option value="RouteID" selected="selected">Territory</option>{{else:}}<option value="RouteID" >Territory</option>{{pass}}
+                        {{if session.search_type_area_team_backup=='SpecialTerritory':}}<option value="SpecialTerritory" selected="selected">Special Territory</option>{{else:}}<option value="SpecialTerritory" >Special Territory</option>{{pass}}
+                   </select>
+				   </td>
+                   <td >
+                   	{{if session.search_value_area_team_backup=='' or session.search_value_area_team_backup==None:}}
+                    	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Enter a value" autocomplete="off" style="width:300px"/>
+                  	{{else:}}
+                    	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_value_area_team_backup}}" placeholder="Enter a value" autocomplete="off" style="width:300px"/>
+                  	{{pass}}
+                   </td>
+                   <td width="100" align="left"  ><input type="submit" name="btn_filter" id="btn_filter" value="Filter"   class="button_update"/>
+                   <input type="submit" name="btn_filter_all" id="btn_filter_all" value="All"   class="button_update"/></td>
+                   <td width="150" align="center"  ><a href="{{=URL(c='level',f='download_area_team_backup_details')}}">
+				 	<input type="button" name="" id="" value="Download" class="button_update" title=""/></a>
+                    
+                    <!--<a href="{{=URL(c='level',f='download_area_team_backup_summary')}}">
+                     <input type="button" name="input" id="input" value="Download Summary" class="button_update" title=""/>
+                   </a>-->
+                    </td>
+                   
+                 </tr>
+			     </form>
+            </table>
+			 <strong>Total:</strong> {{=totalCount}}
+			 <br />
+			 <table width="1103" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+               <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
+                 <td width="80" align="left" >Month<br>Date</td>
+                 <td width="100" align="left" >Zone ID| Name</td>
+                 <td width="100" align="left" >Region ID| Name</td>
+                 <td width="100" align="left" > Area ID| Name</td>
+                 <td width="100" align="left" >Territory ID| Name| Description</td>
+                 <td width="50" align="center" style="border-right:solid 1px #666666;">Special Territory Code</td>
+                 <td width="100" align="left" >ZM ID| Name| Mobile</td>
+                 <td width="100" align="left" >RSM ID| Name| Mobile</td>
+                 <td width="100" align="left" >FM ID| Name| Mobile</td>
+                 <td width="100" align="left" >MSO ID| Name | Mobile</td>
+                 <td width="50" align="center" >MSO Category</td>
+               </tr>
+			   
+			   {{for i,record in enumerate(records):}}
+			   		{{ if i==items_per_page: break}}
+                  
+                  <tr  align="left" class="blackCat"  style="font-size:13px">
+                    <td width="80" align="left">{{=record.firstdate.strftime('%b-%Y')}}<br>{{=record.currentdate}}</td>
+                      <td width="100" align="left">{{=record.zone_id}}| {{=record.zone_name}}</td>
+                      <td width="100" align="left">{{=record.region_id}}| {{=record.region_name}}</td>
+                      <td width="100" align="left">{{=record.area_id}}| {{=record.area_name}}</td>
+                      <td width="100" align="left">{{=record.territory_id}}| {{=record.territory_name}}| {{=record.territory_des}}</td>
+                      <td width="50" align="center" style="border-right:solid 1px #666666;">{{=record.special_territory_code}}</td>
+                      <td width="100" align="left">{{if record.zm_id!='':}}{{=record.zm_id}}| {{=record.zm_name}}| {{=record.zm_mobile_no}}{{pass}}</td>
+                      <td width="100" align="left">{{if record.rsm_id!='':}}{{=record.rsm_id}}| {{=record.rsm_name}}| {{=record.rsm_mobile_no}}{{pass}}</td>
+                      <td width="100" align="left">{{if record.fm_id!='':}}{{=record.fm_id}}| {{=record.fm_name}}| {{=record.fm_mobile_no}}{{pass}}</td>
+                      <td width="100" align="left">{{=record.mso_id}}| {{=record.mso_name}}| {{=record.mso_mobile_no}}</td>
+                      <td width="50" align="center">{{=record.mso_category}}</td>
+                 </tr>
+  
+			   {{pass}}
+</table>
+
+	      </td>
+         </tr>
+    </table>
+<br />
+{{if page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page-page])}}">first</a> |  
+&nbsp;&nbsp;<a href="{{=URL(args=[page-1])}}">previous</a> |
+{{pass}}
+
+{{if len(records)>items_per_page:}}
+&nbsp;&nbsp;<a href="{{=URL(args=[page+1])}}">next</a>
+{{pass}}</td>
+  </tr>
+</table>
+
+<br />
+

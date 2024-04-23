@@ -1,0 +1,205 @@
+{{extend 'layout.html'}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu--SRHoHCMbwyIhDv29b_uTHkTa6sh3o&sensor=true&region=BD"></script>
+    <script>
+
+
+
+
+
+
+
+function initialize() {
+  var myLatlng = new google.maps.LatLng({{=center_point}});
+ // var myLatlng_1 = new google.maps.LatLng(60, 105);
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng
+	
+
+  }
+  
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+//=========road map============
+var flightPlanCoordinates ={{=map_string}};
+		
+   var flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+
+    
+  
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  flightPath.setMap(map);
+  
+  
+  
+ //==============marker================= 
+ 
+ //var locations = [{{=map_string}}];
+  var marker, i;
+  var icons="{{=URL('static','images/man_12.png')}}";
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'path',
+	  icon: icons
+	  
+  });
+ //alert ({{=map_string_name}});
+ var a=$("#desc").val();
+ 
+ //var locations = [['Nothing', 23.745853,90.37643,3],['Nothing', 23.753326,90.377965, 2],['Nothing', 23.756527,90.372514, 1]];
+ // alert (locations);
+  
+  
+   var fields = a.split('rdrd');
+  var total_fields=a.split("rdrd").length-1
+ // alert (total_fields);
+  
+  
+var locations = [];
+ var field=[];
+ var j=0;
+ 
+ for (j = 0; j < total_fields; j++){
+	 var s=0;
+	 //field.push(fields[j])
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length-1
+	// alert (total_fields_single);
+	 var arr=[];
+	 for (s = 0; s < total_fields_single; s++){
+		 
+		 arr.push(fields_single[s]);
+  		}
+	locations.push(arr);
+	
+ }
+ 
+ //alert (locations);
+ 
+ var infowindow = new google.maps.InfoWindow();
+ var marker, i;
+ var icons="{{=URL('static','images/uni_small.png')}}";
+ 
+ for (i = 0; i < locations.length; i++) {  
+ 	  //alert (locations[i][1]);
+      marker = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+		map: map,
+		icon: icons
+//		icon: iconBase + 'http://127.0.0.1:8000/touries/static/images/loading143.gif'
+	   
+      });
+//alert (locations.length);
+	  
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+  
+  
+  }
+  
+  
+  
+  
+  // Show Police Station================================
+ 
+  var p_station=$("#desc_p").val();
+  var fields_p = p_station.split('rdrd');
+  var total_fields_p=p_station.split("rdrd").length-1
+  //alert (p_station);
+  
+  
+ var locations_p = [];
+ var field_p=[];
+ var p=0;
+
+ for (p = 0; p < total_fields_p; p++){
+	 var st=0;
+	 //field.push(fields[j])
+	 var fields_single_p = fields_p[p].split(',');
+  	 var total_fields_single_p=fields_p[p].split(",").length-1
+	// alert (total_fields_single);
+	 var arr_p=[];
+	 for (st = 0; st < total_fields_single_p; st++){
+		 
+		 arr_p.push(fields_single_p[st]);
+  		}
+	locations_p.push(arr_p);
+	
+ }
+  
+ 
+ var marker_p, ip;
+ var icons_p="{{=URL('static','images/uni_small.png')}}";
+ 
+ for (ip = 0; ip < locations_p.length; ip++) {  
+ 	  //	 alert (locations_p.length);
+        marker_p = new google.maps.Marker({
+
+        position: new google.maps.LatLng(locations_p[ip][1], locations_p[ip][2]),
+		map: map,
+		icon: icons_p
+//		icon: iconBase + 'http://127.0.0.1:8000/touries/static/images/loading143.gif'
+	   
+      });
+
+	  
+      google.maps.event.addListener(marker_p, 'click', (function(marker_p, ip) {
+        return function() {
+          infowindow.setContent(locations_p[ip][0]);
+          infowindow.open(map, marker_p);
+        }
+      })(marker_p, ip));
+  
+  
+  }  
+  
+  
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+  
+  
+  <table width="1200px" border="1">
+  <tr>
+    <td>
+    <input name="desc" id="desc" placesholder="" value="{{=map_string_name}}" type="hidden">
+    <input name="desc_p" id="desc_p" placesholder="" value="{{=map_string_name_p}}" type="hidden">
+    <div id="map-canvas" style="height:600px; width:900px"></div></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+  
+  
+  
+  </body>
+</html>

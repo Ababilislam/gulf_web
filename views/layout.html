@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html lang="{{=T.accepted_language or 'en'}}" class="no-js"><!-- no-js need it for modernzr -->
+
+  <head>
+
+    <meta charset="utf-8" />    
+
+    <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+
+    <!--[if IE]><![endif]-->    
+
+    <!-- Always force latest IE rendering engine 
+
+     (even in intranet) & Chrome Frame 
+
+     Remove this if you use the .htaccess -->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>{{=response.title or request.application}}</title>
+
+    <!-- http://dev.w3.org/html5/markup/meta.name.html -->
+
+    <meta name="application-name" content="{{=request.application}}" /> 
+
+    <!-- Speaking of Google, don't forget to set your site up: 
+
+     http://google.com/webmasters -->
+
+    <meta name="google-site-verification" content="" />
+
+    <!--  Mobile Viewport Fix
+
+      j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag 
+
+      device-width: Occupy full width of the screen in its current orientation
+
+      initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+
+      maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
+
+      -->
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+
+    
+    <!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
+
+    <link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
+
+    <link rel="apple-touch-icon" href="{{=URL('static','favicon.png')}}">
+
+    <!-- For the less-enabled mobile browsers like Opera Mini -->
+
+    <link rel="stylesheet" media="handheld" href="{{=URL('static','css/handheld.css')}}">
+	
+    <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+
+	
+    <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
+	
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+
+	
+  <style type="text/css">
+		body {			
+				margin-left: 0px;			
+				margin-top: 0px;			
+				margin-right: 0px;			
+				margin-bottom: 0px;			
+			}
+	</style>
+    
+	
+    {{#------  require CSS and JS files for this page (read info in base.css) ------}}
+
+    {{response.files.append(URL('static','css/base.css'))}}
+
+    {{response.files.append(URL('static','css/superfish.css'))}}
+	
+	{{response.files.append(URL('static','css/bootstrap.min.css'))}}
+
+    {{response.files.append(URL('static','js/superfish.js'))}}
+	
+	
+	
+	
+    {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
+
+    {{include 'web2py_ajax.html'}}
+
+    {{
+
+    #using sidebars need to know what sidebar you want to use
+
+    #prior of using it, because of static width size of content, you can use
+
+    #left_sidebar, right_sidebar, both or none (False left and right)    
+
+    left_sidebar_enabled = globals().get('left_sidebar_enabled',False)
+
+    right_sidebar_enabled = globals().get('right_sidebar_enabled',False)
+
+    if left_sidebar_enabled and right_sidebar_enabled: width_content='63%'
+
+    elif left_sidebar_enabled != right_sidebar_enabled: width_content='740px'
+
+    else: width_content='100%'
+
+    if left_sidebar_enabled: left_sidebar_style = 'style="display: block;"'
+
+    else: left_sidebar_style = 'style="display: none;"'
+
+    if right_sidebar_enabled: right_sidebar_style = 'style="display: block;"'
+
+    else: right_sidebar_style = 'style="display: none;"'
+
+    style_content = 'style="width: %s"' % width_content
+
+    }}
+
+
+<!-- menu required -->
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+ <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap-multiselect.js')}}"></script>
+ 
+ <script> 
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	function clearFilter(){		
+		$.ajax({
+				  url: base_url+'default/clear_filter',
+				  success: function() {
+					  
+				  }
+			});
+	}
+  </script>
+  
+ <script>
+ $(function() {
+ 
+<!-- $( "#accordion" ).on( "accordionactivate", function( click, ui.oldHeader ) {} ); -->
+ 
+	$( "#accordion" ).accordion({
+	  active: true,
+	  navigation:true,
+      heightStyle: "content",
+	  collapsible: true	  	   
+    });
+  });
+  </script>
+  <script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+  
+  <style type="text/css">
+		#accordion ul{	list-style-type:none;margin:0;}
+		#accordion li{ margin:1px; border-radius:5px; border-bottom:1px solid #CCCCCC; font-size:10px; background-color:#F7F7F7; height:20px; padding:5px 2px 2px 15px;}/*:#F7F7F7*/
+		#accordion li a{ text-decoration:none;}
+		#accordion li:hover{ height:21px;background-color:#F5F5F5;}
+		
+	
+	/*#home{ margin-top:0px; width:16px; height:16px;background:url('{{=URL('static','images/ui-icon.png')}}') 0 -110px;}*/
+	
+	#adminTools{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -115px -194px;}
+	#operation{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -67px -50px;}
+	
+	#analysis{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -115px -339px;}
+	#settings{ width:32px; height:25px;background:url('{{=URL('static','images/vicon.png')}}') -307px -289px;}
+	
+	
+
+
+	.bodylink3 {
+		FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+		font-size: 13px;
+		font-style: normal;
+		color:#2A2A2A;
+	/*border:1px solid #ccc;*/
+	
+	}
+	.bodylink3:hover {
+		CURSOR: hand; 
+		FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+		/*font-size: 12px;*/
+		font-style: normal;
+		color:#FF0000;
+		TEXT-DECORATION: none; 
+		/*background-color:#BFBFBF;*/
+		/*background-color:#FFFFF;
+		border:1px solid #CCC;*/
+		
+	}
+
+	.dropbtn {
+	  background-color: #005986;
+	  color: white;
+	  font-size: 1vw;
+	  border: none;
+	  cursor: pointer;
+	}
+	
+	.dropbtn:hover{
+	  background-color: #005986;
+	}
+	
+	.dropdown {
+	  position: relative;
+	  display: inline-block;
+	}
+	
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  background-color: #005986;
+	  min-width: 50%;
+	  overflow: auto;
+	  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	  z-index: 1;
+	  border-radius:5px;
+	}
+	
+	.dropdown-content a {
+	  color: black;
+	  padding: 12px 25px;
+	  text-decoration: none;
+	  display: block;
+	}
+
+	.dropdown a:hover {background-color: #004466;}
+	/*.dropdown-content a:hover {color:#900 !important;}*/
+	.show {display: block;}
+	
+	#fixedbar a{color:#FFF !important;}
+	a:hover{text-decoration:none; color:#4d4d4d;}	
+	</style>
+<!-- menu required -->
+
+  </head>
+  
+  
+  <body ><!--<![endif]-->
+
+	<!-- Top-->
+
+	<!--<table width="100%" border="0" cellspacing="0" cellpadding="0" class="top_table" >
+
+    <tr style="background-color:#005986; color:#EBEBEB; height:100px;" >
+
+      <td width="11">&nbsp;</td>
+
+      <td width="149" align="left">
+      <font size="2px" style="font-weight:bold">m-Reporting</font></td>
+
+      <td  align="center"><font face="Arial, Helvetica, sans-serif" size="4px" >LAFARGE - TLP</font></td>
+
+      <td width="100px" align="center"><a  href="{{=URL('default', 'logout')}}" class="blackCat "></a></td>
+
+      <td width="10px">&nbsp;</td>
+
+    </tr>
+
+  <tr height="1px" style="vertical-align:middle; background:#E8F3F7;">
+
+      <td></td>
+
+      <td align="left"></td>
+
+      <td  align="center"></td>
+
+      <td align="center"></td>
+
+      <td></td>
+
+    </tr>
+
+  </table>-->
+  
+
+<!-- <div id="fixedbar" style="font-family:'Eras ITC','Eras Light ITC',sans-serif; width:100%; padding:10px 0px 10px 0px; font-weight:550; font-size:2.2vw; color:#FFF; text-align:center;background-color:#005986; position:fixed; z-index:100; vertical-align:top; ">
+<span>
+	<img src="('static','images/Home_icon_black.png')" alt="2222">
+</span>
+<span style="margin-left:20%;"><a href="{{#=URL(c='default',f='home')}}">GULF-OIL-BANGLADESH</a></span>
+
+</div> -->
+
+<table width="100%">
+    <tr height="40px" style="background-color: black;">
+        <!-- <td></td> -->
+        <td width="135px" align="left" style="padding-left: 20px;">
+            <img src="/GULF/static/images/gp_black.jpg" alt="blueText">
+        </td>
+        <td colspan="2" style=" padding-top: 9px;"><span class="blackCatTitle" style="margin-left: 35%; font-size: 25px; color: #FFF;">GULF OIL BANGLADESH</span></td>
+        
+    </tr>
+    <tr>
+        <!-- <td width="110px" style="padding-left: 20px; font-size: 14px;">M-Reporting</td> -->
+		<td></td>
+        <td align="right" style="margin-left: 50px; width: 1300px; font-size: 14px; font-weight: bold;">User ID: ADMIN</td>
+		<td width="15px"></td>
+        
+    </tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td align="right" style="padding-right:20px; margin: left 50px; ; font-size: 14px; font-weight: bold;">
+            <a href="{{=URL('default', 'logout')}}" style="color: brown;">Logout</a>
+        </td>
+	</tr>
+</table>
+
+<!-- <br><br><br> -->
+
+<!-- Top - second -->
+
+<!--<table height="20px" width="100%" border="0" cellspacing="0" cellpadding="0" class="top_sec_table" >
+
+  <tr>
+
+    <td width="8">&nbsp;</td>
+
+    <td width="110"><font size="2px" color="#006595"  style="font-weight:bold">&nbsp;</font></td>
+
+    <td width="202" >&nbsp;</td>
+
+    <td width="323" ><div align="right">{{=session.user_id}}-{{=session.user_type}}</div></td>
+
+    <td width="47" ><div align="right"><a href="{{=URL(c='default',f='log_out')}}">Logout</a></div></td>
+
+	<td width="13">&nbsp;</td>
+  </tr>
+</table>-->
+
+	
+
+<!-- Top End-->
+
+{{if response.flash!='':}}
+
+	<div class="flash">
+
+	
+
+	{{=response.flash }}</div> 
+
+	 <!--notification div--> 
+
+	{{pass}}
+
+<div id="container">                        
+
+      <div id="wrapper">        
+
+	<div id="page"> 
+
+	<!-- page main table , col 2 row 1 -->
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="menu_table" > 
+
+    <tr>
+
+  	<!-- Column for menu -->
+
+    <td class="menu_table" style="vertical-align:top" width="180px" >
+			
+			<table  width="180px" border="0" cellspacing="0" cellpadding="0"  >
+				  <tr>
+					<td width="180px">
+					
+					<table width="180px" border="0" cellspacing="0" cellpadding="0" onClick="clearFilter()"  id="menuTblId">
+
+				  <tr   height="30px" class="bodylink2 " >
+					<td width="30px">&nbsp;</td>
+					<td  width="3"></td>
+
+				    <td valign="middle"><a style="text-decoration:none;" href="{{=URL(c='default',f='home')}}"><div style="font-size:16px; padding:3px 0px 0px 2px; vertical-align:middle;"><img src="{{=URL('static','images/Home_icon_black.png')}}" height="22px" width="25px"/>&nbsp;&nbsp;Home</div></a></td>
+				  </tr>
+				  <tr height="1px" style="background-color:#CCCCCC;">
+					<td></td>
+					<td colspan="2"></td>
+				  </tr>
+				  <tr>
+				    <td ></td>
+				    <td colspan="2" title="" >
+										
+					<div style="width:180px; " >
+					<div id="accordion" style="width:180px;" >
+						  <div style=" background-color:#F2F2F2; border-radius:0px; margin:0px; padding:0px 0px 0px 0px; margin:0px; font-size:16px; height:25px; vertical-align:middle; background-image: linear-gradient( #F5F5F5 , #CACACA 50px);"><div id="settings">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BasicSettings</div></div>
+						  <div style="margin:0px; padding:0px; border:0px;">
+							<ul >
+							<!-- {{#if str(session.user_type).strip()=='General':}}-->
+								<li ><a href="{{=URL(c='item',f='Item')}}"><div>Item</div></a></li>
+								<!-- <li ><a href="{{#=URL(c='settings',f='brand')}}"><div>Brand</div></a></li>
+								<li ><a href="{{#=URL(c='settings',f='brand_point')}}"><div>Brand Point</div></a></li>
+								<li ><a href="{{#=URL(c='master',f='master_add')}}"><div>Master</div></a></li> -->
+
+							</ul> 
+						  </div>
+						  <div style=" background-color:#F2F2F2; border-radius:0px; padding:0px 0px 0px 0px; margin:0px; font-size:16px; height:25px; vertical-align:middle; background-image: linear-gradient( #F5F5F5 , #CACACA 50px);"><div id="operation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FieldForce</div></div>
+						  <div style="margin:0px; padding:0px; border:0px;">
+							<ul>
+								
+								<li ><a href="{{=URL(c='level',f='level')}}"><div>Area Structure</div></a></li>
+								
+								<li ><a href="{{=URL(c='representative',f='rep')}}"><div>Representative</div></a></li>
+
+								<!-- <li ><a href="{#=URL(c='representative',f='rep_area')}}"><div>Rep-Distributor</div></a></li> -->
+
+								<li ><a href="{{=URL(c='rep_area_define',f='rep_area')}}"><div>Rep-Distributor</div></a></li>
+								<li ><a href="{{=URL(c='supervisor',f='sup')}}"><div>Supervisor</div></a></li>
+
+								<!-- <li ><a href="{{=URL(c='representative',f='supervisor_level')}}"><div>supervisor-level</div></a></li> -->
+								<li ><a href="{{=URL(c='sup_area_define',f='sup_area')}}"><div>Supervisor Level</div></a></li>
+								<li ><a href="{{=URL(c='rep_retailer',f='rep_ret')}}"><div>Rep-Retailer</div></a></li>
+								
+
+								<!-- {{#if check_role('retailer_sales_dataM')==True:}}
+								<li ><a href="{{#=URL(c='reports',f='retailer_sales_data_gift')}}"><div>Retailer Sales Data Gift</div></a></li>
+								{{#pass}}
+                                {{#if check_role('rptWaterQV')==True:}}
+								<li ><a href="{{#=URL(c='reports',f='water_quality_records')}}"><div>Water Quality Test New</div></a></li>
+								{{#pass}}
+								{{#if session.user_role=='PNGO MANAGER':}}
+								<li ><a href="{{#=URL(c='reports',f='approve_all')}}"><div>Approval</div></a></li>
+								{{#pass}} -->
+							</ul> 
+						  </div>
+						  
+						  <div style=" background-color:#F2F2F2; border-radius:0px; padding:0px 0px 0px 0px; margin:0px; font-size:16px; height:25px; vertical-align:middle; background-image: linear-gradient( #F5F5F5 , #CACACA 50px);"><div id="adminTools" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Customer</div></div>
+						  <div style="margin:0px; padding:0px; border:0px;">
+							<ul>
+								<!-- {{#if check_role('userM')==True or check_role('userV')==True:}}
+								<li ><a href="{{#=URL(c='user',f='user_add')}}"><div>User</div></a></li>
+								<li ><a href="{{#=URL(c='settings',f='userrole')}}"><div>User Role</div></a></li>
+								{{#pass}} -->
+								<li ><a href="{{=URL(c='customer',f='client')}}"><div>Retailer</div></a></li>							
+							</ul> 
+						  </div>
+
+						  <div style=" background-color:#F2F2F2; border-radius:0px; padding:0px 0px 0px 0px; margin:0px; font-size:16px; height:25px; vertical-align:middle; background-image: linear-gradient( #F5F5F5 , #CACACA 50px);">
+						  <div id="adminTools" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Report</div>
+						  </div>
+						  <div style="margin:0px; padding:0px; border:0px;">
+						  	<ul>
+						  		<li >
+						  			<a href="{{=URL(c='order',f='no_order')}}"><div>No Order</div>
+						  			</a>
+						  		</li>	
+								  <li >
+									<a href="{{=URL(c='sales_person_tracking_map',f='index')}}"><div>Visit Tracking -Map</div>
+									</a>
+								</li>						
+						  	</ul> 
+						  </div>
+
+
+						  
+
+						  <div style=" background-color:#F2F2F2; border-radius:0px; padding:0px 0px 0px 0px; margin:0px; font-size:16px; height:25px; vertical-align:middle; background-image: linear-gradient( #F5F5F5 , #CACACA 50px);"><div id="adminTools0" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tools</div></div>
+						  <div style="margin:0px; padding:0px; border:0px;">
+							<ul>
+								<!-- {{#if check_role('userM')==True or check_role('userV')==True:}}
+								<li ><a href="{{#=URL(c='user',f='user_add')}}"><div>User</div></a></li>
+								<li ><a href="{{#=URL(c='settings',f='userrole')}}"><div>User Role</div></a></li>
+								{{#pass}} -->
+								<li ><a href="{{=URL(c='tools',f='reset_password')}}" target="_blank"><div>Change Password</div></a></li>							
+							</ul> 
+						  </div>
+						  
+				
+						</div>
+					</div>					
+					  </td>
+				    </tr>
+				  <tr>
+					<td></td>
+					<td colspan="2" align="center"></td>
+				  </tr>
+				</table>
+				</td>
+				  </tr>
+		  </table>  
+
+		  </td>  
+
+    <!--	end of menu column-->
+
+	<!--	column for page -->
+
+   <!-- <td style="background-color:#E6F2FF;>-->
+
+    <td  style="vertical-align:top;" class="page_color"   >
+
+		<!-- <div  class="rounded_corner" style="background-color:#F0F8FF; border: #C1E0FF; border-width:thick; border-style:outset; border-right:none;"> -->
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
+
+    <td>
+
+	{{if left_sidebar_enabled:}}
+
+            <div id="left_sidebar" {{=XML(left_sidebar_style)}} >
+
+              <div style="padding: 4px;">
+			  
+
+              {{block left_sidebar}}Content Left Sidebar{{end}}            </div>
+
+            </div><!-- left_sidebar -->
+
+      {{pass}}
+
+      <!-- content -->
+
+      <div id="content" {{=XML(style_content)}} >
+
+        {{include}}      </div>
+
+        <!-- content -->
+
+      {{if right_sidebar_enabled:}}
+
+      <div id="right_sidebar" {{=XML(right_sidebar_style)}} >
+
+        <div style="padding: 4px;">
+
+          {{block right_sidebar}}Content Right Sidebar{{end}} </div>
+
+        </div><!-- right_sidebar -->
+
+      {{pass}}
+
+       </td>
+
+ 		 </tr>
+
+	</table>	</td> <!-- column for page -->
+
+  </tr>
+
+</table>
+
+  </div><!-- page --> 
+
+  </div><!-- wrapper -->
+
+  </div><!-- container -->   
+
+     <!-- bottom-->
+
+ 	<!-- bottom End-->
+<script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+<script src="{{=URL('static','js/web2py_bootstrap.js')}}"></script>   
+
+</body>
+
+</html>
+

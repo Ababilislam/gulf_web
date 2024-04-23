@@ -1,0 +1,31 @@
+.formBody{
+	width: 950px;
+	background-color: #3FB58E;
+	border-radius: 5px;
+	margin: 10px;
+	padding: 10px;
+}
+.blackCat2{
+	color:#ffffff !important;
+}
+.inputSubmitStyle input{
+	color: #fff;
+	background-color: #2e8468;
+	height: 30px;
+	width: 100px;
+}
+.inputSubmitStyle input:hover {
+	background-color: #3FB58E !important;
+	color:#ffffff !important;
+}
+.tdDecoratoin{
+	padding:10px !important;
+}
+/*
+.filterRow{
+	background-color:#3FB58E;
+}*/
+
+.sample_border{
+	margin-left:10px !important;
+}

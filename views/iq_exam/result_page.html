@@ -1,0 +1,187 @@
+{{extend 'layout_mobile.html'}}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hawkseye - SB</title>
+     
+</head>
+<style type="text/css">
+	.page_color{background-color:#FFF;}
+</style>
+<script type="text/javascript">
+ 
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+$(document).ready(function(){
+	$("#msg").hide();
+});
+
+function examDataSubmit(){
+	$("#examDataSubmit_btn").show();	
+	var examId=$("#examId").val();
+	var examAnsRowListId=$("#examAnsRowListId").val();
+	var examAnsStr=examAnsRowListId.split('||');
+	var ansStr='';
+	var flag=true;
+	for(i=0;i<examAnsStr.length;i++){
+		examAns=examAnsStr[i].split('|');
+		
+		var checkValue=$("input[name='examAns_"+examAns[0]+"']:checked").val();
+		if(checkValue==undefined){
+			flag=false;
+		}
+		
+		if (ansStr==''){
+			ansStr=examAns[0]+'|'+checkValue+'|'+examAns[1];
+		}else{
+			ansStr+='||'+examAns[0]+'|'+checkValue+'|'+examAns[1];
+		}
+	}
+	if (flag==true){
+		$("#msg").hide();
+		$("#errorMsg").text("");
+		//alert(base_url+'iq_exam/examDataSubmit?examId='+examId+'&dataAnsStr='+ansStr);
+		$.ajax({
+			  url:base_url+'iq_exam/examDataSubmit?examId='+examId+'&dataAnsStr='+ansStr,
+			  success: function(result) {
+				if(result=='Success'){
+					$("#msg").show();
+					$("#examDataSubmit_btn").hide();
+					$("#successMsg").text(result);
+				}
+			  }
+		})
+	}else{
+		$("#msg").show();
+		$("#errorMsg").text("Required ALL");
+	}
+	
+}
+
+</script>
+<body style=" background-color:#E8EEE6;color:#3F3F3F;">
+<p style="color:#098CE3; margin:0px;"><strong>&nbsp;&nbsp;ID : {{=session.rep_id}}&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Mobile No : {{=session.mobileNo}}</strong></p>
+<table width="100%" border="1" cellspacing="1" cellpadding="1" >
+
+  <tr height="100%"  style="vertical-align:top;">
+
+    <td>
+		
+	<div style=" margin:15px; box-shadow:#E1E1E1 0 0 10px; border-radius:5px; height:90%; border:1px solid #DADADA; background-color:#FFF;">
+    <br>
+    	<div style="font-size:22px; text-align:center; margin-bottom:10px; "><strong>{{=exam_name}}</strong></div>
+        
+      <span style="font-size:15px; color:#00F;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start Time: {{=e_start_dt}} <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End Time: {{=e_end_dt}}</span>
+     <p style="border:1px solid;"></p> 
+      
+	  <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" >
+         
+        <tr height="30" style="font-size:18px;border-bottom:2px solid;">
+        	<td><strong >&nbsp;Exam Marks : {{=result}}/{{=countId}}  &nbsp;&nbsp;|&nbsp;&nbsp;{{=resultPercent}}%</strong></td>
+        </tr>
+        <tr height="10" >
+        </tr>
+                
+        {{for i,iqExamQRows in enumerate(iqExamQRows):}}
+                
+        {{a1=0}}
+        {{a2=0}}
+        {{a3=0}}
+        {{a4=0}}
+        {{for j,iqExamAnsRows1 in enumerate(iqExamAnsRows):}}
+               
+        {{if str(iqExamQRows.exam_id)==str(iqExamAnsRows1.exam_id) and  str(iqExamQRows.q_sl)==str(iqExamAnsRows1.q_sl) and str(iqExamQRows.a_1)==str(iqExamAnsRows1.given_a):}}
+          {{a1=1}}
+        {{elif str(iqExamQRows.exam_id)==str(iqExamAnsRows1.exam_id) and  str(iqExamQRows.q_sl)==str(iqExamAnsRows1.q_sl) and str(iqExamQRows.a_2)==str(iqExamAnsRows1.given_a):}} 
+        {{a2=1}} 
+        {{elif str(iqExamQRows.exam_id)==str(iqExamAnsRows1.exam_id) and  str(iqExamQRows.q_sl)==str(iqExamAnsRows1.q_sl) and str(iqExamQRows.a_3)==str(iqExamAnsRows1.given_a):}} 
+        {{a3=1}} 
+        {{elif str(iqExamQRows.exam_id)==str(iqExamAnsRows1.exam_id) and  str(iqExamQRows.q_sl)==str(iqExamAnsRows1.q_sl) and str(iqExamQRows.a_4)==str(iqExamAnsRows1.given_a):}} 
+        {{a4=1}}        
+        {{pass}}
+        {{pass}}  
+                  
+        <tr height="10">
+          <td width="100%">
+          	&nbsp;{{=iqExamQRows.q_sl}}.  {{=iqExamQRows.q_text_1}}  <br>
+                
+          	<span style=" font-size:14px; font-weight:bold;">
+            
+            {{if str(iqExamQRows.a_1)==str(iqExamQRows.correct_a):}}
+            {{if a1==1:}}
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" checked id="" value="{{=iqExamQRows.a_1}}" >&nbsp;<span style="color:#090;">a)&nbsp;{{=iqExamQRows.a_1}}</span><br>
+             {{else:}}
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_1}}" >&nbsp;<span style="color:#090;">a)&nbsp;{{=iqExamQRows.a_1}}</span><br>
+			{{pass}}
+             {{else:}}
+             {{if a1==1:}}
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" checked value="{{=iqExamQRows.a_1}}" >&nbsp;<span style="color:#C00;">a)&nbsp;{{=iqExamQRows.a_1}}</span><br>
+             {{else:}}
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_1}}">&nbsp;a)&nbsp;{{=iqExamQRows.a_1}}<br>
+             {{pass}}
+            {{pass}}
+            
+            {{if str(iqExamQRows.a_2)==str(iqExamQRows.correct_a):}} 
+            {{if a2==1:}}           
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" checked  value="{{=iqExamQRows.a_2}}">&nbsp;<span style="color:#090;">b)&nbsp;{{=iqExamQRows.a_2}}</span> <br>
+                {{else:}}
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_2}}">&nbsp;<span style="color:#090;">b)&nbsp;{{=iqExamQRows.a_2}}</span> <br>
+                {{pass}}
+             {{else:}}
+             {{if a2==1:}} 
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  checked value="{{=iqExamQRows.a_2}}">&nbsp;<span style="color:#C00;">b)&nbsp;{{=iqExamQRows.a_2}}</span> <br>
+             {{else:}}
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_2}}">&nbsp;b)&nbsp;{{=iqExamQRows.a_2}} <br>
+             {{pass}}
+             {{pass}}
+             
+             {{if str(iqExamQRows.a_3)==str(iqExamQRows.correct_a):}}
+             {{if a3==1:}}      
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" checked value="{{=iqExamQRows.a_3}}">&nbsp;<span style="color:#090;">c)&nbsp;{{=iqExamQRows.a_3}}</span><br> 
+                {{else:}}
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_3}}">&nbsp;<span style="color:#090;">c)&nbsp;{{=iqExamQRows.a_3}}</span><br> 
+                {{pass}}
+             {{else:}}
+             {{if a3==1:}}    
+             &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" checked value="{{=iqExamQRows.a_3}}">&nbsp;<span style="color:#C00;">c)&nbsp;{{=iqExamQRows.a_3}}</span><br> 
+             {{else:}}
+              &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" value="{{=iqExamQRows.a_3}}">&nbsp;c)&nbsp;{{=iqExamQRows.a_3}}<br>
+              {{pass}}
+             {{pass}}
+             
+              {{if str(iqExamQRows.a_4)==str(iqExamQRows.correct_a):}}   
+              {{if a4==1:}} 
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  checked value="{{=iqExamQRows.a_4}}">&nbsp;<span style="color:#090;">d)&nbsp;{{=iqExamQRows.a_4}}</span> <br>&nbsp;
+                {{else:}}
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_4}}">&nbsp;<span style="color:#090;">d)&nbsp;{{=iqExamQRows.a_4}}</span> <br>&nbsp;
+                {{pass}}
+               {{else:}}
+               {{if a4==1:}} 
+               &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id="" checked  value="{{=iqExamQRows.a_4}}">&nbsp;<span style="color:#C00;">d)&nbsp;{{=iqExamQRows.a_4}}</span> <br>&nbsp;
+               {{else:}}
+                &nbsp;<input type="radio" name="examAns_{{=iqExamQRows.q_sl}}" id=""  value="{{=iqExamQRows.a_4}}">&nbsp;d)&nbsp;{{=iqExamQRows.a_4}} <br>&nbsp;
+                {{pass}} 
+               {{pass}} 
+                
+             </span>
+                    
+                    
+                                        
+          </td>
+        </tr>
+        
+        {{pass}}
+      </table>
+      
+	</div>
+	
+</td>
+ </tr>
+ 
+  <tr height="20">
+  
+  </tr>
+</table>
+</body>
+</html>
+

@@ -1,0 +1,228 @@
+{{extend 'layout.html'}}
+<script>
+  var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+  $(function() {
+    $('#rep_old_id').blur(function(){
+      var repIdName=$('#rep_old_id').val();
+      if(repIdName!=''){
+        var repIdNameArray=repIdName.split("|");
+        if(repIdNameArray.length==2){
+          $('#rep_old_id').val(repIdNameArray[0]);
+          $('#rep_old_name').val(repIdNameArray[1]);
+          }
+        }
+      
+    });	
+  
+    var scListStr="";
+      $.ajax({
+          url: base_url+'rep_retailer/get_rep_id_list',
+          success: function(resStr) {
+            scListStr=resStr
+          }
+        });
+     
+      $('#rep_old_id').keyup(function(){	
+        
+        //-------------------------
+        var ref_list = scListStr.split(',');				
+        var ref_name=$("#rep_old_id").val();
+        
+        //---------------- auto complete combo list
+        var ref_list_new=new Array();
+        lc=0;
+        i =0;
+        var refStr="";				
+        while (i < ref_list.length)
+        {
+          refStr=ref_list[i];
+          i=i+1;					
+          var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res!=null){
+            ref_list_new[lc]=refStr;
+            lc=lc+1;
+            if (lc==30){
+              break;
+            };
+          }else{
+            continue;
+          }					
+        };
+        //alert (ref_list_new);
+        
+        //-------------- auto complete source
+        $( "input#rep_old_id" ).autocomplete({
+          source: ref_list_new
+        });
+      
+      });    
+  });
+
+  $(function() {
+    $('#rep_new_id').blur(function(){
+      var repIdName=$('#rep_new_id').val();
+      if(repIdName!=''){
+        var repIdNameArray=repIdName.split("|");
+        if(repIdNameArray.length==2){
+          $('#rep_new_id').val(repIdNameArray[0]);
+          $('#rep_new_name').val(repIdNameArray[1]);
+          }
+        }
+      
+    });	
+  
+    var scListStr="";
+      $.ajax({
+          url: base_url+'rep_retailer/get_rep_id_list',
+          success: function(resStr) {
+            scListStr=resStr
+          }
+        });
+     
+      $('#rep_new_id').keyup(function(){	
+        
+        //-------------------------
+        var ref_list = scListStr.split(',');				
+        var ref_name=$("#rep_new_id").val();
+        
+        //---------------- auto complete combo list
+        var ref_list_new=new Array();
+        lc=0;
+        i =0;
+        var refStr="";				
+        while (i < ref_list.length)
+        {
+          refStr=ref_list[i];
+          i=i+1;					
+          var res=refStr.toUpperCase().match(ref_name.toUpperCase());
+          if (res!=null){
+            ref_list_new[lc]=refStr;
+            lc=lc+1;
+            if (lc==30){
+              break;
+            };
+          }else{
+            continue;
+          }					
+        };
+        //alert (ref_list_new);
+        
+        //-------------- auto complete source
+        $( "input#rep_new_id" ).autocomplete({
+          source: ref_list_new
+        });
+      
+      });    
+  });
+</script>
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+    <tr height="30px" >
+      <td width="180"><span class="blackCatTitle">Rep-Replacement
+        
+      </span></td>
+      <form action="{{=URL(c='rep_retailer',f='rep_ret')}}" method="post">
+        <td width="255" align="right"><input name="" type="submit"  value="Back"/></td>
+        </form>
+      <td align="right" width="20px">&nbsp;</td>
+    </tr>
+    <tr  height="1px" style="background-color:#CCCCCC;">
+          <td ></td><td ></td>
+          <td width="100" ></td>
+          <td ></td>
+    </tr>
+</table>
+
+
+<table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
+    <tr height="100%"  style="vertical-align:top;">
+        <td>
+            <table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
+                <tr>
+                    <td width="10">&nbsp;</td>
+                    <td valign="top">
+                        <br />
+
+          <!--=====UPDATE VALUES===========-->
+                        <form action="{{=URL(c='rep_retailer',f='rep_replacement')}}" method="post">
+                          <table width="700">
+                            <tr>
+                              <td width="400">
+                                <table width="620" class="blackCat">
+                                    <tr>
+                                        <td style="width: 200px;">Representative Old ID&nbsp;</td>
+                                        <td></td>
+                                        {{if session.rep_old_id=='':}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_old_id" id= "rep_old_id" autocomplete="off"></td>
+                                        {{else:}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_old_id" id= "rep_old_id" value="{{=session.rep_old_id}}" autocomplete="off"></td>
+                                        {{pass}}
+                                           <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>   
+                                    </tr>
+
+                                    <tr>  
+                                      <td style="width: 200px;">Representative Old Name</td>
+                                        <td></td>
+                                        {{if session.rep_old_name=='':}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_old_name" id= "rep_old_name" autocomplete="off" readonly></td>
+                                        {{else:}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_old_name" id= "rep_old_name" value="{{=session.rep_old_name}}" autocomplete="off" readonly></td>
+                                        {{pass}}
+                                        <!-- <td width="12"></td> -->
+                                          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+
+                                    <tr>  
+                                      <td style="width: 200px;">Representative New ID</td>
+                                        <td></td>
+                                        {{if session.rep_new_id=='':}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_new_id" id= "rep_new_id" autocomplete="off"></td>
+                                        {{else:}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_new_id" id= "rep_new_id" value="{{=session.rep_new_id}}" autocomplete="off"></td>
+                                        {{pass}}
+                                        <!-- <td width="12"></td> -->
+                                          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+
+                                    <tr>  
+                                      <td style="width: 200px;">Representative New Name</td>
+                                        <td></td>
+                                        {{if session.rep_new_name=='':}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_new_name" id= "rep_new_name" autocomplete="off" readonly></td>
+                                        {{else:}}
+                                        <td><input style= "width: 200px;"type="text" name="rep_new_name" id= "rep_new_name" value="{{=session.rep_new_name}}" autocomplete="off" readonly></td>
+                                        {{pass}}
+                                        <!-- <td width="12"></td> -->
+                                          <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+
+                                    <tr>
+                                      <td style="width: 200px;"></td>
+                                      <td></td>
+                                      <td align="right" style="margin-left: 5px; width: 200px;" >
+                                        <div align="right">
+                                          <input align="right" type="submit" name="update_btn" id="update_btn" value='Update' style="vertical-align:middle;height:30px ;border-radius:4px; background-color: rgb(133, 243, 197);"/>
+                                        </div>
+                                    </td>
+                                    <!-- <td width="12"></td> -->
+                                    <td>&nbsp;&nbsp;</td>
+
+                                    </tr>
+                                        
+                                        
+                                    
+                                    
+                                    </tr>
+                          
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                        <!--========END=========-->
+                        
+                        
+        </td>
+    </tr>
+</table>
+        

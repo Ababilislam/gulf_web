@@ -1,0 +1,338 @@
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+  <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+  <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+  
+  <style type="text/css">
+	 input[type=text], input[type=password]{
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+	select{
+		margin: 2px 0px 2px 0px;
+		width: 215px;
+	}
+		
+	div.error {
+		width: 200px;
+	}
+	
+	
+	.page_color,body{
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:13px;	
+		}
+ </style>
+ 
+ <script>
+var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+$(function() {
+	 	var valueListStr="";
+		
+		$('#search_type').blur(function(){
+			if ($('#search_type').val()=='ItemID'){
+				//alert(base_url+'default/get_route_list');
+				$.ajax({
+					  url: base_url+'default/get_item_list',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			}else if ($('#search_type').val()=='Catagory'){
+				$.ajax({
+					  url: base_url+'default/get_item_category',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			}else if ($('#search_type').val()=='Unit'){
+				$.ajax({
+					  url: base_url+'default/get_item_unit_type',
+					  success: function(resStr) {
+						  valueListStr=resStr
+					  }
+					});
+			
+			};
+			
+	 	});
+	 
+		$('#search_value').keyup(function(){
+			//-------------------------
+			var valueList = valueListStr.split(',');				
+			var searchValue=$("#search_value").val();
+			
+			//---------------- auto complete combo list
+			var valueList_new=new Array();
+			lc=0;
+			i =0;
+			var valueStr="";				
+			while (i < valueList.length)
+			{
+				valueStr=valueList[i];
+				i=i+1;					
+				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res!=null){
+					valueList_new[lc]=valueStr;
+					lc=lc+1;
+					if (lc==30){
+						break;
+					};
+				}else{
+					continue;
+				}					
+			};
+			//alert (ref_list_new);
+			
+			//-------------- auto complete source
+			$( "input#search_value" ).autocomplete({
+				source: valueList_new
+			});
+		
+	  }); 
+	   //==============	   
+}); 
+
+</script>
+ 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
+  <tr height="30px" >
+    <td><span class="blackCatTitle">Area Stucture
+      
+    </span></td>
+    <!-- <td align="right"><span class="blackCatTitle">
+   {{#if session.rm_item_cat_unit_manage=="True" or session.rm_item_cat_unit_view=="True":}}
+   	
+     <a href="{{#=URL(c='item',f='unit')}}"><input type="button" name="" value="Unit Type"/></a>&nbsp;
+     <a href="{{#=URL(c='item',f='catagory')}}"><input type="button" name="" value="Group/Category"/></a>&nbsp;
+     {{#pass}}
+    </span></td>
+    <td align="right" width="100">{{#if access_permission==True:}}<a href="{{#=URL(c='item',f='temp_item')}}"><input type="button" name="" value="Item Change Schedule"/></a>{{#pass}}</td> -->
+    <td align="right" width="20px">&nbsp;</td>
+  </tr>
+  <tr  height="1px" style="background-color:#CCCCCC;">
+	    <td ></td><td ></td>
+	    <td width="100" ></td>
+	    <td ></td>
+  </tr>
+</table>
+
+
+<table width="800px" border="0" cellspacing="0" cellpadding="0">
+    <form id="form" name="form" method="post" action="{{#=URL(c='level',f='level_search',args=[parentLevelId])}}">
+    
+      <tr>
+        <td align="right">Level ID/Name :
+            {{#if session.level_search=='' or session.level_search==None:}}
+                <input type="text" name="level_search" id="level_search" size="25" value=""  autocomplete="off" style="width:250px" placeholder="Select Level ID/Name"/>
+            {{#else:}}
+                <!-- <input type="text" name="level_search" id="level_search"  value="{{#=session.level_search}}" placeholder="Select Level ID/Name" autocomplete="off" style="width:250px"/> -->
+            {{#pass}}
+    
+          <input type="submit" name="btn_search" id="btn_search" value="Search"   class="button_update"/>
+    
+        </td>
+        </tr>
+    </form>
+</table>
+
+<table width="100%" height="500px"  class="page_color"  >
+
+	<tr height="100%"  style="vertical-align:top;">
+	  <td>
+	  <table width="100%" >
+		<tr>
+		  <td width="10px">&nbsp;</td>
+		  <td>&nbsp;</td>
+		</tr>
+  
+		<tr>
+  
+		  <td>&nbsp;</td>
+  
+		  <td>
+		  
+		  {{#if access_permission==True:}}
+			<table width="500" class="blackCat">
+			  {{#=form.custom.begin}}
+				<tr>
+  
+				  <td>Region ID </td>
+  
+				  <td><input style= "width: 200px;"type="text" name="item_id" ></td>
+  
+				</tr>
+  
+			<tr>
+			  <td>Region Name</td>
+			  <td><input style= "width: 200px;"type="text" name="item_id" ></td>
+			</tr>
+			  
+			  {{#if is_leaf=='1':}}
+				<!-- <tr>
+				  <td>Territory Description</td>
+				  <td><input type="text" name="territory_des" value=""/></td>
+				</tr>
+				<tr>
+				  <td>Special Territory Code</td>
+				  <td><input type="text" name="special_territory_code" value=""/></td>
+				</tr> -->
+			  {{#pass}}
+			  
+			  
+				<tr>
+					<td width=""></td>
+					<td align="left" style="margin-left: 5px;" >
+						<div align="left">
+						  <input align="left" type="submit" name="submit" id="submit" value=" Save " style="vertical-align:middle;height:30px ;border-radius:4px;"/>
+						</div>
+					</td>
+				</tr>
+			  
+			  {{#=form.custom.end}}
+			  </table>
+		  {{#pass}}
+		  
+		  <table width="800px" border="0" cellpadding="0" cellspacing="0" >
+  
+			 <tr align="left"  height="20px" >
+  
+				<td width="114" >&nbsp;</td>
+  
+				<td width="100" >&nbsp;</td>
+  
+				<td align="right" >
+				<a href="{{#=URL(c='level',f='download_level')}}"><input type="button" name="" id="" value="Download"   class="button_update"/></a>
+				  <a href="{{#=URL(c='level',f='download_level_classic')}}"><input type="button" name="" id="" value="Download Classic"   class="button_update"/></a>
+			  </td>
+  
+			  </tr>
+  
+			</table>
+  
+				<!-- {{# if parentLevelId!='0':}}
+				
+				{{#if depth>=1:}}<a href="{{#=URL(c='level',f='level_back_button',args=[level0])}}"><input type="button" style="font-weight:bold" value="{{#=session.level0Name}}:{{#=level0_name}}({{#=level0}})"/></a>
+				  {{#if depth>=2:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level1])}}"><input type="button" style="font-weight:bold" value="{{#=session.level1Name}}:{{#=level1_name}}({{#=level1}})"/></a>
+						 {{#if depth>=3:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level2])}}"><input type="button" style="font-weight:bold" value="{{#=session.level2Name}}:{{#=level2_name}}({{#=level2}})"/></a>
+						  {{#if depth>=4:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level3])}}"><input type="button" style="font-weight:bold" value="{{#=session.level3Name}}:{{#=level3_name}}({{#=level3}})"/></a>
+							  {{#if depth>=5:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level4])}}"><input type="button" style="font-weight:bold" value="{{#=session.level4Name}}:{{#=level4_name}}({{#=level4}})"/></a>
+								  {{#if depth>=6:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level5])}}"><input type="button" style="font-weight:bold" value="{{#=session.level5Name}}:{{#=level5_name}}({{#=level5}})"/></a>
+									  {{#if depth>=7:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level6])}}"><input type="button" style="font-weight:bold" value="{{#=session.level6Name}}:{{#=level6_name}}({{#=level6}})"/></a>
+										  {{#if depth>=8:}} > <a href="{{#=URL(c='level',f='level_back_button',args=[level7])}}"><input type="button" style="font-weight:bold" value="{{#=session.level7Name}}:{{#=level7_name}}({{#=level7}})"/></a>
+										  
+										  {{#pass}}
+									  {{#pass}}
+								  {{#pass}}
+							  {{#pass}}
+						  {{#pass}}
+					  {{#pass}}
+					 {{#pass}}
+				{{#pass}}
+				
+				
+   
+				  
+				{{#else:}}
+				 <br/>
+				{{#pass}} -->
+				<br/>
+  
+	  <table width="800" border="1" cellpadding="1" cellspacing="1" class="sample_border" >
+				<tr align="left" class="blackCatHead"  height="20px">
+				  <td width="110"  >Region ID</td>
+				  <td  >&nbsp;</td>
+				  <td  >Region Name</td>
+				  <!-- <td width="100">{{#if is_leaf=='1':}}Description{{#pass}}</td>
+				  <td width="100">{{#if is_leaf=='1':}}Special Code{{#pass}}</td> -->
+				  <td width="50" align="right" ></td>
+				  <td width="50" align="right" ></td>
+				</tr>
+  
+		  
+		{{#for i,record in enumerate(records):}}
+  
+			{{# rows_check=db((db.sm_level.cid==session.cid) & (db.sm_level.parent_level_id==record.level_id)).select()}}
+	  
+			  {{#ckeck_parent=''}}
+	  
+			  {{#if rows_check:}}
+	  
+			  {{#ckeck_parent='1' }}
+	  
+				  {{#pass}}
+	  
+						
+				  
+			  <tr  align="left" class="blackCat">
+				<td width="110" >{{#=record.level_id}}</td> 
+				
+				<!--record.level_id = parent level id-->
+				<form id="form" name="form" method="post" action="{{#=URL(c='level',f='level',args=[record.level_id])}}">  
+				<td width="46" >
+				{{# if record.is_leaf!='1':}}
+				<input type="submit" name="btn_go" id="btn_go" value="&gt;&gt;"  class="button_update"/> 
+				{{#pass }}
+				</td>
+			  </form>
+			  
+			  <form id="form" name="form" method="post" action="{{#=URL(c='level',f='level',args=[parentLevelId])}}">            
+				<td >
+				<input type="hidden"  name="rowid" size="25" value="{{#=record.id}}" title="" />
+				<input type="hidden"  name="level_id" size="25" value="{{#=record.level_id}}" title="" />
+				
+				<input type="text" style="width:150px;" name="level_name" id="level_name" value="{{#=record.level_name}}"  class="button_update"/></td>
+				  
+				<!-- <td width="100"  >
+				{{#if is_leaf=='1':}}
+				  <input type="text" name="territory_des" value="{{#=record.territory_des}}" placeholder="Territory Description"/>
+				{{#pass}}
+				</td> -->
+				<!-- <td width="100"  >
+				{{#if is_leaf=='1':}}
+					<input type="text" style="width:100px;" name="special_territory_code" value="{{#=record.special_territory_code}}" placeholder="Special T.Code" title="Special Territory Code"/>
+				{{#pass}}              
+				</td> -->
+		  
+				<td width="50" align="right"  >
+				{{#if access_permission==True:}}
+				  <input type="submit" name="btn_edit" id="btn_edit" value="Update"   class="button_update"/>
+				 {{#pass}}
+				 
+				 </td>
+		  
+				<td width="50" align="right" >
+		  
+				{{#if access_permission==True:}}
+					 {{# if ckeck_parent!='1':}}
+					<input type="submit" name="btn_delete" id="btn_delete" value="X"   class="button_update"/>
+					{{#pass}}
+				{{#pass}}
+				</td>	  
+				</form>
+				
+				</tr>
+		  {{#pass}}
+			  </table>
+  
+			  
+			</td>
+		</tr>
+	  </table>
+  
+  
+  </td>
+	</tr>
+  </table>
+  <br />
+  <br />
+
+
+
+  
+
+
