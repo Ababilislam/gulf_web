@@ -250,12 +250,51 @@ def client_add():
     return dict()
 
 
-def catagory():
+def category():
     if (session.cid=='' or session.cid==None):
         redirect (URL('default','index'))
-    return dict()
+    response.title='Category'
 
-def sub_catagory():
+    c_id = session.cid
+    submit=request.vars.submit
+    delete_btn = request.vars.btn_delete
+    
+    if submit:
+        # category_id =request.vars.category_id
+        name =request.vars.name
+        if name=='' or name==None or name=='None':
+            response.flash = 'Required All!'
+        else:
+            check_category_sql = "select * from customer_type where cid='"+str(c_id)+"'and type='"+str(name)+"';"
+            check_category = db.executesql(check_category_sql, as_dict=True)
+            if len(check_category)>0:
+                response.flash = 'Category already exists!'
+                # return 10 
+            else:
+                insert_catrgory_sql = "INSERT INTO customer_type (cid,type) VALUES ('"+str(c_id)+"','"+str(name)+"');"      
+                insert_catrgory = db.executesql(insert_catrgory_sql)
+                response.flash= 'Successfully saved!'
+                redirect(URL('customer','client'))
+
+    # return delete_btn
+    if delete_btn:
+        cat_Id= delete_btn
+        return delete_btn
+        # return cat_Id
+        # type_id = request.vars.type_id
+
+        delete_sql = "DELETE from customer_type where cid = '"+c_id+"' and id='"+str(cat_Id)+"' ;"
+        records = db.executesql(delete_sql)
+        session.flash = 'Deleted Successfully'
+        redirect (URL('customer','category'))
+
+    customerRows_sql = "select * from customer_type where cid = '"+str(c_id)+"';"
+    # return customerRows_sql
+    customerRows = db.executesql(customerRows_sql, as_dict=True)
+
+    return dict(customerRows=customerRows)
+
+def sub_category():
     if (session.cid=='' or session.cid==None):
         redirect (URL('default','index'))
     return dict()

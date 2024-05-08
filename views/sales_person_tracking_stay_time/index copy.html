@@ -1,0 +1,231 @@
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<style type="text/css">
+	input[type=text],
+	input[type=password] {
+		margin: 2px 0px 2px 0px;
+		width: 200px;
+	}
+
+	div.error {
+		width: 200px;
+	}
+
+	select {
+		margin: 2px 0px 2px 0px;
+		width: 210px;
+	}
+
+	.page_color,
+	body {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 13px;
+	}
+</style>
+
+<script>
+	var base_url = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	$(function () {
+
+		//=============== start Representative search ======================
+
+		// alert(base_url + 'sales_person_tracking_stay_time/get_all_rep_list');
+		var repListStr_ri = "";
+		$.ajax({
+			type: 'POST',
+			url: base_url + 'sales_person_tracking_stay_time/get_all_rep_list',
+
+			success: function (retStr) {
+				repListStr_ri = retStr
+
+
+			}
+
+		});
+
+		$('#representative_filter').keyup(function () {
+			//-------------------------
+			var ref_list_no = repListStr_ri.split(',');
+			var ref_name_no = $("#representative_filter").val();
+
+			//---------------- auto complete combo list
+			var ref_list_no_new = new Array();
+			lc_no = 0;
+			i = 0;
+			var refStr_no = "";
+			while (i < ref_list_no.length) {
+				refStr_no = ref_list_no[i];
+				i = i + 1;
+				var res = refStr_no.toUpperCase().match(ref_name_no.toUpperCase());
+				if (res != null) {
+					ref_list_no_new[lc_no] = refStr_no;
+					lc_no = lc_no + 1;
+					if (lc_no == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//-------------- auto complete source
+			$("input#representative_filter").autocomplete({
+				source: ref_list_no_new
+			});
+		});
+		// ===============end Representative search =====================
+
+
+		// =====================start client search ========================
+		var client_ListStr = "";
+		// alert(base_url + 'sales_person_tracking_stay_time/get_all_client_list');
+		$.ajax({
+			type: 'POST',
+			url: base_url + 'sales_person_tracking_stay_time/get_all_client_list',
+
+			success: function (retStr) {
+				client_ListStr = retStr
+
+
+			}
+
+		});
+
+		$('#customer_filter').keyup(function () {
+			//-------------------------
+			var ref_list_no = client_ListStr.split(',');
+
+			var ref_name_no = $("#customer_filter").val();
+
+			//---------------- auto complete combo list
+			var ref_list_no_new = new Array();
+			lc_no = 0;
+			i = 0;
+			var refStr_no = "";
+			while (i < ref_list_no.length) {
+				refStr_no = ref_list_no[i];
+				i = i + 1;
+				var res = refStr_no.toUpperCase().match(ref_name_no.toUpperCase());
+				if (res != null) {
+					ref_list_no_new[lc_no] = refStr_no;
+					lc_no = lc_no + 1;
+					if (lc_no == 30) {
+						break;
+					};
+				} else {
+					continue;
+				}
+			};
+			//-------------- auto complete source
+			$("input#customer_filter").autocomplete({
+				source: ref_list_no_new
+			});
+		});
+		// ===============end client search =====================
+	});
+
+</script>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+	<tr height="30px">
+		<td width="500"><span class="blackCatTitle">Visit Stay Time</span></td>
+
+		<td align="right">&nbsp;</td>
+	</tr>
+	<tr height="1px" style="background-color:#CCCCCC;">
+		<td width="300"></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+
+<div style="">
+	<table width="100%" height="10px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+		<tr>
+			<td width="5">&nbsp;</td>
+		</tr>
+		<tr height="100%" style="vertical-align:top;">
+			<td width="5">&nbsp;</td>
+			<form id="form1" name="form1" method="post"
+				action="{{=URL(c='sales_person_tracking_stay_time',f='index')}}">
+				<td width="15%">
+					<input name="representative_filter" type="text" id="representative_filter" size="25" value=""
+						placeholder="Representative ID/Name" autocomplete="off" style="width:160px" />
+				</td>
+				<td style=" width: 19%; padding-top: 2px; padding-left: 3px;">
+					<input type="date" name="date_filter" id="date_filter" size="25" style="width:205px;" />
+				</td>
+				<td width="15%">
+					<input name="customer_filter" type="text" id="customer_filter" size="25"
+						placeholder="Customer ID/Name" autocomplete="off"
+						style="width:160px; margin-left: 3px; padding-left: 5px;" />
+				</td>
+				<td>
+					<input type="submit" name="btn_filter" id="btn_filter" value="Show" class="button_update"
+						style="width:100px;height: 30px; margin-left: 3px; background-color: #f8f7f7; color:black;" />
+				</td>
+
+			</form>
+
+
+			</td>
+		</tr>
+	</table>
+</div>
+<div style="margin-left: 5px;">
+
+	<strong>Total:{{#=all_rec}}</strong>
+	<table width="100%" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+		<tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle" style="background-color: rgb(200, 248, 231);">
+			
+			<td width="150" >Representative Id/Name</td>
+			<td width="150" >Area Id/Name</td>
+			<td width="150" >Customer Id/Name</td>
+			<td width="100" >Visited Location</td>
+
+			<td width="100" >Visited Date</td>
+			<td width="80" >&nbsp;Stay time</td>
+			
+		  </tr>
+		  <br>
+		  {{for row in data_list:
+			rep= row['rep']
+			area = row['area']
+			c_info = row['customer_info']
+			visited_location = row['location']
+			visited_date = row['date']
+			rep_stay_time = row['time_stay']
+		}}
+		<tr>
+			<td>{{=rep}}</td>
+			<td>{{=area}}</td>
+			<td>{{=c_info}}</td>
+			<td>{{=visited_location}}</td>
+			<td>{{=visited_date}}</td>
+			<td>{{=rep_stay_time}}</td>
+		</tr>
+		{{pass}}
+
+		<table>
+			<tr>
+			{{if page:}}
+			&nbsp;&nbsp;<a href="{{#=URL(args=[page-page])}}">first</a> |
+			&nbsp;&nbsp;<a href="{{#=URL(args=[page-1])}}">previous</a> |
+			{{pass}}
+			
+			{{if len(data_list)>clients_per_page:}}
+			&nbsp;&nbsp;<a href="{{#=URL(args=[page+1])}}">next</a>
+			{{pass}}
+			</tr>
+		</table>
+
+	</table>
+	
+	
+</div>
