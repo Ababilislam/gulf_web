@@ -1,213 +1,276 @@
-
 {{extend 'layout.html'}}
-  
- <link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
-  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
-  <link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
-   <script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
-    <script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
+
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/ui.theme.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/jquery-ui.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static', 'js_and_css/style.css')}}" type="text/css" />
+<script src="{{=URL('static','js_and_css/jquery-1.8.2.js')}}"></script>
+<script src="{{=URL('static','js_and_css/jquery-ui.js')}}"></script>
 
 <style type="text/css">
- input[type=text], input[type=password]{
-    margin: 2px 0px 2px 0px;
-	width: 200px;
-}
-div.error {
-    width: 200px;
-}
-select {
-    margin: 2px 0px 2px 0px;
-	width: 210px;
-}
-.page_color,body{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:13px;	
+	input[type=text],
+	input[type=password] {
+		margin: 2px 0px 2px 0px;
+		width: 200px;
 	}
-	
- </style>
- 
- <script>
-var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
 
-$(function() {
-	 	var valueListStr="";
-		
-		$('#search_type').blur(function(){
-			if ($('#search_type').val()=='MARKET'){
+	div.error {
+		width: 200px;
+	}
+
+	select {
+		margin: 2px 0px 2px 0px;
+		width: 210px;
+	}
+
+	.page_color,
+	body {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 13px;
+	}
+</style>
+
+<script>
+	var base_url = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
+
+	$(function () {
+		var valueListStr = "";
+
+		$('#search_type').blur(function () {
+			if ($('#search_type').val() == 'MARKET') {
 				//alert(base_url+'default/get_route_list');
 				$.ajax({
-					  url: base_url+'sales_person_tracking_map/get_all_area_list',
-					  success: function(resStr) {
-						  valueListStr=resStr
-					  }
-					});
+					url: base_url + 'sales_person_tracking_map/get_all_area_list',
+					success: function (resStr) {
+						valueListStr = resStr
+					}
+				});
 			};
-			
-	 	});
-	 
-		$('#search_value').keyup(function(){
+
+		});
+
+		$('#search_value').keyup(function () {
 			//-------------------------
-			var valueList = valueListStr.split(',');				
-			var searchValue=$("#search_value").val();
-			
+			var valueList = valueListStr.split(',');
+			var searchValue = $("#search_value").val();
+
 			//---------------- auto complete combo list
-			var valueList_new=new Array();
-			lc=0;
-			i =0;
-			var valueStr="";				
-			while (i < valueList.length)
-			{
-				valueStr=valueList[i];
-				i=i+1;					
-				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
-				if (res!=null){
-					valueList_new[lc]=valueStr;
-					lc=lc+1;
-					if (lc==30){
+			var valueList_new = new Array();
+			lc = 0;
+			i = 0;
+			var valueStr = "";
+			while (i < valueList.length) {
+				valueStr = valueList[i];
+				i = i + 1;
+				var res = valueStr.toUpperCase().match(searchValue.toUpperCase());
+				if (res != null) {
+					valueList_new[lc] = valueStr;
+					lc = lc + 1;
+					if (lc == 30) {
 						break;
 					};
-				}else{
+				} else {
 					continue;
-				}					
+				}
 			};
 			//alert (ref_list_new);
-			
+
 			//-------------- auto complete source
-			$( "input#search_value" ).autocomplete({
+			$("input#search_value").autocomplete({
 				source: valueList_new
 			});
-		
-	  }); 
-	   //==============
-	   
-}); 
 
-</script>
-  <script>
-var base_url=location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/{{=request.application}}/";
-
-$(function() {
-	 	var valueListStr2="";
-		//alert (base_url+'default/get_all_ff_list');
-		$.ajax({
-			  url: base_url+'default/get_all_area_list',
-			  success: function(resStr) {
-				  valueListStr2=resStr
-			  }
-			
 		});
-			 
-		$('#rep_id').keyup(function(){
+		//============== area search end
+
+
+
+		//=============== start Representative search ======================
+
+		// alert(base_url + 'sales_person_tracking_map/get_all_rep_list');
+		var scListStr_ri = "";
+		$.ajax({
+			type: 'POST',
+			url: base_url + 'sales_person_tracking_map/get_all_rep_list',
+
+			success: function (retStr) {
+				scListStr_ri = retStr
+
+
+			}
+
+		});
+
+		$('#search_value_person').keyup(function () {
 			//-------------------------
-			var valueList = valueListStr2.split(',');				
-			var searchValue=$("#search_value").val();
-			
+			var ref_list_no = scListStr_ri.split(',');
+			var ref_name_no = $("#search_value_person").val();
+
 			//---------------- auto complete combo list
-			var valueList2_new=new Array();
-			lc=0;
-			i =0;
-			var valueStr="";				
-			while (i < valueList.length)
-			{
-				valueStr=valueList[i];
-				i=i+1;					
-				var res=valueStr.toUpperCase().match(searchValue.toUpperCase());
-				if (res!=null){
-					valueList2_new[lc]=valueStr;
-					lc=lc+1;
-					if (lc==30){
+			var ref_list_no_new = new Array();
+			lc_no = 0;
+			i = 0;
+			var refStr_no = "";
+			while (i < ref_list_no.length) {
+				refStr_no = ref_list_no[i];
+				i = i + 1;
+				var res = refStr_no.toUpperCase().match(ref_name_no.toUpperCase());
+				if (res != null) {
+					ref_list_no_new[lc_no] = refStr_no;
+					lc_no = lc_no + 1;
+					if (lc_no == 30) {
 						break;
 					};
-				}else{
+				} else {
 					continue;
-				}					
+				}
 			};
-			//alert (ref_list_new);
-			
 			//-------------- auto complete source
-			$( "input#rep_id" ).autocomplete({
-				source: valueList2_new
+			$("input#search_value_person").autocomplete({
+				source: ref_list_no_new
 			});
-		
-	  }); 
-	   //==============	   
-}); 
+		});
+		// ===============end Representative search =====================
+	});
 
 </script>
- 
-<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;" >
-  <tr height="30px" >
-    <td><span class="blackCatTitle">Tracking Map</span></td>
-  </tr>
-  <tr  height="1px" style="background-color:#CCCCCC;">
-	    <td ></td>
-  </tr>
-  </table>
-  
-  
-  <table width="100%" height="500px"  border="0" cellspacing="0" cellpadding="0" class="page_color"  >
-  <tr height="100%"  style="vertical-align:top;">
-    <td>
-	<table width="100%"  border="0" cellpadding="0" cellspacing="0"  >
-      <tr>
-        <td width="5">&nbsp;</td>
-        <td>
-		<table width="900" border="0" cellpadding="0" cellspacing="0" >
-			<tr>
-				<td>&nbsp;</td>
-				<td align="right">&nbsp;</td>
-			</tr>
-		</table>
-		
-		
-		</td>
-      </tr>
-      <tr>
-        <td width="5">&nbsp;</td>
-        <td>
 
-         <table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border" >		   
-		   <form id="form1" name="form1" method="post" action="{{=URL(c='sales_person_tracking_map',f='outletMap')}}" target="_blank">
-            <tr style="background-color:#CCC" align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
-              <td colspan="4" >Market Wise Outlet:</td>
-              </tr>
-            <tr align="left" class="blackCatHead"  height="20px" ;"vertical-align:middle">
-              <td width="100" >
-                <select name="search_type" id="search_type" style="width:150px" >
-                  <option value="">Select a type</option>
-                  	{{if session.search_typeOutlet=='MARKET':}}<option value="MARKET" selected="selected">Market</option>{{else:}}<option value="MARKET" >Market</option>{{pass}}
-                </select>
-              </td>
-              <td width="200" >
-              {{if session.search_valueOutlet=='' or session.search_valueOutlet==None:}}
-              	<input  name="search_value" type="text" id="search_value" size="25" value="" placeholder="Select a value" autocomplete="off" style="width:200px"/>
-              {{else:}}
-              	<input  name="search_value" type="text" id="search_value" size="25" value="{{=session.search_valueOutlet}}" placeholder="Select a value" autocomplete="off" style="width:200px"/>
-              {{pass}}
-              
-              
-              </td>
-              <td width="100" ><input type="submit" name="btn_outlet_map" id="btn_outlet_map" value="Show"   class="button_update"/>
-			  		
-		  		</td>
-				
-              <td align="right" >
-			  
-             
-			  </td>
-            </tr>
-            </form>
-
-
-          </table>
-         <p>&nbsp;</p>
-        </td></tr>
-    </table>
-    
-
-	</td>
-  </tr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FFFFFF;">
+	<tr height="30px">
+		<td><span class="blackCatTitle">Tracking Map</span></td>
+	</tr>
+	<tr height="1px" style="background-color:#CCCCCC;">
+		<td></td>
+	</tr>
 </table>
-  
-  <br />
-  <br />
+
+
+<table width="100%" height="500px" border="0" cellspacing="0" cellpadding="0" class="page_color">
+	<tr height="100%" style="vertical-align:top;">
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="5">&nbsp;</td>
+					<td>
+						<table width="900" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td>&nbsp;</td>
+								<td align="right">&nbsp;</td>
+							</tr>
+						</table>
+
+
+					</td>
+				</tr>
+				<tr>
+					<td width="5">&nbsp;</td>
+					<td>
+
+						<table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+							<form id="form1" name="form1" method="post"
+								action="{{=URL(c='sales_person_tracking_map',f='outletMap')}}" target="_blank">
+								<tr style="background-color:#CCC" align="left" class="blackCatHead" height="20px"
+									;"vertical-align:middle">
+									<td colspan="4">Market Wise Outlet:</td>
+								</tr>
+								<tr align="left" class="blackCatHead" style="width:20px; margin-left:10px"vertical-align:middle">
+									<td width="100">
+										<select name="search_type" id="search_type" style="width:190px">
+											<option value="">Select a type</option>
+											{{if session.search_typeOutlet=='MARKET':}}<option value="MARKET"
+												selected="selected">Market</option>{{else:}}<option value="MARKET">
+												Market</option>{{pass}}
+										</select>
+									</td>
+									<td width="200">
+										{{if session.search_valueOutlet=='' or session.search_valueOutlet==None:}}
+										<input name="search_value" type="text" id="search_value" size="25" value=""
+											placeholder="Select a value" autocomplete="off" style="width:200px" />
+										{{else:}}
+										<input name="search_value" type="text" id="search_value" size="25"
+											value="{{=session.search_valueOutlet}}" placeholder="Select a value"
+											autocomplete="off" style="width:200px" />
+										{{pass}}
+
+
+									</td>
+									<td width="100";padding-top="5px" ><input type="submit" name="btn_outlet_map" id="btn_outlet_map"
+											value="Show" class="button_update" />
+
+									</td>
+
+									<td align="right">
+
+
+									</td>
+								</tr>
+							</form>
+						</table>
+
+
+						<!--  new table for  date wise representative visit of a shop -->
+						<table width="700" border="1" cellpadding="1" cellspacing="1" class="sample_border">
+							<form id="form2" name="form2" method="post"
+								action="{{=URL(c='sales_person_tracking_map',f='sales_person_tracking_map_date')}}"
+								target="_blank">
+								<tr style="background-color:#CCC" align="left" class="blackCatHead" height="20px"
+									;"vertical-align:middle">
+									<td colspan="4">Sales Person Wise Visit Map:</td>
+								</tr>
+								<tr align="left" class="blackCatHead" height="20px" ;"vertical-align:middle">
+
+
+									<td>
+										<label for="search_value_person" style="margin-top: 6px; padding-left: 10px; ">Representative
+											ID:</label>
+									</td>
+									<td>
+										<input name="search_value_person" type="text" id="search_value_person" size="25"
+											value="" placeholder="Select a Representative ID" autocomplete="off"
+											style="width:200px" />
+
+									</td>
+									<td></td>
+								<tr class="blackCatHead">
+									<td>
+										<label for=" search_date" style="margin-top: 12px; padding-left: 10px;"> Date From: </label>
+									</td>
+									<td>
+										<input type="date" name="search_date" id="search_date" size="25" value=""
+											placeholder="Select a Date" autocomplete="off"
+											style="width:200px; margin-top: 8px;" />
+									</td>
+									<td></td>
+								</tr>
+
+
+
+								<tr class="blackCatHead">
+									<td>
+										<label for=" search_date_to" style="margin-top: 12px; padding-left: 10px;"> Date To: </label>
+									</td>
+									<td>
+										<input type="date" name="search_date_to" id="search_date_to" size="25" value=""
+											placeholder="Select a Date" autocomplete="off" style="width:200px; margin-top: 8px;" />
+										<input type="submit" name="btn_sp_visit_map" id="btn_sp_visit_map"
+											value="Show" class="button_update" />
+										</td>
+										<td>
+
+									</td>
+								</tr>
+
+
+
+								<td align="right">
+
+
+								</td>
+				</tr>
+				</form>
+
+		</td>
+	</tr>
+</table>
+
+<br />
+<br />

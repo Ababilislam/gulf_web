@@ -1,0 +1,267 @@
+{{extend 'layout.html'}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }search_form
+	  img 
+		{
+			max-width: none;
+		}
+    </style>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu--SRHoHCMbwyIhDv29b_uTHkTa6sh3o&sensor=true&region=BD"></script>
+    <script>
+
+
+
+
+
+
+
+function initialize() {
+  var myLatlng = new google.maps.LatLng({{=center_point}});
+ // var myLatlng_1 = new google.maps.LatLng(60, 105);
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng
+	
+
+  }
+ var infowindow = new google.maps.InfoWindow({
+            content: ''
+        });
+			
+ var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  var marker, i;
+  var icons="{{=URL('static','images/lafarge_g.png')}}";
+  
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Outlet',
+	  icon: icons
+	  
+  });
+ //alert ('nadira');
+ var p_station=$("#desc").val();
+ 
+
+  
+  
+  var fields = p_station.split('rdrd');
+  var total_fields=p_station.split("rdrd").length
+  //alert (total_fields);
+  
+  
+ var locations = [];
+ var field=[];
+ var j=0;
+ 
+ var outlet_name='';
+ 
+ for (j = 0; j < total_fields; j++){
+	 var s=0;
+	 var fields_single = fields[j].split(',');
+  	 var total_fields_single=fields[j].split(",").length
+	 var arr=[];
+	 for (s = 0; s < total_fields_single; s++){
+		 arr.push(fields_single[s]);
+		 outlet_name=outlet_name+fields_single[s]
+  		}
+	locations.push(arr);
+ }
+// alert (outlet_name);
+ 
+ var infowindow = new google.maps.InfoWindow();
+ var marker, i;
+ var icons="{{=URL('static','images/lafarge_g.png')}}";
+ 
+ 
+//  alert (locations.length);
+ for (i = 0; i < locations.length; i++) {  
+ 	
+   //check double shop==============
+	  var searchS=locations[i][1]+','+locations[i][2];
+	  var mOutlet = p_station.split('rdrd');
+	  var total_mOutlet=p_station.split("rdrd").length
+	  show_info='';
+	  //alert (total_mOutlet);
+	  for (var m = 0; m < total_mOutlet; m++){
+		// alert (searchS);	
+		 if ( (mOutlet[m].search(searchS))!= -1 ){
+			 
+			 var mOutlet_single=mOutlet[m].split(',');
+			//  alert(mOutlet_single);
+			 if (show_info==''){
+				// alert (show_info); 
+				// show_info='<div  style="height:50px; width:400px">'+mOutlet_single[m][0]+'</div>';
+				 show_info='n'
+				 icons="{{=URL('static','images/uni_small.png')}}";
+			 }
+			 else{
+				// alert (locations[i][0]); 
+				
+				
+				//show_info=show_info+'<div style="background-color:#408080; height:2px"></div>'+'<div  style="height:50px; width:300px">'+
+				
+				
+				//show_info=show_info+'<div style="background-color:#408080; height:2px"></div>'+'<div  style="height:50px; width:300px">'+mOutlet_single[m][0]+'</div>';	 
+				icons="{{=URL('static','images/uni_small.png')}}";
+			 }
+			 
+		 }
+		
+		 //alert ('start: '+locations[i][0])
+	   }// double check for loop
+	  
+   //======check double shop end========
+   		
+		
+	//  alert (locations[i][1]+','+locations[i][2])	
+	  marker = new google.maps.Marker({
+		position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+		map: map,
+		icon: icons
+	   
+	  });
+		  
+		  
+		  
+		  
+		  
+//alert (locations.length);
+      		google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				return function() {
+					
+				  //check double shop==============
+				  var searchS=locations[i][1]+','+locations[i][2];
+				  var mOutlet = p_station.split('rdrd');
+				  var total_mOutlet=p_station.split("rdrd").length
+				  show_info='';
+				  
+				  
+				  for (var m = 0; m < total_mOutlet; m++){
+					// alert (mOutlet[m]);
+					 if ( (mOutlet[m].search(searchS))!= -1 ){
+						 var mOutlet_single=mOutlet[m].split(',');
+						 if (show_info==''){
+						
+							 show_info='<div  style="height:50px; width:400px">'+mOutlet_single[0]+'</div>';
+							// icons="{{=URL('static','images/lafarge_g.png')}}";
+						 	
+						 }
+						 else{
+							//alert (show_info.search(mOutlet_single[0]));
+							if (show_info.search(mOutlet_single[0])==-1){ 
+								show_info=show_info+'<div style="background-color:#408080; height:2px"></div>'+'<div  style="height:50px; width:400px">'+mOutlet_single[0]+'</div>';	 
+								//icons="{{=URL('static','images/lafarge_m.png')}}";
+							}
+							
+						 }
+						
+					 }
+					 
+				   }// double check for loop
+				 // alert (searchS);
+			   //======check double shop end========	
+					
+					
+					
+					
+				
+					
+				  infowindow.setContent(show_info);
+				  
+				  infowindow.open(map, marker);
+				  
+				  
+				  //infowindow.close();
+				}
+      		})(marker, i));
+	  
+  
+  		//alert (i)
+  
+ }  //main for
+  
+  
+} 
+
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+  
+  
+   <table width="100%" border="1">
+   <tr height="30px">
+    <td style="background-color:#FBFBFB; font-size:15px;">&nbsp;&nbsp;Sale Person: {{=session.sale_person_id_name}}. &nbsp;&nbsp;&nbsp;&nbsp;Number of Visit: {{=session.no_of_record}}</td>
+    
+    
+  </tr>
+  <tr>
+    <td><input name="desc" id="desc" placesholder="" value="{{=map_string_name}}" type="hidden">
+    <!--<input name="desc" id="desc" placesholder="" value="MS Janata Traders,23.9079139,90.4002706,0rdrdMs Jenifer Nur Enterprise,23.9079139,90.4002706,1rdrdMsSunilTraders,23.8918234,90.4152323,4rdrdMs N.Islam,23.8917894,90.4152618,5rdrd" type="text">-->
+    <div id="map-canvas" style="height:600px; width:100%"></div></td>
+
+  </tr>
+</table>
+
+
+
+
+
+<!--=============Client info=================-->  
+  <script src="{{=URL('static','js_and_css/myScript.js')}}"></script>
+  
+  <script>
+ 
+//var my_url ="http://127.0.0.1:8000/lscmreporting/";
+var my_url ="http://e2.businesssolutionapps.com/mrepbiopharma/";
+function show_dialog(a){ 
+//$("#dialog-message").html( my_url+'showMap/client_detail/'+a);
+$.ajax({
+		
+		  url: my_url+'showMap/client_detail_outlet/'+a ,
+		  
+		  success: function(dialog) {
+			dialog_show=dialog
+			//var dialog_show_array = dialog_show.split('fd-fd');	
+			//var dialog_show_final = dialog_show_array[0];
+			//alert 'nadira';	
+			$("#dialog-message").html(dialog_show);
+			//$("#dialog-message").html( my_url+'showMap/client_detail/'+a);
+			
+		  }		  
+	});
+
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+ }
+  </script>
+
+
+ <div style="width:1000px" id="dialog-message" title="Client Info">    
+ 
+
+</div>
+  
+  
+  </body>
+</html>
