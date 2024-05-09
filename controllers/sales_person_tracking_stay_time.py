@@ -1,3 +1,4 @@
+# http://127.0.0.1:8000/gulf_web/sales_person_tracking_stay_time/index
 from datetime import datetime
 
 def index():
