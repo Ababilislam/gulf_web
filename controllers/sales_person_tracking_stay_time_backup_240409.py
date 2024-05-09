@@ -72,28 +72,33 @@ def index():
         session.condition_info = condition_info
         # return session.condition_info
 
-    if session.condition_info == None:
-        session.condition_info =""
+        # if session.condition == None:
+        #     session.condition =""
+        # condition=session.condition
+        # return session.condition
 
     # return session.condition_info
 
-    if session.condition_info =="None" or session.condition_info==None or session.condition_info=="":
-        all_row_sql = f"SELECT rep_id,rep_name,area_id,area_name,visited_to_id,visited_to_name,visited_latlong,visit_date,start_time,visit_time FROM `sm_tracking_live2` WHERE cid = '{str(cid)}' ORDER BY start_time ASC limit %d, %d" % limitby;
+
+    if condition_info!="" or session.condition_info!="" :
+        all_row_sql = f"SELECT rep_id,rep_name,area_id,area_name,visited_to_id,visited_to_name,visited_latlong,visit_date,start_time,visit_time FROM `sm_tracking_live2` WHERE cid = '{str(cid)}' {session.condition_info} ORDER BY start_time ASC limit %d, %d" % limitby;
         # return all_row_sql
         all_visited_record = db.executesql(all_row_sql, as_dict=True)
-        # return dict(data_list=all_visited_record, total_rec=total_rec,page=page,rep_per_page=rep_per_page)
- # # ================================always work to find out all rows in table=======================
+
+        
+        
+        # ================================always work to find out all rows in table=======================
         all_rec_sql = f"SELECT rep_id,rep_name,area_id,area_name,visited_to_id,visited_to_name,visited_latlong,visit_date,start_time,visit_time FROM `sm_tracking_live2` WHERE cid = '{str(cid)}' {session.condition_info};"
         # return all_rec_sql
         all_record = db.executesql(all_rec_sql)
         total_rec = len(all_record)
         # return session.condition
         # return len(all_visited_record)
-        # # =================================for table rows(total_record)===================================================
-        # # return total_rec
+        # =================================for table rows(total_record)===================================================
+        # return total_rec
 
         for row in all_visited_record:
-        
+            
             rep_id = row['rep_id']
             rep_name = row['rep_name']
             rep = rep_id+"|"+rep_name
@@ -122,61 +127,11 @@ def index():
             time_stay = time_end - time_start
         # return time_stay
             data_list.append({"rep": rep,"area":area, "customer_info":customer_info, "location":location, "date":visited_date,"start_time":start_time,"visit_time":end_time,"time_stay":time_stay})
-        return dict(data_list=data_list, total_rec=total_rec,page=page,rep_per_page=rep_per_page)
-
-    else:
-        if (condition_info!="" or condition_info!="None" or condition_info!=None) or (session.condition_info!="" or session.condition_info!=None or session.condition_info!="None"):
-            all_row_sql = f"SELECT rep_id,rep_name,area_id,area_name,visited_to_id,visited_to_name,visited_latlong,visit_date,start_time,visit_time FROM `sm_tracking_live2` WHERE cid = '{str(cid)}' {session.condition_info} ORDER BY start_time ASC limit %d, %d" % limitby;
-            # return all_row_sql
-            all_visited_record = db.executesql(all_row_sql, as_dict=True)
-            
-            
-            # # ================================always work to find out all rows in table=======================
-            all_rec_sql = f"SELECT rep_id,rep_name,area_id,area_name,visited_to_id,visited_to_name,visited_latlong,visit_date,start_time,visit_time FROM `sm_tracking_live2` WHERE cid = '{str(cid)}' {session.condition_info};"
-            # return all_rec_sql
-            all_record = db.executesql(all_rec_sql)
-            total_rec = len(all_record)
-            # return session.condition
-            # return len(all_visited_record)
-            # # =================================for table rows(total_record)===================================================
-            # # return total_rec
-
-            for row in all_visited_record:
-            
-                rep_id = row['rep_id']
-                rep_name = row['rep_name']
-                rep = rep_id+"|"+rep_name
-
-                area_id = row['area_id']
-                area_name = row['area_name']
-                area = area_id+"|"+area_name
-
-                customer_d_id = row['visited_to_id']
-                customer_d_name = row['visited_to_name']
-                customer_info = customer_d_id+"|"+customer_d_name
-
-                location = row['visited_latlong']
-                visited_date = row['visit_date']
-
-                start_time = row['start_time']
-                v_time = row['visit_time']
-                end_time = v_time.split(" ")[-1]
-                end_time = end_time.split(".")[0]
-                # time_format = "%S:%M:%H"
-                # print(type(end_time))
-                time_start = datetime.strptime(start_time, '%H:%M:%S')
-
-                time_end = datetime.strptime(end_time, '%H:%M:%S') 
-                # print(time_end)
-                time_stay = time_end - time_start
-            # return time_stay
-                data_list.append({"rep": rep,"area":area, "customer_info":customer_info, "location":location, "date":visited_date,"start_time":start_time,"visit_time":end_time,"time_stay":time_stay})
-            return dict(data_list=data_list, total_rec=total_rec,page=page,rep_per_page=rep_per_page)
-
-
+        
     # if
     # return len(data_list)
     # return dict(data_list=data_list,page=page,rep_per_page=rep_per_page)
+    return dict(data_list=data_list, total_rec=total_rec,page=page,rep_per_page=rep_per_page)
 
     return locals()
     
